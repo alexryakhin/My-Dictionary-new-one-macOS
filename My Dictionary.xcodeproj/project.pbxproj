@@ -23,6 +23,8 @@
 		5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913B270F75180077B3C8 /* HomeViewModel.swift */; };
 		5171913E270F76090077B3C8 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913D270F76090077B3C8 /* BlurView.swift */; };
 		51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913F270F7F000077B3C8 /* MainTabViewMacOs.swift */; };
+		51719141270F84D20077B3C8 /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEE270F4AAB0066782B /* Words.swift */; };
+		51719142270F86370077B3C8 /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */; };
 		517366DF270EB83F0073651A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366DE270EB83F0073651A /* MainTabView.swift */; };
 		517366E1270EB8A50073651A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E0270EB8A50073651A /* OnboardingView.swift */; };
 		517366E3270EB8D80073651A /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E2270EB8D80073651A /* CurrentUser.swift */; };
@@ -340,6 +342,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				51719142270F86370077B3C8 /* DictionaryViewModel.swift in Sources */,
 				517366E4270EB8D80073651A /* CurrentUser.swift in Sources */,
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
@@ -347,6 +350,7 @@
 				517366E7270EB99C0073651A /* QuizesView.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
+				51719141270F84D20077B3C8 /* Words.swift in Sources */,
 				5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */,
 				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				5171913E270F76090077B3C8 /* BlurView.swift in Sources */,

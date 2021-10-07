@@ -21,15 +21,16 @@ class DictionaryManager: ObservableObject {
             guard let url = URL(string: stringURL) else {
                 DispatchQueue.main.async {
                     self.status = .error
+                    print("1 URL: \(stringURL)")
                 }
                 return
             }
-            var request = URLRequest(url: url)
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-            URLSession.shared.dataTask(with: request) { data, response, error in
+            URLSession.shared.dataTask(with: url) { data, response, error in
                 guard let data = data else {
                     DispatchQueue.main.async {
                         self.status = .error
+                        print("2 URL: \(stringURL)")
+                        print(error?.localizedDescription)
                     }
                     return
                 }
@@ -45,6 +46,7 @@ class DictionaryManager: ObservableObject {
                     DispatchQueue.main.async {
                         self.resultWordDetails = nil
                         self.status = .error
+                        print("3 URL: \(stringURL)")
                     }
                     print(error.localizedDescription)
                 }
