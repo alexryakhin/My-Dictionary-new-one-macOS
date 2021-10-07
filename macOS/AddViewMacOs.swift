@@ -8,13 +8,24 @@
 import SwiftUI
 
 struct AddView: View {
+    @Binding var isShowingAddView: Bool
+    
     var body: some View {
-        Text("Hello, World!")
+        VStack {
+            Text("Hello, World!")
+
+            Button {
+                isShowingAddView = false
+            } label: {
+                Text("Hide")
+            }
+
+        }.padding()
     }
 }
 
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
-        AddView()
+        AddView(isShowingAddView: .constant(true))
     }
 }

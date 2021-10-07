@@ -16,5 +16,8 @@ struct My_DictionaryApp: App {
             MainTabView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
+        #if os(macOS)
+        .windowStyle(HiddenTitleBarWindowStyle())
+        #endif
     }
 }

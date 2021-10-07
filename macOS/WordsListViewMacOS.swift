@@ -10,7 +10,8 @@ import CoreData
 
 struct WordsListView: View {
     @Environment(\.managedObjectContext) private var viewContext
-
+    @EnvironmentObject var homeData: HomeViewModel
+    
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
         animation: .default)
@@ -18,9 +19,46 @@ struct WordsListView: View {
     
     @State private var selectedWord: Word?
     @State private var isShowingAddView = false
-
+    
     var body: some View {
-        NavigationView {
+        VStack {
+            Spacer().frame(height: 27)
+            
+            HStack{
+                Button {
+                    //                        addItem()
+                    showAddView()
+                } label: {
+                    Image(systemName: "plus")
+                        .foregroundColor(.accentColor)
+                }
+                Spacer()
+                Button {
+                    removeWord()
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(
+                            selectedWord == nil
+                            ? .secondary
+                            : .red)
+                }
+            }
+            .padding(.horizontal)
+            
+            HStack {
+                
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                
+                TextField("Search", text: $homeData.search)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+            .padding(.vertical,8)
+            .padding(.horizontal)
+            .background(Color.primary.opacity(0.15))
+            .cornerRadius(10)
+            .padding(.horizontal)
+            
             List(selection: $selectedWord) {
                 ForEach(words) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
@@ -30,37 +68,16 @@ struct WordsListView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-            .navigationTitle("Words")
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button {
-//                        addItem()
-                        showAddView()
-                    } label: {
-                        Image(systemName: "plus")
-                            .foregroundColor(.accentColor)
-                    }
-                }
-                ToolbarItem(placement: .destructiveAction) {
-                    Button {
-                        removeWord()
-                    } label: {
-                        Image(systemName: "trash")
-                            .foregroundColor(
-                                selectedWord == nil
-                                ? .secondary
-                                : .red)
-                    }
-                }
-            }
-            .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
-                AddView()
-            }
-            Text("Select an item")
+//            .listStyle(SidebarListStyle())
         }
+        .ignoresSafeArea()
+        .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
+            AddView(isShowingAddView: $isShowingAddView)
+        }
+//        Text("Select an item")
         
     }
-
+    
     private func addItem() {
         withAnimation {
             let newWord = Word(context: viewContext)
@@ -70,7 +87,7 @@ struct WordsListView: View {
             newWord.partOfSpeech = "noun"
             newWord.phonetic = "phonetic symbols"
             newWord.timestamp = Date()
-
+            
             save()
         }
     }
@@ -78,11 +95,11 @@ struct WordsListView: View {
     private func showAddView() {
         isShowingAddView = true
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.map { words[$0] }.forEach(viewContext.delete)
-
+            
             do {
                 try viewContext.save()
             } catch {
