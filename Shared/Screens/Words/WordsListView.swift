@@ -26,6 +26,7 @@ struct WordsListView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
+            .navigationTitle("Words")
             .toolbar {
 #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -40,7 +41,7 @@ struct WordsListView: View {
             }
             Text("Select an item")
         }
-        .navigationTitle("Words")
+        
     }
 
     private func addItem() {
@@ -53,14 +54,7 @@ struct WordsListView: View {
             newWord.phonetic = "phonetic symbols"
             newWord.timestamp = Date()
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            save()
         }
     }
 
@@ -76,6 +70,17 @@ struct WordsListView: View {
                 let nsError = error as NSError
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
+        }
+    }
+    
+    private func save() {
+        do {
+            try viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
 }

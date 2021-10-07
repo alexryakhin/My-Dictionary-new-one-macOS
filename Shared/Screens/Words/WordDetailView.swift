@@ -12,10 +12,13 @@ struct WordDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) var presentationMode
     
-    var word: Word
+    @ObservedObject var word: Word
+    
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
+    
+    @FocusState private var focusedField: Field?
     
     private var examples: [String] {
         guard let data = word.examples else {return []}
@@ -23,9 +26,14 @@ struct WordDetailView: View {
         return examples
     }
     
-    
-    
     var body: some View {
+        let bindingWordDefinition = Binding (
+            get: { word.definition ?? "" },
+            set: {
+                word.definition = $0
+            }
+        )
+        
         List {
             Section {
                 HStack {
@@ -33,7 +41,6 @@ struct WordDetailView: View {
                     Spacer()
                     Button {
                         //play audio of word
-                        print(word.examples)
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -48,14 +55,26 @@ struct WordDetailView: View {
                 Text("Part Of Speech")
             }
             Section {
-                Text(word.definition ?? "")
-                    .contextMenu {
-                        Button("Edit", action: {
-                            withAnimation {
-                                isEditingDefinition = true
-                            }
-                        })
-                    }
+                if isEditingDefinition {
+                    TextField("Definition", text: bindingWordDefinition, onCommit: {
+                        focusedField = nil
+                        isEditingDefinition = false
+                        save()
+                    })
+                        .focused($focusedField, equals: .definition)
+                } else {
+                    Text(word.definition ?? "")
+                        .contextMenu {
+                            Button("Edit", action: {
+//                                withAnimation {
+                                    isEditingDefinition = true
+//                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                                    focusedField = .definition
+                                })
+                            })
+                        }
+                }
             } header: {
                 Text("Definition")
             }
@@ -64,13 +83,16 @@ struct WordDetailView: View {
                     withAnimation {
                         isShowAddExample = true
                     }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                        focusedField = .example
+                    })
                 } label: {
                     Text("Add example")
                 }
                 
                 ForEach(examples, id: \.self) { example in
                     Text(example)
-                }
+                }.onDelete(perform: removeExample)
                 
                 
                 if isShowAddExample {
@@ -82,11 +104,13 @@ struct WordDetailView: View {
                                 let newExamples = examples + [exampleTextFieldStr]
                                 let newExamplesData = try? JSONEncoder().encode(newExamples)
                                 word.examples = newExamplesData
-                                try? viewContext.save()
+                                focusedField = nil
+                                save()
                             }
                             exampleTextFieldStr = ""
                         }
                     })
+                        .focused($focusedField, equals: .example)
                 }
             } header: {
                 Text("Examples")
@@ -97,13 +121,8 @@ struct WordDetailView: View {
         .navigationTitle(word.content ?? "")
         .navigationBarItems(leading: Button(action: {
             //favorites
-            if word.isFavorite {
-                word.isFavorite = false
-                try? viewContext.save()
-            } else {
-                word.isFavorite = true
-                try? viewContext.save()
-            }
+            word.isFavorite.toggle()
+            save()
         }, label: {
             Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
         }),
@@ -118,8 +137,28 @@ struct WordDetailView: View {
     
     private func removeWord() {
         viewContext.delete(word)
-        try? viewContext.save()
+        save()
         presentationMode.wrappedValue.dismiss()
+    }
+    
+    private func removeExample(offsets: IndexSet) {
+        var examples = self.examples
+        examples.remove(atOffsets: offsets)
+        
+        let newExamplesData = try? JSONEncoder().encode(examples)
+        word.examples = newExamplesData
+        save()
+    }
+    
+    private func save() {
+        do {
+            try viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+        }
     }
 }
 
@@ -142,4 +181,8 @@ struct WordDetailView_Previews: PreviewProvider {
         }
         
     }
+}
+
+fileprivate enum Field: Int, Hashable {
+    case partOfSpeech, definition, example
 }
