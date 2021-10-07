@@ -8,20 +8,20 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+struct WordsListView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Item.timestamp, ascending: true)],
+        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
         animation: .default)
-    private var items: FetchedResults<Item>
+    private var words: FetchedResults<Word>
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(items) { item in
-                    NavigationLink(destination: Text("Item at \(item.timestamp!, formatter: itemFormatter)")) {
-                        Text(item.timestamp!, formatter: itemFormatter)
+                ForEach(words, id:\.id) { word in
+                    NavigationLink(destination: WordDetailView(word: word)) {
+                        Text(word.content ?? "word")
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -40,12 +40,18 @@ struct ContentView: View {
             }
             Text("Select an item")
         }
+        .navigationTitle("Words")
     }
 
     private func addItem() {
         withAnimation {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newWord = Word(context: viewContext)
+            newWord.id = UUID()
+            newWord.content = "New Word"
+            newWord.definition = "Word's Definition"
+            newWord.partOfSpeech = "noun"
+            newWord.phonetic = "phonetic symbols"
+            newWord.timestamp = Date()
 
             do {
                 try viewContext.save()
@@ -60,7 +66,7 @@ struct ContentView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+            offsets.map { words[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -76,13 +82,13 @@ struct ContentView: View {
 
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
-    formatter.dateStyle = .short
+    formatter.dateStyle = .long
     formatter.timeStyle = .medium
     return formatter
 }()
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        WordsListView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
     }
 }
