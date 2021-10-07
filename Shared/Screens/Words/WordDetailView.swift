@@ -17,9 +17,13 @@ struct WordDetailView: View {
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
     
-    var examples: [Example] {
-        Array(word.examples as! Set<Example>)
+    private var examples: [String] {
+        guard let data = word.examples else {return []}
+        guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
+        return examples
     }
+    
+    
     
     var body: some View {
         List {
@@ -63,8 +67,9 @@ struct WordDetailView: View {
                 } label: {
                     Text("Add example")
                 }
+                
                 ForEach(examples, id: \.self) { example in
-                    Text(example.string ?? "")
+                    Text(example)
                 }
                 
                 
@@ -74,11 +79,10 @@ struct WordDetailView: View {
                             //save
                             isShowAddExample = false
                             if exampleTextFieldStr != "" {
-                                let newExample = Example(context: viewContext)
-                                newExample.string = exampleTextFieldStr
-                                
-                                word.examples?.adding(newExample)
-                                print(word.examples)
+                                let newExamples = examples + [exampleTextFieldStr]
+                                let newExamplesData = try? JSONEncoder().encode(newExamples)
+                                word.examples = newExamplesData
+                                try? viewContext.save()
                             }
                             exampleTextFieldStr = ""
                         }
@@ -95,8 +99,10 @@ struct WordDetailView: View {
             //favorites
             if word.isFavorite {
                 word.isFavorite = false
+                try? viewContext.save()
             } else {
                 word.isFavorite = true
+                try? viewContext.save()
             }
         }, label: {
             Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
@@ -121,8 +127,6 @@ struct WordDetailView_Previews: PreviewProvider {
     static let viewContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
             
     static var previews: some View {
-        let example1 = Example(context: viewContext)
-        example1.string = "Example 1"
                 
         let word = Word(context: viewContext)
         word.id = UUID()
@@ -132,9 +136,6 @@ struct WordDetailView_Previews: PreviewProvider {
         word.phonetic = "fascinating"
         word.timestamp = Date()
         word.isFavorite = true
-        
-        example1.word = word
-        
         
         return NavigationView {
             WordDetailView(word: word)

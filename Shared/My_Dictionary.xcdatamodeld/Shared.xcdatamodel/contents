@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19206" systemVersion="21A5534d" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" userDefinedModelVersionIdentifier="">
-    <entity name="Example" representedClassName="Example" syncable="YES" codeGenerationType="class">
-        <attribute name="string" optional="YES" attributeType="String"/>
-        <relationship name="word" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Word" inverseName="examples" inverseEntity="Word"/>
-    </entity>
     <entity name="Word" representedClassName="Word" syncable="YES" codeGenerationType="class">
         <attribute name="content" attributeType="String" defaultValueString=""/>
         <attribute name="definition" attributeType="String" defaultValueString=""/>
+        <attribute name="examples" optional="YES" attributeType="Binary"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="isFavorite" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="partOfSpeech" attributeType="String" defaultValueString=""/>
         <attribute name="phonetic" optional="YES" attributeType="String"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="examples" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Example" inverseName="word" inverseEntity="Example"/>
     </entity>
     <elements>
         <element name="Word" positionX="-63" positionY="-18" width="128" height="149"/>
-        <element name="Example" positionX="-54" positionY="45" width="128" height="59"/>
     </elements>
 </model>
