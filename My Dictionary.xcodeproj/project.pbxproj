@@ -12,7 +12,6 @@
 		51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
 		51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
 		51423CE1270DE477006B94CB /* WordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCD270DE477006B94CB /* WordsListView.swift */; };
-		51423CE2270DE477006B94CB /* WordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCD270DE477006B94CB /* WordsListView.swift */; };
 		51423CE3270DE477006B94CB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* Persistence.swift */; };
 		51423CE4270DE477006B94CB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* Persistence.swift */; };
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
@@ -25,12 +24,12 @@
 		517366E6270EB99C0073651A /* QuizesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizesView.swift */; };
 		517366E7270EB99C0073651A /* QuizesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizesView.swift */; };
 		517366EA270EFC260073651A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366DE270EB83F0073651A /* MainTabView.swift */; };
-		517366EB270EFC300073651A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E0270EB8A50073651A /* OnboardingView.swift */; };
 		517366ED270EFCC70073651A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517366EC270EFCC70073651A /* CloudKit.framework */; };
 		517366EF270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
-		517366F0270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
 		517366F1270F24E60073651A /* My-Dictionary--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */; };
 		517366F2270F24E70073651A /* My-Dictionary--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */; };
+		517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366FA270F31030073651A /* WordDetailViewMacOS.swift */; };
+		51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +50,8 @@
 		517366E5270EB99C0073651A /* QuizesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizesView.swift; sourceTree = "<group>"; };
 		517366EC270EFCC70073651A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		517366EE270EFF860073651A /* WordDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
+		517366FA270F31030073651A /* WordDetailViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailViewMacOS.swift; sourceTree = "<group>"; };
+		51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListViewMacOS.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +112,8 @@
 			isa = PBXGroup;
 			children = (
 				51423CDC270DE477006B94CB /* macOS.entitlements */,
+				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
+				51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -305,10 +308,9 @@
 				51423CE4270DE477006B94CB /* Persistence.swift in Sources */,
 				517366E7270EB99C0073651A /* QuizesView.swift in Sources */,
 				517366EA270EFC260073651A /* MainTabView.swift in Sources */,
-				517366EB270EFC300073651A /* OnboardingView.swift in Sources */,
-				517366F0270EFF860073651A /* WordDetailView.swift in Sources */,
+				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
+				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
-				51423CE2270DE477006B94CB /* WordsListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -506,6 +508,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -534,6 +537,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
