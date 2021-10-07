@@ -15,6 +15,9 @@ struct WordsListView: View {
         sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
         animation: .default)
     private var words: FetchedResults<Word>
+    
+    @StateObject var vm = DictionaryManager()
+    @State private var showingAddSheet = false
 
     var body: some View {
         NavigationView {
@@ -28,16 +31,17 @@ struct WordsListView: View {
             }
             .navigationTitle("Words")
             .toolbar {
-#if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
-#endif
                 ToolbarItem {
                     Button(action: addItem) {
                         Label("Add Item", systemImage: "plus")
                     }
                 }
+            }
+            .sheet(isPresented: $showingAddSheet) {
+                AddView(vm: vm)
             }
             Text("Select an item")
         }
@@ -45,17 +49,18 @@ struct WordsListView: View {
     }
 
     private func addItem() {
-        withAnimation {
-            let newWord = Word(context: viewContext)
-            newWord.id = UUID()
-            newWord.wordItself = "New Word"
-            newWord.definition = "Word's Definition"
-            newWord.partOfSpeech = "noun"
-            newWord.phonetic = "phonetic symbols"
-            newWord.timestamp = Date()
-
-            save()
-        }
+//        withAnimation {
+//            let newWord = Word(context: viewContext)
+//            newWord.id = UUID()
+//            newWord.wordItself = "New Word"
+//            newWord.definition = "Word's Definition"
+//            newWord.partOfSpeech = "noun"
+//            newWord.phonetic = "phonetic symbols"
+//            newWord.timestamp = Date()
+//
+//            save()
+//        }
+        showingAddSheet = true
     }
 
     private func deleteItems(offsets: IndexSet) {

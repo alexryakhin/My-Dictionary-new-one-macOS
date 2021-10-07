@@ -17,6 +17,7 @@ struct WordsListView: View {
     private var words: FetchedResults<Word>
     
     @State private var selectedWord: Word?
+    @State private var isShowingAddView = false
 
     var body: some View {
         NavigationView {
@@ -33,7 +34,8 @@ struct WordsListView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
-                        addItem()
+//                        addItem()
+                        showAddView()
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(.accentColor)
@@ -50,6 +52,9 @@ struct WordsListView: View {
                                 : .red)
                     }
                 }
+            }
+            .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
+                AddView()
             }
             Text("Select an item")
         }
@@ -68,6 +73,10 @@ struct WordsListView: View {
 
             save()
         }
+    }
+    
+    private func showAddView() {
+        isShowingAddView = true
     }
 
     private func deleteItems(offsets: IndexSet) {

@@ -66,9 +66,7 @@ struct WordDetailView: View {
                     Text(word.definition ?? "")
                         .contextMenu {
                             Button("Edit", action: {
-//                                withAnimation {
                                     isEditingDefinition = true
-//                                }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
                                     focusedField = .definition
                                 })

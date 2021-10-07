@@ -17,6 +17,7 @@
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CE6270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51423CF1270DE658006B94CB /* CloudKit.framework */; };
+		51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */; };
 		517366DF270EB83F0073651A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366DE270EB83F0073651A /* MainTabView.swift */; };
 		517366E1270EB8A50073651A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E0270EB8A50073651A /* OnboardingView.swift */; };
 		517366E3270EB8D80073651A /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E2270EB8D80073651A /* CurrentUser.swift */; };
@@ -30,6 +31,11 @@
 		517366F2270F24E70073651A /* My-Dictionary--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */; };
 		517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366FA270F31030073651A /* WordDetailViewMacOS.swift */; };
 		51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */; };
+		51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBE8270F4A7E0066782B /* AddView.swift */; };
+		51EBFBEB270F4A970066782B /* WordCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEA270F4A970066782B /* WordCard.swift */; };
+		51EBFBED270F4A9E0066782B /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */; };
+		51EBFBEF270F4AAB0066782B /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEE270F4AAB0066782B /* Words.swift */; };
+		51EBFBF1270F4C040066782B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBF0270F4C040066782B /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +50,7 @@
 		51423CEF270DE64E006B94CB /* My Dictionary (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Dictionary (iOS).entitlements"; sourceTree = "<group>"; };
 		51423CF1270DE658006B94CB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "My-Dictionary--iOS--Info.plist"; sourceTree = "<group>"; };
+		51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOs.swift; sourceTree = "<group>"; };
 		517366DE270EB83F0073651A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		517366E0270EB8A50073651A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		517366E2270EB8D80073651A /* CurrentUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrentUser.swift; sourceTree = "<group>"; };
@@ -52,6 +59,11 @@
 		517366EE270EFF860073651A /* WordDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
 		517366FA270F31030073651A /* WordDetailViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailViewMacOS.swift; sourceTree = "<group>"; };
 		51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListViewMacOS.swift; sourceTree = "<group>"; };
+		51EBFBE8270F4A7E0066782B /* AddView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddView.swift; sourceTree = "<group>"; };
+		51EBFBEA270F4A970066782B /* WordCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordCard.swift; sourceTree = "<group>"; };
+		51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
+		51EBFBEE270F4AAB0066782B /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		51EBFBF0270F4C040066782B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +107,7 @@
 				51423CCE270DE477006B94CB /* Persistence.swift */,
 				51423CCF270DE477006B94CB /* Assets.xcassets */,
 				51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */,
+				51EBFBF0270F4C040066782B /* Extensions.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -114,6 +127,7 @@
 				51423CDC270DE477006B94CB /* macOS.entitlements */,
 				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
 				51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */,
+				51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -157,8 +171,12 @@
 		517366DC270EB8090073651A /* Words */ = {
 			isa = PBXGroup;
 			children = (
+				51EBFBEE270F4AAB0066782B /* Words.swift */,
 				51423CCD270DE477006B94CB /* WordsListView.swift */,
 				517366EE270EFF860073651A /* WordDetailView.swift */,
+				51EBFBE8270F4A7E0066782B /* AddView.swift */,
+				51EBFBEA270F4A970066782B /* WordCard.swift */,
+				51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */,
 			);
 			path = Words;
 			sourceTree = "<group>";
@@ -289,13 +307,18 @@
 			files = (
 				51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				51423CE3270DE477006B94CB /* Persistence.swift in Sources */,
+				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
 				51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				517366E1270EB8A50073651A /* OnboardingView.swift in Sources */,
 				51423CE1270DE477006B94CB /* WordsListView.swift in Sources */,
+				51EBFBED270F4A9E0066782B /* DictionaryViewModel.swift in Sources */,
 				517366E3270EB8D80073651A /* CurrentUser.swift in Sources */,
 				517366EF270EFF860073651A /* WordDetailView.swift in Sources */,
+				51EBFBEB270F4A970066782B /* WordCard.swift in Sources */,
+				51EBFBEF270F4AAB0066782B /* Words.swift in Sources */,
 				517366DF270EB83F0073651A /* MainTabView.swift in Sources */,
 				517366E6270EB99C0073651A /* QuizesView.swift in Sources */,
+				51EBFBF1270F4C040066782B /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -311,6 +334,7 @@
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
+				51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -514,7 +538,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dor.My-Dictionary";
 				PRODUCT_NAME = "My Dictionary";
@@ -543,7 +567,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dor.My-Dictionary";
 				PRODUCT_NAME = "My Dictionary";
