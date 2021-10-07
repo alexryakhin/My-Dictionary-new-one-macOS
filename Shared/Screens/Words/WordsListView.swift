@@ -19,9 +19,9 @@ struct WordsListView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(words, id:\.id) { word in
+                ForEach(words) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
-                        Text(word.content ?? "word")
+                        Text(word.wordItself ?? "word")
                     }
                 }
                 .onDelete(perform: deleteItems)
@@ -48,7 +48,7 @@ struct WordsListView: View {
         withAnimation {
             let newWord = Word(context: viewContext)
             newWord.id = UUID()
-            newWord.content = "New Word"
+            newWord.wordItself = "New Word"
             newWord.definition = "Word's Definition"
             newWord.partOfSpeech = "noun"
             newWord.phonetic = "phonetic symbols"

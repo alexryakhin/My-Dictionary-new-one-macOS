@@ -118,7 +118,7 @@ struct WordDetailView: View {
             
             
         }
-        .navigationTitle(word.content ?? "")
+        .navigationTitle(word.wordItself ?? "")
         .navigationBarItems(leading: Button(action: {
             //favorites
             word.isFavorite.toggle()
@@ -169,7 +169,7 @@ struct WordDetailView_Previews: PreviewProvider {
                 
         let word = Word(context: viewContext)
         word.id = UUID()
-        word.content = "Fascinating"
+        word.wordItself = "Fascinating"
         word.definition = "Extremely interesting"
         word.partOfSpeech = "noun"
         word.phonetic = "fascinating"

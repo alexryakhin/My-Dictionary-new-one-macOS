@@ -29,6 +29,8 @@
 		517366ED270EFCC70073651A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517366EC270EFCC70073651A /* CloudKit.framework */; };
 		517366EF270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
 		517366F0270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
+		517366F1270F24E60073651A /* My-Dictionary--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */; };
+		517366F2270F24E70073651A /* My-Dictionary--iOS--Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* My-Dictionary--iOS--Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -261,6 +263,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517366F1270F24E60073651A /* My-Dictionary--iOS--Info.plist in Resources */,
 				51423CE5270DE477006B94CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +272,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517366F2270F24E70073651A /* My-Dictionary--iOS--Info.plist in Resources */,
 				51423CE6270DE477006B94CB /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -437,6 +441,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -469,6 +474,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
