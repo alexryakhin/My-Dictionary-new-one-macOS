@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct AddView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @Binding var isShowingAddView: Bool
     @State private var definitionInput = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
     @ObservedObject var vm = DictionaryManager()
     @State private var wordClassSelection = 0
-//    var indices: Range<Array<Definition>.Index> {
-//
-//    }
+    @State private var showingAlert = false
+    
     var definitions: [Definition] {
         vm.resultWordDetails!.meanings[wordClassSelection].definitions
     }
@@ -121,13 +121,13 @@ struct AddView: View {
             
             
             Button {
-                isShowingAddView = false
+                saveNewWord()
             } label: {
                 Text("Save").bold()
             }
             
         }
-        .frame(width: 500, height: 400)
+        .frame(width: 600, height: 500)
         .padding()
     }
     
@@ -136,6 +136,40 @@ struct AddView: View {
             try vm.fetchData()
         } catch {
             print(error.localizedDescription)
+        }
+    }
+    
+    private func saveNewWord() {
+        if !vm.inputWord.isEmpty, !definitionInput.isEmpty {
+            let newWord = Word(context: viewContext)
+            newWord.id = UUID()
+            newWord.wordItself = vm.inputWord
+            newWord.definition = definitionInput
+            if vm.resultWordDetails == nil {
+                newWord.partOfSpeech = partOfSpeech.rawValue
+            } else {
+                newWord.partOfSpeech = vm.resultWordDetails!.meanings[wordClassSelection].partOfSpeech
+            }
+            newWord.phonetic = vm.resultWordDetails?.phonetic
+            newWord.timestamp = Date()
+            save()
+            isShowingAddView = false
+            vm.resultWordDetails = nil
+            vm.inputWord = ""
+            vm.status = .blank
+        } else {
+            showingAlert = true
+        }
+    }
+    
+    private func save() {
+        do {
+            try viewContext.save()
+        } catch {
+            // Replace this implementation with code to handle the error appropriately.
+            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+            let nsError = error as NSError
+            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
         }
     }
 }

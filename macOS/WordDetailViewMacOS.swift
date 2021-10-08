@@ -10,20 +10,44 @@ import SwiftUI
 struct WordDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
 
-    var word: Word
+    @ObservedObject var word: Word
+    
+    @State private var isEditing = false
     
     var body: some View {
         VStack {
+            // MARK: Title and toolbar
             HStack {
                 Text(word.wordItself ?? "").font(.title).bold()
                 Spacer()
+                Button(action: {
+                    //favorites
+                    word.isFavorite.toggle()
+                    save()
+                }, label: {
+                    Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
+                        .foregroundColor(.accentColor)
+                })
+                Button(action: {
+                    if !isEditing {
+                        isEditing = true
+                    } else {
+                        save()
+                        isEditing = false
+                    }
+                }, label: {
+                    Text(isEditing ? "Save" : "Edit")
+                })
             }
+            // MARK: Primary Content
             Spacer()
         }
         .padding()
         .navigationTitle(word.wordItself ?? "")
+        
     }
     
+    // MARK: Private methods
     private func save() {
         do {
             try viewContext.save()
