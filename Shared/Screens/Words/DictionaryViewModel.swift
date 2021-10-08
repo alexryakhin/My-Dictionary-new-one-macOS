@@ -6,54 +6,90 @@
 //
 
 import SwiftUI
+import Combine
 
 class DictionaryManager: ObservableObject {
         
     @Published var status: FetchingStatus = .blank
     @Published var inputWord: String = ""
     @Published var resultWordDetails: WordElement?
-    @Published var definitions: [String] = []
+//    @Published var definitions: [String] = []
     
-    func fetchData() {
+    var cancellables = Set<AnyCancellable>()
+    
+//    func fetchData() {
+//        status = .loading
+//        if inputWord != "" {
+//            let stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/\(inputWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))"
+//            guard let url = URL(string: stringURL) else {
+//                DispatchQueue.main.async {
+//                    self.status = .error
+//                    print("1 URL: \(stringURL)")
+//                }
+//                return
+//            }
+//            URLSession.shared.dataTask(with: url) { data, response, error in
+//                guard let data = data else {
+//                    DispatchQueue.main.async {
+//                        self.status = .error
+//                        print("2 URL: \(stringURL)")
+//                        print(error?.localizedDescription)
+//                    }
+//                    return
+//                }
+//
+//                do {
+//                    let decodedData = try JSONDecoder().decode(Words.self, from: data)
+//                    DispatchQueue.main.async {
+//                        self.resultWordDetails = decodedData.first!
+//                        self.status = .ready
+//                    }
+//
+//                } catch let error {
+//                    DispatchQueue.main.async {
+//                        self.resultWordDetails = nil
+//                        self.status = .error
+//                        print("3 URL: \(stringURL)")
+//                    }
+//                    print(error.localizedDescription)
+//                }
+//            }.resume()
+//        } else {
+//            return
+//        }
+//    }
+    
+    func fetchData() throws {
         status = .loading
-        if inputWord != "" {
-            let stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/\(inputWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))"
-            guard let url = URL(string: stringURL) else {
-                DispatchQueue.main.async {
-                    self.status = .error
-                    print("1 URL: \(stringURL)")
-                }
-                return
-            }
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                guard let data = data else {
-                    DispatchQueue.main.async {
-                        self.status = .error
-                        print("2 URL: \(stringURL)")
-                        print(error?.localizedDescription)
-                    }
-                    return
-                }
-                
-                do {
-                    let decodedData = try JSONDecoder().decode(Words.self, from: data)
-                    DispatchQueue.main.async {
-                        self.resultWordDetails = decodedData.first!
-                        self.status = .ready
-                    }
-                    
-                } catch let error {
-                    DispatchQueue.main.async {
-                        self.resultWordDetails = nil
-                        self.status = .error
-                        print("3 URL: \(stringURL)")
-                    }
-                    print(error.localizedDescription)
-                }
-            }.resume()
-        } else {
-            return
+        let stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/\(inputWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))"
+        guard let url = URL(string: stringURL) else {
+            status = .error
+            throw URLError(.badURL)
         }
+        
+        URLSession.shared.dataTaskPublisher(for: url)
+            .receive(on: DispatchQueue.main)
+            .tryMap { (data, response) -> Data in
+                guard let response = response as? HTTPURLResponse, response.statusCode >= 200 && response.statusCode < 300 else {
+                    self.status = .error
+                    throw URLError(.badServerResponse)
+                }
+                return data
+            }
+            .decode(type: Words.self, decoder: JSONDecoder())
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("COMPLETION: \(completion)")
+                case .failure:
+                    self.resultWordDetails = nil
+                    self.status = .error
+                }
+            } receiveValue: { [weak self] words in
+                self?.resultWordDetails = words.first!
+                self?.status = .ready
+            }
+            .store(in: &cancellables)
     }
     
 //    func sort(by what: SortingCases) {

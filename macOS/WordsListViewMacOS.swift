@@ -26,14 +26,6 @@ struct WordsListView: View {
             
             HStack{
                 Button {
-                    //                        addItem()
-                    showAddView()
-                } label: {
-                    Image(systemName: "plus")
-                        .foregroundColor(.accentColor)
-                }
-                Spacer()
-                Button {
                     removeWord()
                 } label: {
                     Image(systemName: "trash")
@@ -42,8 +34,15 @@ struct WordsListView: View {
                             ? .secondary
                             : .red)
                 }
+                Spacer()
+                Button {
+                    showAddView()
+                } label: {
+                    Image(systemName: "plus")
+                        .foregroundColor(.accentColor)
+                }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 10)
             
             HStack {
                 
@@ -53,11 +52,11 @@ struct WordsListView: View {
                 TextField("Search", text: $homeData.search)
                     .textFieldStyle(PlainTextFieldStyle())
             }
-            .padding(.vertical,8)
+            .padding(.vertical, 8)
             .padding(.horizontal)
             .background(Color.primary.opacity(0.15))
-            .cornerRadius(10)
-            .padding(.horizontal)
+            .cornerRadius(8)
+            .padding(.horizontal, 10)
             
             List(selection: $selectedWord) {
                 ForEach(words) { word in
@@ -68,13 +67,12 @@ struct WordsListView: View {
                 }
                 .onDelete(perform: deleteItems)
             }
-//            .listStyle(SidebarListStyle())
         }
         .ignoresSafeArea()
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
             AddView(isShowingAddView: $isShowingAddView)
         }
-//        Text("Select an item")
+        Text("Select an item")
         
     }
     

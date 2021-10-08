@@ -38,6 +38,7 @@ struct MainTabView: View {
             .animation(.none)
         }
         .ignoresSafeArea(.container, edges: .all)
+        .frame(minWidth: 800, minHeight: 600)
         .environmentObject(homeData)
     }
 }

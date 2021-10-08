@@ -31,11 +31,10 @@ struct AddView: View {
                 VStack(alignment: .leading, spacing: 11) {
                     TextField("Enter your word", text: $vm.inputWord, onCommit: {
                         if !vm.inputWord.isEmpty {
-                            if vm.definitions.isEmpty {
-                                vm.fetchData()
-                            } else {
-                                vm.definitions.removeAll()
-                                vm.fetchData()
+                            do {
+                                try vm.fetchData()
+                            } catch {
+                                print(error.localizedDescription)
                             }
                         } else {
                             print("type a word")
@@ -68,11 +67,10 @@ struct AddView: View {
                     Divider().padding(.leading)
                     Button(action: {
                         if !vm.inputWord.isEmpty {
-                            if vm.definitions.isEmpty {
-                                vm.fetchData()
-                            } else {
-                                vm.definitions.removeAll()
-                                vm.fetchData()
+                            do {
+                               try vm.fetchData()
+                            } catch {
+                                print(error.localizedDescription)
                             }
                         } else {
                             print("type a word")

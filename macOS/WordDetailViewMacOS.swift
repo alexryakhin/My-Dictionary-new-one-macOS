@@ -13,11 +13,14 @@ struct WordDetailView: View {
     var word: Word
     
     var body: some View {
-        ScrollView {
-            VStack {
-                Text(word.wordItself ?? "")
+        VStack {
+            HStack {
+                Text(word.wordItself ?? "").font(.title).bold()
+                Spacer()
             }
+            Spacer()
         }
+        .padding()
         .navigationTitle(word.wordItself ?? "")
     }
     

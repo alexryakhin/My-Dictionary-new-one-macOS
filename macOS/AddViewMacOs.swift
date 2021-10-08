@@ -13,99 +13,130 @@ struct AddView: View {
     @State private var partOfSpeech: PartOfSpeech = .noun
     @ObservedObject var vm = DictionaryManager()
     @State private var wordClassSelection = 0
-    var indices: Range<Array<Definition>.Index> {
-        vm.resultWordDetails!.meanings[wordClassSelection].definitions.indices
-    }
+//    var indices: Range<Array<Definition>.Index> {
+//
+//    }
     var definitions: [Definition] {
         vm.resultWordDetails!.meanings[wordClassSelection].definitions
     }
     
     var body: some View {
         VStack {
-            Text("Add new word")
-            
-            TextField("Enter the word", text: $vm.inputWord)
-            TextField("Enter definition", text: $definitionInput)
-            
-            Picker(selection: $partOfSpeech, label: Text("Part of Speech")) {
-                ForEach(PartOfSpeech.allCases, id: \.self) { c in
-                    Text(c.rawValue)
+            HStack {
+                Text("Add new word").font(.title2).bold()
+                Spacer()
+                Button {
+                    isShowingAddView = false
+                } label: {
+                    Text("Close")
+                }
+
+            }
+            HStack {
+                TextField("Enter the word", text: $vm.inputWord, onCommit:  {
+                    fetchData()
+                })
+                Button {
+                    fetchData()
+                } label: {
+                    Text("Get definitions")
                 }
             }
+            TextField("Enter definition", text: $definitionInput)
             
-            Button {
-                vm.fetchData()
-                print(vm.resultWordDetails)
-            } label: {
-                Text("Get definitions from the internet")
+            if vm.resultWordDetails == nil {
+                Picker(selection: $partOfSpeech, label: Text("Part of Speech")) {
+                    ForEach(PartOfSpeech.allCases, id: \.self) { c in
+                        Text(c.rawValue)
+                    }
+                }
+                
             }
             
-            Group {
-                if vm.resultWordDetails != nil && vm.status == .ready {
+            
+            
+            if vm.resultWordDetails != nil && vm.status == .ready {
+                VStack {
+                    Picker(selection: $wordClassSelection, label: Text("Part of Speech")) {
+                        ForEach(vm.resultWordDetails!.meanings.indices, id: \.self) { index in
+                            Text("\(vm.resultWordDetails!.meanings[index].partOfSpeech)")
+                        }
+                    }
+                    
+                    if vm.resultWordDetails!.phonetic != nil {
+                        HStack(spacing: 0) {
+                            Text("Phonetic: ").bold()
+                            Text(vm.resultWordDetails!.phonetic ?? "")
+                            Spacer()
+                            Button {
+        //                        speak the word
+        //                        synthesizer.speak(utterance)
+                            } label: {
+                                Image(systemName: "speaker.wave.2.fill")
+                                    
+                            }
+                        }
+                    }
+                    
                     TabView() {
-                        ForEach(indices, id: \.self) { index in
+                        ForEach(vm.resultWordDetails!.meanings[wordClassSelection].definitions.indices, id: \.self) { index in
                             ScrollView {
                                 VStack(alignment: .leading) {
                                     if !definitions[index].definition.isEmpty {
                                         Divider()
-                                        Text("**Definition \(index + 1):** \(definitions[index].definition)")
-                                            .onTapGesture {
-                                                let partOfSpeechStr = vm.resultWordDetails!.meanings[wordClassSelection].partOfSpeech
-                                                
-                                                switch partOfSpeechStr {
-                                                case "noun":
-                                                    partOfSpeech = .noun
-                                                case "verb":
-                                                    partOfSpeech = .verb
-                                                case "adjective":
-                                                    partOfSpeech = .adjective
-                                                case "adverb":
-                                                    partOfSpeech = .adverb
-                                                case "exclamation":
-                                                    partOfSpeech = .exclamation
-                                                case "conjunction":
-                                                    partOfSpeech = .conjunction
-                                                case "pronoun":
-                                                    partOfSpeech = .pronoun
-                                                case "number":
-                                                    partOfSpeech = .number
-                                                default:
-                                                    partOfSpeech = .unknown
-                                                }
-                                                
-                                                definitionInput = definitions[index].definition
-                                                
-                                            }
-                                        
+                                        HStack {
+                                            Text("Definition \(index + 1): ").bold()
+                                            + Text(definitions[index].definition)
+                                        }
+                                        .onTapGesture {
+                                            definitionInput = definitions[index].definition
+                                        }
                                     }
                                     if definitions[index].example != nil {
                                         Divider()
-                                        Text("**Example:** \(definitions[index].example!)")
+                                        Text("Example: ").bold()
+                                        + Text(definitions[index].example!)
                                     }
                                     if !definitions[index].synonyms.isEmpty {
                                         Divider()
-                                        Text("**Synonyms:** \(definitions[index].synonyms.joined(separator: ", "))")
+                                        Text("Synonyms: ").bold()
+                                        + Text(definitions[index].synonyms.joined(separator: ", "))
                                     }
                                     if !definitions[index].antonyms.isEmpty {
                                         Divider()
-                                        Text("**Antonyms:** \(definitions[index].antonyms.joined(separator: ", "))")
+                                        Text("Antonyms: ").bold()
+                                        + Text(definitions[index].antonyms.joined(separator: ", "))
                                     }
                                 }
-                            }
-                            .padding(.horizontal)
+                            }.tabItem({
+                                Text("\(index + 1)")
+                            })
+                                .padding(.horizontal)
                         }
                     }
                 }
+            } else {
+                Spacer()
             }
             
             
             Button {
                 isShowingAddView = false
             } label: {
-                Text("Save")
+                Text("Save").bold()
             }
             
-        }.padding()
+        }
+        .frame(width: 500, height: 400)
+        .padding()
+    }
+    
+    private func fetchData() {
+        do {
+            try vm.fetchData()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 
