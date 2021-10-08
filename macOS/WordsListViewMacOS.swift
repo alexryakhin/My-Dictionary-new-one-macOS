@@ -11,14 +11,21 @@ import CoreData
 struct WordsListView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var homeData: HomeViewModel
-    
+        
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
+//        predicate: NSPredicate(format: "wordItself == %@", "Fascinating"),
         animation: .default)
     private var words: FetchedResults<Word>
     
     @State private var selectedWord: Word?
     @State private var isShowingAddView = false
+    @State private var searchTerm = ""
+    
+//    private var predicate: NSPredicate {
+//        let predicate = NSPredicate(format: "name == %@", searchTerm)
+//        return predicate
+//    }
     
     var body: some View {
         VStack {
@@ -49,7 +56,7 @@ struct WordsListView: View {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
                 
-                TextField("Search", text: $homeData.search)
+                TextField("Search", text: $searchTerm)
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding(.vertical, 8)
@@ -59,7 +66,11 @@ struct WordsListView: View {
             .padding(.horizontal, 10)
             
             List(selection: $selectedWord) {
-                ForEach(words) { word in
+                //Search, if user type something into search field, show filtered array
+                ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
+                    guard let wordItself = $0.wordItself else { return false }
+                    return wordItself.starts(with: searchTerm)
+                })) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
                         Text(word.wordItself ?? "word")
                     }
@@ -73,7 +84,6 @@ struct WordsListView: View {
             AddView(isShowingAddView: $isShowingAddView)
         }
         Text("Select an item")
-        
     }
     
     private func addItem() {

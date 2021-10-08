@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct AddView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -19,6 +20,13 @@ struct AddView: View {
     var definitions: [Definition] {
         vm.resultWordDetails!.meanings[wordClassSelection].definitions
     }
+    
+    var utterance: AVSpeechUtterance {
+        let utterance = AVSpeechUtterance(string: vm.inputWord)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        return utterance
+    }
+    let synthesizer = AVSpeechSynthesizer()
     
     var body: some View {
         VStack {
@@ -69,8 +77,7 @@ struct AddView: View {
                             Text(vm.resultWordDetails!.phonetic ?? "")
                             Spacer()
                             Button {
-        //                        speak the word
-        //                        synthesizer.speak(utterance)
+                                synthesizer.speak(utterance)
                             } label: {
                                 Image(systemName: "speaker.wave.2.fill")
                                     
@@ -130,7 +137,7 @@ struct AddView: View {
         .frame(width: 600, height: 500)
         .padding()
         .alert(isPresented: $showingAlert, content: {
-            Alert(title: Text("Ooops..."), message: Text("You should enter a word and its description before saving it"), dismissButton: .default(Text("Got it")))
+            Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
         })
     }
     

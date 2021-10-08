@@ -16,13 +16,19 @@ struct WordsListView: View {
         animation: .default)
     private var words: FetchedResults<Word>
     
+    private var searchWords = [Word]()
+    
     @StateObject var vm = DictionaryManager()
     @State private var showingAddSheet = false
+    @State private var searchTerm = ""
 
     var body: some View {
         NavigationView {
             List {
-                ForEach(words) { word in
+                ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
+                    guard let wordItself = $0.wordItself else { return false }
+                    return wordItself.starts(with: searchTerm)
+                })) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
                         Text(word.wordItself ?? "word")
                     }
@@ -45,21 +51,10 @@ struct WordsListView: View {
             }
             Text("Select an item")
         }
-        
+        .searchable(text: $searchTerm)
     }
 
     private func addItem() {
-//        withAnimation {
-//            let newWord = Word(context: viewContext)
-//            newWord.id = UUID()
-//            newWord.wordItself = "New Word"
-//            newWord.definition = "Word's Definition"
-//            newWord.partOfSpeech = "noun"
-//            newWord.phonetic = "phonetic symbols"
-//            newWord.timestamp = Date()
-//
-//            save()
-//        }
         showingAddSheet = true
     }
 

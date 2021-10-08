@@ -210,7 +210,7 @@ struct AddView: View {
                 Text("Save")
             }))
             .alert(isPresented: $showingAlert, content: {
-                Alert(title: Text("Error"), message: Text("You should enter a word and its description before saving it"), dismissButton: .default(Text("Got it")))
+                Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
             })
             
         }
