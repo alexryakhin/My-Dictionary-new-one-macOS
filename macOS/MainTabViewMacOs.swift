@@ -26,12 +26,11 @@ struct MainTabView: View {
             
 
             ZStack{
-
                 switch homeData.selectedTab{
                 case "Words": NavigationView{ WordsListView() }
                 case "Quizzes": Text("Quizzes")
                 case "Settings": Text("Settings")
-                default : Text("")
+                default : Text("Select an item")
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

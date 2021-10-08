@@ -129,6 +129,9 @@ struct AddView: View {
         }
         .frame(width: 600, height: 500)
         .padding()
+        .alert(isPresented: $showingAlert, content: {
+            Alert(title: Text("Ooops..."), message: Text("You should enter a word and its description before saving it"), dismissButton: .default(Text("Got it")))
+        })
     }
     
     private func fetchData() {
