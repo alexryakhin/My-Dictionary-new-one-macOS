@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import AVKit
 
 struct WordDetailView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -26,6 +27,13 @@ struct WordDetailView: View {
         return examples
     }
     
+    var utterance: AVSpeechUtterance {
+        let utterance = AVSpeechUtterance(string: word.wordItself ?? "")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        return utterance
+    }
+    let synthesizer = AVSpeechSynthesizer()
+    
     var body: some View {
         let bindingWordDefinition = Binding (
             get: { word.definition ?? "" },
@@ -41,6 +49,7 @@ struct WordDetailView: View {
                     Spacer()
                     Button {
                         //play audio of word
+                        synthesizer.speak(utterance)
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }

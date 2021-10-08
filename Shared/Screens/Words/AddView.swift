@@ -43,6 +43,11 @@ struct AddView: View {
                     }).focused($focusedField)
                         .padding(.horizontal)
                         .padding(.top, 11)
+                        .onAppear(perform: {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                focusedField = true
+                            }
+                        })
                     Divider().padding(.leading)
                     TextField("Word's definition", text: $descriptionField)
                         .padding(.horizontal)
@@ -93,8 +98,10 @@ struct AddView: View {
                     if vm.resultWordDetails != nil && vm.status == .ready {
                         if vm.resultWordDetails!.phonetic != nil {
                             HStack(spacing: 0) {
-                                Text("**Phonetic:** ").padding(.top)
-                                Text(vm.resultWordDetails!.phonetic ?? "").padding(.top)
+                                HStack {
+                                    Text("Phonetic: ").bold()
+                                    + Text(vm.resultWordDetails!.phonetic ?? "")
+                                }.padding(.top)
                                 Spacer()
                                 Button {
                                     synthesizer.speak(utterance)
@@ -149,7 +156,7 @@ struct AddView: View {
                         }
                     } else if vm.status == .blank {
                         VStack {
-                            Spacer().frame(height: 50)
+                            Spacer().frame(height: 25)
                             Text("*After the data shows up here, tap on word's definition to fill it into definition's field.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
@@ -161,7 +168,7 @@ struct AddView: View {
                         }
                     } else if vm.status == .error {
                         VStack {
-                            Spacer().frame(height: 50)
+                            Spacer().frame(height: 25)
                             Text("Couldn't get the word's data, check your spelling. Or you lost your internet connection, so check this out as well.")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
@@ -175,12 +182,10 @@ struct AddView: View {
                 }
                 
                 .cornerRadius(15)
-            }.onAppear(perform: {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    focusedField = true
-                }
+            }
+            .onDisappear(perform: {
+                focusedField = false
             })
-            
             .ignoresSafeArea(.all, edges: [.bottom])
             .background(Color("Background")
                             .ignoresSafeArea()

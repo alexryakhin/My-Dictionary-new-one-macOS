@@ -38,24 +38,30 @@ struct WordCard: View {
                         VStack(alignment: .leading) {
                             if !definitions[index].definition.isEmpty {
                                 Divider()
-                                Text("**Definition \(index + 1):** \(definitions[index].definition)")
-                                    .onTapGesture {
-                                        partOfSpeech = wordMeanings[wordClassSelection].partOfSpeech
-                                        tapGesture(definitions[index].definition, partOfSpeech)
-                                    }
+                                HStack {
+                                    Text("Definition \(index + 1): ").bold()
+                                    + Text(definitions[index].definition)
+                                }
+                                .onTapGesture {
+                                    partOfSpeech = wordMeanings[wordClassSelection].partOfSpeech
+                                    tapGesture(definitions[index].definition, partOfSpeech)
+                                }
                                 
                             }
                             if definitions[index].example != nil {
                                 Divider()
-                                Text("**Example:** \(definitions[index].example!)")
+                                Text("Example: ").bold()
+                                + Text(definitions[index].example!)
                             }
                             if !definitions[index].synonyms.isEmpty {
                                 Divider()
-                                Text("**Synonyms:** \(definitions[index].synonyms.joined(separator: ", "))")
+                                Text("Synonyms: ").bold()
+                                + Text(definitions[index].synonyms.joined(separator: ", "))
                             }
                             if !definitions[index].antonyms.isEmpty {
                                 Divider()
-                                Text("**Antonyms:** \(definitions[index].antonyms.joined(separator: ", "))")
+                                Text("Antonyms: ").bold()
+                                + Text(definitions[index].antonyms.joined(separator: ", "))
                             }
                         }
                     }
