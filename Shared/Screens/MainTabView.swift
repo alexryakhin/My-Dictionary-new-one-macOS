@@ -21,6 +21,7 @@ struct MainTabView: View {
                     Label("Quiz", systemImage: "a.magnify")
                 }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showingOnboarding, onDismiss: {
             CurrentUserManager.shared.hasSeenOnboarding = true
         }) {

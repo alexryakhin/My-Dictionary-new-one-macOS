@@ -27,12 +27,12 @@ struct WordDetailView: View {
         return examples
     }
     
-    var utterance: AVSpeechUtterance {
+    private var utterance: AVSpeechUtterance {
         let utterance = AVSpeechUtterance(string: word.wordItself ?? "")
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         return utterance
     }
-    let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = AVSpeechSynthesizer()
     
     var body: some View {
         let bindingWordDefinition = Binding (
@@ -60,6 +60,15 @@ struct WordDetailView: View {
             
             Section {
                 Text(word.partOfSpeech ?? "")
+                    .contextMenu {
+                        ForEach(PartOfSpeech.allCases, id: \.self) { c in
+                            Button {
+                                word.partOfSpeech = c.rawValue
+                            } label: {
+                                Text(c.rawValue)
+                            }
+                        }
+                    }
             } header: {
                 Text("Part Of Speech")
             }
@@ -69,7 +78,7 @@ struct WordDetailView: View {
                         focusedField = nil
                         isEditingDefinition = false
                         save()
-                    })
+                    }).disableAutocorrection(true)
                         .focused($focusedField, equals: .definition)
                 } else {
                     Text(word.definition ?? "")
@@ -161,10 +170,8 @@ struct WordDetailView: View {
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print(nsError.localizedDescription)
         }
     }
 }

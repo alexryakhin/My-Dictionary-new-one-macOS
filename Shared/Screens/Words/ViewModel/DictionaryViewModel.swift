@@ -49,17 +49,3 @@ class DictionaryManager: ObservableObject {
             .store(in: &cancellables)
     }
 }
-
-enum FetchingStatus {
-    case blank
-    case ready
-    case loading
-    case error
-}
-
-enum SortingCases {
-    case def
-    case name
-    case partOfSpeech
-}
-

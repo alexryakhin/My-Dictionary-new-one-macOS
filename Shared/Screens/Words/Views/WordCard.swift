@@ -73,16 +73,3 @@ struct WordCard: View {
     }
 }
 
-//struct WordCard_Previews: PreviewProvider {
-//    static var wordMeanings: [Meaning] {
-//        return wordElement.meanings
-//    }
-//    static var meaning: Meaning {
-//        return wordMeanings[0]
-//    }
-//    
-//    static var previews: some View {
-//        //        WordCard(meaning: WordCard_Previews.meaning, tapGesture: {_ in })
-//        WordCard(wordMeanings: Self.wordMeanings, tapGesture: { _,_ in })
-//    }
-//}

@@ -22,22 +22,48 @@ struct WordsListView: View {
     
     var body: some View {
         NavigationView {
-            List {
-                ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
-                    guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.starts(with: searchTerm)})
-                ) { word in
-                    NavigationLink(destination: WordDetailView(word: word)) {
-                        HStack {
-                            Text(word.wordItself ?? "word")
-                                .bold()
-                            Spacer()
-                            Text(word.partOfSpeech ?? "")
+            VStack {
+                if words.isEmpty {
+                    ZStack {
+                        Color("Background").ignoresSafeArea()
+                        VStack {
+                            Spacer().frame(height: 100)
+                            Image(systemName: "applescript")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 150, height: 150)
                                 .foregroundColor(.secondary)
+                                .padding(.bottom, 60)
+                            
+                            Text("Begin to add words to your list\nby tapping on plus icon in upper left corner")
+                                .padding(20)
+                                .multilineTextAlignment(.center)
+                                .lineSpacing(10)
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
+                            Spacer()
                         }
                     }
+                } else {
+                    List {
+                        ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
+                            guard let wordItself = $0.wordItself else { return false }
+                            return wordItself.starts(with: searchTerm)})
+                        ) { word in
+                            NavigationLink(destination: WordDetailView(word: word)) {
+                                HStack {
+                                    Text(word.wordItself ?? "word")
+                                        .bold()
+                                    Spacer()
+                                    Text(word.partOfSpeech ?? "")
+                                        .foregroundColor(.secondary)
+                                }
+                            }
+                        }
+                        .onDelete(perform: deleteItems)
+                    }
                 }
-                .onDelete(perform: deleteItems)
             }
             .navigationTitle("Words")
             .toolbar {
@@ -98,7 +124,11 @@ struct WordsListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingAddSheet) {
+            .sheet(isPresented: $showingAddSheet, onDismiss: {
+                vm.resultWordDetails = nil
+                vm.inputWord = ""
+                vm.status = .blank
+            }) {
                 AddView(vm: vm)
             }
             Text("Select an item")
@@ -112,15 +142,14 @@ struct WordsListView: View {
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { words[$0] }.forEach(viewContext.delete)
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            if searchTerm.isEmpty {
+                offsets.map { words[$0] }.forEach(viewContext.delete)
+            } else {
+                offsets.map { words.filter({
+                    guard let wordItself = $0.wordItself else { return false }
+                    return wordItself.starts(with: searchTerm)})[$0] }.forEach(viewContext.delete)
             }
+            save()
         }
     }
     
@@ -128,10 +157,8 @@ struct WordsListView: View {
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print(nsError.localizedDescription)
         }
     }
 }
@@ -145,6 +172,6 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        WordsListView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        WordsListView()
     }
 }

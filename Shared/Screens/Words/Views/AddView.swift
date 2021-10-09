@@ -18,12 +18,12 @@ struct AddView: View {
     @State private var showingAlert = false
     @FocusState private var focusedField: Bool
     
-    var utterance: AVSpeechUtterance {
+    private var utterance: AVSpeechUtterance {
         let utterance = AVSpeechUtterance(string: vm.inputWord)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         return utterance
     }
-    let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = AVSpeechSynthesizer()
     
     var body: some View {
         NavigationView {
@@ -225,10 +225,8 @@ struct AddView: View {
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print(nsError.localizedDescription)
         }
     }
     
@@ -241,43 +239,6 @@ struct AddView: View {
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
         AddView(vm: DictionaryManager())
-    }
-}
-
-enum PartOfSpeech: String, CaseIterable {
-    case noun
-    case verb
-    case adjective
-    case adverb
-    case exclamation
-    case conjunction
-    case pronoun
-    case number
-    case unknown
-}
-
-class AudioManager {
-    
-    static let shared = AudioManager()
-    
-    private init() { }
-    
-    private var audioPlayer: AVAudioPlayer?
-    
-    func playback(phonetics: [Phonetic]) {
-        guard let phonetic = phonetics.first else { return }
-        guard var stringURL = phonetic.audio else { return }
-        stringURL.insert(contentsOf: "https:", at: stringURL.startIndex)
-        guard let url = URL(string: stringURL) else { return }
-        
-        do {
-            let data = try Data(contentsOf: url)
-            audioPlayer = try AVAudioPlayer(data: data)
-            audioPlayer?.play()
-        }
-        catch {
-            print(error.localizedDescription)
-        }
     }
 }
 

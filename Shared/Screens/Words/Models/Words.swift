@@ -33,3 +33,28 @@ struct Phonetic: Codable {
 }
 
 typealias Words = [WordElement]
+
+enum FetchingStatus {
+    case blank
+    case ready
+    case loading
+    case error
+}
+
+enum SortingCases {
+    case def
+    case name
+    case partOfSpeech
+}
+
+enum PartOfSpeech: String, CaseIterable {
+    case noun
+    case verb
+    case adjective
+    case adverb
+    case exclamation
+    case conjunction
+    case pronoun
+    case number
+    case unknown
+}

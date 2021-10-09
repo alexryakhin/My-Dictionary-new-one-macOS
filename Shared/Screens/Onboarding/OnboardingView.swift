@@ -45,7 +45,6 @@ struct OnboardingView: View {
                 Spacer()
                 
                 Button {
-                    //hide
                     presentationMode.wrappedValue.dismiss()
                     CurrentUserManager.shared.hasSeenOnboarding = true
                 } label: {
@@ -70,7 +69,7 @@ struct OnboardingView: View {
         var subTitle: String
     }
     
-    var onboardingCases = [
+    private var onboardingCases = [
         OnboardingCase(icon: "text.justify", title: "Your own list of words", subTitle: "Note any words you want, write your own definitions and examples"),
         OnboardingCase(icon: "network", title: "Get definitions from the Internet", subTitle: "Some words might mean totally different thing!"),
         OnboardingCase(icon: "a.magnify", title: "Quizzes", subTitle: "Expand your vocabulary with quizzes from your word list.")
