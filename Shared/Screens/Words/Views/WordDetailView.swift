@@ -64,6 +64,7 @@ struct WordDetailView: View {
                         ForEach(PartOfSpeech.allCases, id: \.self) { c in
                             Button {
                                 word.partOfSpeech = c.rawValue
+                                save()
                             } label: {
                                 Text(c.rawValue)
                             }
