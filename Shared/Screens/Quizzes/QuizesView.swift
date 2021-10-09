@@ -23,14 +23,7 @@ struct QuizesView: View {
                 ZStack {
                     Color("Background").ignoresSafeArea()
                     VStack {
-                        Spacer().frame(height: 100)
-                        Image(systemName: "applescript")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 150, height: 150)
-                            .foregroundColor(.secondary)
-                            .padding(.bottom, 60)
-
+                        Spacer()
                         Text("Add at least 10 words\nto your list to play!")
                             .multilineTextAlignment(.center)
                             .lineSpacing(10)

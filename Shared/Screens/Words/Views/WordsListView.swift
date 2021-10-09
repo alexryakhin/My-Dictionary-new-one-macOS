@@ -27,14 +27,7 @@ struct WordsListView: View {
                     ZStack {
                         Color("Background").ignoresSafeArea()
                         VStack {
-                            Spacer().frame(height: 100)
-                            Image(systemName: "applescript")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 150, height: 150)
-                                .foregroundColor(.secondary)
-                                .padding(.bottom, 60)
-                            
+                            Spacer()
                             Text("Begin to add words to your list\nby tapping on plus icon in upper left corner")
                                 .padding(20)
                                 .multilineTextAlignment(.center)
@@ -56,6 +49,9 @@ struct WordsListView: View {
                                     Text(word.wordItself ?? "word")
                                         .bold()
                                     Spacer()
+                                    if word.isFavorite {
+                                        Image(systemName: "heart.fill").font(.caption).foregroundColor(.accentColor)
+                                    }
                                     Text(word.partOfSpeech ?? "")
                                         .foregroundColor(.secondary)
                                 }
