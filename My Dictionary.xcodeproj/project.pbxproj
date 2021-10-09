@@ -32,7 +32,6 @@
 		517366E3270EB8D80073651A /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E2270EB8D80073651A /* CurrentUser.swift */; };
 		517366E4270EB8D80073651A /* CurrentUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E2270EB8D80073651A /* CurrentUser.swift */; };
 		517366E6270EB99C0073651A /* QuizesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizesView.swift */; };
-		517366E7270EB99C0073651A /* QuizesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizesView.swift */; };
 		517366ED270EFCC70073651A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517366EC270EFCC70073651A /* CloudKit.framework */; };
 		517366EF270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
 		517366F1270F24E60073651A /* MyDictionaryInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 51423CF3270DEBD4006B94CB /* MyDictionaryInfo.plist */; };
@@ -375,7 +374,6 @@
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				51423CE4270DE477006B94CB /* Persistence.swift in Sources */,
-				517366E7270EB99C0073651A /* QuizesView.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51719141270F84D20077B3C8 /* Words.swift in Sources */,
@@ -513,7 +511,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -546,7 +544,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;

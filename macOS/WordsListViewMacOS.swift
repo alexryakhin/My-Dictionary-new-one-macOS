@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import AVFoundation
 
 struct WordsListView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -14,18 +15,12 @@ struct WordsListView: View {
         
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-//        predicate: NSPredicate(format: "wordItself == %@", "Fascinating"),
         animation: .default)
     private var words: FetchedResults<Word>
     
     @State private var selectedWord: Word?
     @State private var isShowingAddView = false
     @State private var searchTerm = ""
-    
-//    private var predicate: NSPredicate {
-//        let predicate = NSPredicate(format: "name == %@", searchTerm)
-//        return predicate
-//    }
     
     var body: some View {
         VStack {
@@ -69,8 +64,8 @@ struct WordsListView: View {
                 //Search, if user type something into search field, show filtered array
                 ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
                     guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.starts(with: searchTerm)
-                })) { word in
+                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})
+                ) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
                         Text(word.wordItself ?? "word")
                     }
@@ -106,16 +101,15 @@ struct WordsListView: View {
     
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { words[$0] }.forEach(viewContext.delete)
-            
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            if searchTerm.isEmpty {
+                offsets.map { words[$0] }.forEach(viewContext.delete)
+            } else {
+                offsets.map { words.filter({
+                    guard let wordItself = $0.wordItself else { return false }
+                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})[$0] }.forEach(viewContext.delete)
             }
+            
+            save()
         }
     }
     
@@ -148,6 +142,6 @@ private let itemFormatter: DateFormatter = {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        WordsListView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+        WordsListView()
     }
 }

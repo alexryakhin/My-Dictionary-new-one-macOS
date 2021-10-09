@@ -42,7 +42,7 @@ struct WordsListView: View {
                     List {
                         ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
                             guard let wordItself = $0.wordItself else { return false }
-                            return wordItself.starts(with: searchTerm)})
+                            return wordItself.lowercased().starts(with: searchTerm.lowercased())})
                         ) { word in
                             NavigationLink(destination: WordDetailView(word: word)) {
                                 HStack {
@@ -143,7 +143,7 @@ struct WordsListView: View {
             } else {
                 offsets.map { words.filter({
                     guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.starts(with: searchTerm)})[$0] }.forEach(viewContext.delete)
+                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})[$0] }.forEach(viewContext.delete)
             }
             save()
         }

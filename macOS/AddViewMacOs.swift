@@ -189,15 +189,3 @@ struct AddView_Previews: PreviewProvider {
         AddView(isShowingAddView: .constant(true))
     }
 }
-
-enum PartOfSpeech: String, CaseIterable {
-    case noun
-    case verb
-    case adjective
-    case adverb
-    case exclamation
-    case conjunction
-    case pronoun
-    case number
-    case unknown
-}
