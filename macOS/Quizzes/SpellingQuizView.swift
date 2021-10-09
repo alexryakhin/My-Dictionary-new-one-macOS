@@ -26,13 +26,13 @@ struct SpellingQuizView: View {
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
-            Text("Definition")
-                .foregroundColor(.secondary)
+//            Text("Definition")
+//                .foregroundColor(.secondary)
             
             Text(randomWord?.definition ?? "Error")
                 .font(.title)
                 .bold()
-                .padding(.vertical)
+//                .padding(.vertical)
                 .padding(.horizontal, 30)
             
             Text(randomWord?.partOfSpeech ?? "error").foregroundColor(.secondary)
@@ -51,6 +51,8 @@ struct SpellingQuizView: View {
                             checkAnswer()
                         }
                     })
+                        .frame(maxWidth: 300)
+                        .multilineTextAlignment(.center)
                         .textFieldStyle(PlainTextFieldStyle())
                 }
                 .padding(.vertical, 8)
@@ -125,8 +127,8 @@ struct SpellingQuizView: View {
     }
 }
 
-struct SpellingQuizView_Previews: PreviewProvider {
-    static var previews: some View {
-        SpellingQuizView()
-    }
-}
+//struct SpellingQuizView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SpellingQuizView()
+//    }
+//}

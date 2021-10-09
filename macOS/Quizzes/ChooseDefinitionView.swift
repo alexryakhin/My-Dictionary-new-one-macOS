@@ -16,12 +16,12 @@ struct ChooseDefinitionView: View {
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
-            Text("Given word:")
+//            Text("Given word:")
 
             Text(vm.words[rightAnswerIndex].wordItself ?? "")
                 .font(.largeTitle)
                 .bold()
-                .padding()
+//                .padding()
             Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
             
