@@ -9,12 +9,6 @@ import SwiftUI
 import Combine
 
 class DictionaryManager: ObservableObject {
-    //    @Environment(\.managedObjectContext) private var viewContext
-    //
-    //    @FetchRequest(
-    //        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-    //        animation: .default)
-    //    private var words: FetchedResults<Word>
     @Published var status: FetchingStatus = .blank
     @Published var inputWord: String = ""
     @Published var resultWordDetails: WordElement?

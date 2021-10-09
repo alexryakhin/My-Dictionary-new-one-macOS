@@ -16,8 +16,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Words", systemImage: "textformat.abc")
             }
-//            QuizesView()
-            Text("Quizzes")
+            QuizesView()
                 .tabItem {
                     Label("Quiz", systemImage: "a.magnify")
                 }

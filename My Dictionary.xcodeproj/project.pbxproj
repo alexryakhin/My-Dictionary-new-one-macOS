@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		513CBC64271099CF00A2F4EC /* ChooseDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513CBC63271099CF00A2F4EC /* ChooseDefinitionView.swift */; };
+		513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513CBC65271099D800A2F4EC /* SpellingQuizView.swift */; };
 		51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */; };
 		51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */; };
 		51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
@@ -45,6 +47,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		513CBC63271099CF00A2F4EC /* ChooseDefinitionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDefinitionView.swift; sourceTree = "<group>"; };
+		513CBC65271099D800A2F4EC /* SpellingQuizView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingQuizView.swift; sourceTree = "<group>"; };
 		51423CCB270DE477006B94CB /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		51423CCC270DE477006B94CB /* My_DictionaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_DictionaryApp.swift; sourceTree = "<group>"; };
 		51423CCD270DE477006B94CB /* WordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListView.swift; sourceTree = "<group>"; };
@@ -210,6 +214,7 @@
 		517366E8270EB9BF0073651A /* SpellingQuiz */ = {
 			isa = PBXGroup;
 			children = (
+				513CBC65271099D800A2F4EC /* SpellingQuizView.swift */,
 			);
 			path = SpellingQuiz;
 			sourceTree = "<group>";
@@ -217,6 +222,7 @@
 		517366E9270EB9CD0073651A /* ChooseDefinitionQuiz */ = {
 			isa = PBXGroup;
 			children = (
+				513CBC63271099CF00A2F4EC /* ChooseDefinitionView.swift */,
 			);
 			path = ChooseDefinitionQuiz;
 			sourceTree = "<group>";
@@ -324,8 +330,10 @@
 				51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				51423CE3270DE477006B94CB /* Persistence.swift in Sources */,
 				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
+				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
 				51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				517366E1270EB8A50073651A /* OnboardingView.swift in Sources */,
+				513CBC64271099CF00A2F4EC /* ChooseDefinitionView.swift in Sources */,
 				51423CE1270DE477006B94CB /* WordsListView.swift in Sources */,
 				51EBFBED270F4A9E0066782B /* DictionaryViewModel.swift in Sources */,
 				517366E3270EB8D80073651A /* CurrentUser.swift in Sources */,
