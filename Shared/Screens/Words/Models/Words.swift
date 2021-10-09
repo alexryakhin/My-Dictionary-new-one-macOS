@@ -41,10 +41,10 @@ enum FetchingStatus {
     case error
 }
 
-enum SortingCases {
-    case def
-    case name
-    case partOfSpeech
+enum SortingCases: String {
+    case def = "Default"
+    case name = "Name"
+    case partOfSpeech = "Part of Speech"
 }
 
 enum PartOfSpeech: String, CaseIterable {
@@ -57,4 +57,14 @@ enum PartOfSpeech: String, CaseIterable {
     case pronoun
     case number
     case unknown
+}
+
+extension String {
+    func capitalizingFirstLetter() -> String {
+        return prefix(1).capitalized + dropFirst()
+    }
+
+    mutating func capitalizeFirstLetter() {
+        self = self.capitalizingFirstLetter()
+    }
 }

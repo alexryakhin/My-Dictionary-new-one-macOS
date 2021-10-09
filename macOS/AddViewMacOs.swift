@@ -43,7 +43,7 @@ struct AddView: View {
             HStack {
                 TextField("Enter the word", text: $vm.inputWord, onCommit:  {
                     fetchData()
-                })
+                }).textFieldStyle(RoundedBorderTextFieldStyle())
                 Button {
                     fetchData()
                 } label: {
@@ -51,6 +51,7 @@ struct AddView: View {
                 }
             }
             TextField("Enter definition", text: $definitionInput)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
             
             if vm.resultWordDetails == nil {
                 Picker(selection: $partOfSpeech, label: Text("Part of Speech")) {
@@ -153,8 +154,8 @@ struct AddView: View {
         if !vm.inputWord.isEmpty, !definitionInput.isEmpty {
             let newWord = Word(context: viewContext)
             newWord.id = UUID()
-            newWord.wordItself = vm.inputWord
-            newWord.definition = definitionInput
+            newWord.wordItself = vm.inputWord.capitalizingFirstLetter()
+            newWord.definition = definitionInput.capitalizingFirstLetter()
             if vm.resultWordDetails == nil {
                 newWord.partOfSpeech = partOfSpeech.rawValue
             } else {

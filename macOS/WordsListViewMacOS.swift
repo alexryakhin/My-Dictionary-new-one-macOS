@@ -21,11 +21,12 @@ struct WordsListView: View {
     @State private var selectedWord: Word?
     @State private var isShowingAddView = false
     @State private var searchTerm = ""
+    @State private var sortingState: SortingCases = .def
     
     var body: some View {
         VStack {
             Spacer().frame(height: 27)
-            
+            // MARK: Toolbar
             HStack{
                 Button {
                     removeWord()
@@ -37,6 +38,42 @@ struct WordsListView: View {
                             : .red)
                 }
                 Spacer()
+                Menu {
+                    Button {
+                        withAnimation {
+                            sortingState = .def
+                        }
+                    } label: {
+                        if sortingState == .def {
+                            Image(systemName: "checkmark")
+                        }
+                        Text("Default")
+                    }
+                    Button {
+                        withAnimation {
+                            sortingState = .name
+                        }
+                    } label: {
+                        if sortingState == .name {
+                            Image(systemName: "checkmark")
+                        }
+                        Text("Name")
+                    }
+                    Button {
+                        withAnimation {
+                            sortingState = .partOfSpeech
+                        }
+                    } label: {
+                        if sortingState == .partOfSpeech {
+                            Image(systemName: "checkmark")
+                        }
+                        Text("Part of speech")
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                    Text(sortingState.rawValue)
+                }
+
                 Button {
                     showAddView()
                 } label: {
@@ -45,7 +82,7 @@ struct WordsListView: View {
                 }
             }
             .padding(.horizontal, 10)
-            
+            // MARK: Search text field
             HStack {
                 
                 Image(systemName: "magnifyingglass")
@@ -62,12 +99,32 @@ struct WordsListView: View {
             
             List(selection: $selectedWord) {
                 //Search, if user type something into search field, show filtered array
-                ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
+                ForEach(searchTerm.isEmpty ? Array(words.sorted(by: {
+                    switch sortingState {
+                    case .def:
+                        return $0.timestamp! < $1.timestamp!
+                    case .name:
+                        return $0.wordItself! < $1.wordItself!
+                    case .partOfSpeech:
+                        return $0.partOfSpeech! < $1.partOfSpeech!
+                    }
+                })) : words.filter({
                     guard let wordItself = $0.wordItself else { return false }
                     return wordItself.lowercased().starts(with: searchTerm.lowercased())})
                 ) { word in
                     NavigationLink(destination: WordDetailView(word: word)) {
-                        Text(word.wordItself ?? "word")
+                        HStack {
+                            Text(word.wordItself ?? "word")
+                                .bold()
+                            Spacer()
+                            if word.isFavorite {
+                                Image(systemName: "heart.fill")
+                                    .font(.caption)
+                                    .foregroundColor(selectedWord == word ? .secondary : .accentColor)
+                            }
+                            Text(word.partOfSpeech ?? "")
+                                .foregroundColor(.secondary)
+                        }
                     }
                     .tag(word)
                 }

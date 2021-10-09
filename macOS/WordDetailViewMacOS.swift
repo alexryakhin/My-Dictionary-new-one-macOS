@@ -103,6 +103,7 @@ struct WordDetailView: View {
                     if isEditing {
                         Text("Definition: ").bold()
                         TextField("Definition", text: bindingWordDefinition)
+                            .textFieldStyle(RoundedBorderTextFieldStyle())
                     } else {
                         Text("Definition: ").bold()
                         + Text(word.definition ?? "")

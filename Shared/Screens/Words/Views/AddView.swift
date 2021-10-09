@@ -198,8 +198,8 @@ struct AddView: View {
                 if !vm.inputWord.isEmpty, !descriptionField.isEmpty {
                     let newWord = Word(context: viewContext)
                     newWord.id = UUID()
-                    newWord.wordItself = vm.inputWord
-                    newWord.definition = descriptionField
+                    newWord.wordItself = vm.inputWord.capitalizingFirstLetter()
+                    newWord.definition = descriptionField.capitalizingFirstLetter()
                     newWord.partOfSpeech = partOfSpeech.rawValue
                     newWord.phonetic = vm.resultWordDetails?.phonetic
                     newWord.timestamp = Date()

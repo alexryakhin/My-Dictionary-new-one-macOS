@@ -18,7 +18,7 @@ struct MainTabView: View {
                 TabButton(image: "textformat.abc", title: "Words", selectedTab: $homeData.selectedTab)
                 TabButton(image: "a.magnify", title: "Quizzes", selectedTab: $homeData.selectedTab)
                 Spacer()
-                TabButton(image: "gear", title: "Settings", selectedTab: $homeData.selectedTab)
+//                TabButton(image: "gear", title: "Settings", selectedTab: $homeData.selectedTab)
             }
             .padding()
             .padding(.top, 40)
@@ -28,8 +28,8 @@ struct MainTabView: View {
             ZStack{
                 switch homeData.selectedTab{
                 case "Words": NavigationView{ WordsListView() }
-                case "Quizzes": Text("Quizzes")
-                case "Settings": Text("Settings")
+                case "Quizzes": NavigationView{ QuizzesView() }
+//                case "Settings": Text("Settings")
                 default : Text("Select an item")
                 }
             }

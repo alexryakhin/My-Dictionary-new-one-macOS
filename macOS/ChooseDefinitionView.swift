@@ -1,8 +1,8 @@
 //
 //  ChooseDefinitionView.swift
-//  My Dictionary
+//  My Dictionary (macOS)
 //
-//  Created by Alexander Bonney on 9/30/21.
+//  Created by Alexander Bonney on 10/9/21.
 //
 
 import SwiftUI
@@ -14,25 +14,31 @@ struct ChooseDefinitionView: View {
     @ObservedObject var vm: QuizzesViewModel
     
     var body: some View {
-        List {
-            Section {
-                HStack {
-                    Text(vm.words[rightAnswerIndex].wordItself ?? "")
-                        .bold()
-                    Spacer()
-                    Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
-                        .foregroundColor(.secondary)
-                }
-                
-            } header: {
-                Text("Given word")
-            } footer: {
-                Text("Choose from given definitions below")
-            }
+        VStack {
+            Spacer().frame(height: 100)
+            Text("Given word:")
+
+            Text(vm.words[rightAnswerIndex].wordItself ?? "")
+                .font(.largeTitle)
+                .bold()
+                .padding()
+            Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
+                    .foregroundColor(.secondary)
             
-            Section {
-                ForEach(0..<3) { index in
-                    Button {
+            Spacer()
+            Text("Choose from given definitions below")
+                .font(.caption)
+                .foregroundColor(.secondary)
+            
+            ForEach(0..<3) { index in
+                Text(vm.words[index].definition ?? "")
+                    .foregroundColor(.primary)
+                    .frame(width: 300)
+                    .padding()
+                    .background(Color.secondary.opacity(0.3))
+                    .cornerRadius(15)
+                    .padding(3)
+                    .onTapGesture {
                         if vm.words[rightAnswerIndex].id == vm.words[index].id {
                             withAnimation {
                                 isRightAnswer = true
@@ -44,20 +50,18 @@ struct ChooseDefinitionView: View {
                                 isRightAnswer = false
                             }
                         }
-                    } label: {
-                        Text(vm.words[index].definition ?? "")
-                            .foregroundColor(.primary)
                     }
-                }
-            } footer: {
-                Text(isRightAnswer ? "" : "Incorrect. Try Arain")
             }
-
+            
+            Text(isRightAnswer ? "" : "Incorrect. Try Arain")
+            Spacer().frame(height: 100)
         }
+        .ignoresSafeArea()
         .navigationTitle("Choose Definition")
         .onAppear {
             rightAnswerIndex = Int.random(in: 0...2)
         }
+        
     }
 }
 
