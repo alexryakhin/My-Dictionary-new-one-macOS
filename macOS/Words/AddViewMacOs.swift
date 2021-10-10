@@ -123,6 +123,12 @@ struct AddView: View {
                         }
                     }
                 }
+            } else if vm.status == .loading {
+                VStack {
+                    Spacer().frame(height: 50)
+                    ProgressView()
+                    Spacer()
+                }
             } else {
                 Spacer()
             }
@@ -177,16 +183,8 @@ struct AddView: View {
         do {
             try viewContext.save()
         } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
             let nsError = error as NSError
-            fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            print(nsError.localizedDescription)
         }
-    }
-}
-
-struct AddView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddView(isShowingAddView: .constant(true))
     }
 }

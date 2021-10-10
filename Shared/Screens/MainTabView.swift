@@ -18,7 +18,7 @@ struct MainTabView: View {
             }
             QuizesView()
                 .tabItem {
-                    Label("Quiz", systemImage: "a.magnify")
+                    Label("Quizzes", systemImage: "a.magnify")
                 }
         }
         .navigationViewStyle(StackNavigationViewStyle())

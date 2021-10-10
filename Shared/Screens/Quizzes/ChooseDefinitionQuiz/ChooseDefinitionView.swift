@@ -66,5 +66,6 @@ class QuizzesViewModel: ObservableObject {
     
     init(words: [Word]) {
         self.words = words
+        self.words.shuffle()
     }
 }

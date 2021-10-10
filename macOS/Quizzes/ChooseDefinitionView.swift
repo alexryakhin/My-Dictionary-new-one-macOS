@@ -16,12 +16,10 @@ struct ChooseDefinitionView: View {
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
-//            Text("Given word:")
 
             Text(vm.words[rightAnswerIndex].wordItself ?? "")
                 .font(.largeTitle)
                 .bold()
-//                .padding()
             Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
             
@@ -70,5 +68,6 @@ class QuizzesViewModel: ObservableObject {
     
     init(words: [Word]) {
         self.words = words
+        self.words.shuffle()
     }
 }
