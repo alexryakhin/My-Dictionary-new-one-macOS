@@ -18,10 +18,8 @@ struct WordsListView: View {
         animation: .default)
     private var words: FetchedResults<Word>
     
-    @State private var selectedWord: Word?
     @State private var isShowingAddView = false
     @State private var searchTerm = ""
-    @State private var sortingState: SortingCases = .def
     
     var body: some View {
         VStack {
@@ -33,7 +31,7 @@ struct WordsListView: View {
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(
-                            selectedWord == nil
+                            homeData.selectedWord == nil
                             ? .secondary
                             : .red)
                 }
@@ -41,37 +39,37 @@ struct WordsListView: View {
                 Menu {
                     Button {
                         withAnimation {
-                            sortingState = .def
+                            homeData.sortingState = .def
                         }
                     } label: {
-                        if sortingState == .def {
+                        if homeData.sortingState == .def {
                             Image(systemName: "checkmark")
                         }
                         Text("Default")
                     }
                     Button {
                         withAnimation {
-                            sortingState = .name
+                            homeData.sortingState = .name
                         }
                     } label: {
-                        if sortingState == .name {
+                        if homeData.sortingState == .name {
                             Image(systemName: "checkmark")
                         }
                         Text("Name")
                     }
                     Button {
                         withAnimation {
-                            sortingState = .partOfSpeech
+                            homeData.sortingState = .partOfSpeech
                         }
                     } label: {
-                        if sortingState == .partOfSpeech {
+                        if homeData.sortingState == .partOfSpeech {
                             Image(systemName: "checkmark")
                         }
                         Text("Part of speech")
                     }
                 } label: {
                     Image(systemName: "arrow.up.arrow.down")
-                    Text(sortingState.rawValue)
+                    Text(homeData.sortingState.rawValue)
                 }
 
                 Button {
@@ -97,10 +95,10 @@ struct WordsListView: View {
             .cornerRadius(8)
             .padding(.horizontal, 10)
             
-            List(selection: $selectedWord) {
+            List(selection: $homeData.selectedWord) {
                 //Search, if user type something into search field, show filtered array
                 ForEach(searchTerm.isEmpty ? Array(words.sorted(by: {
-                    switch sortingState {
+                    switch homeData.sortingState {
                     case .def:
                         return $0.timestamp! < $1.timestamp!
                     case .name:
@@ -120,7 +118,7 @@ struct WordsListView: View {
                             if word.isFavorite {
                                 Image(systemName: "heart.fill")
                                     .font(.caption)
-                                    .foregroundColor(selectedWord == word ? .secondary : .accentColor)
+                                    .foregroundColor(homeData.selectedWord == word ? .secondary : .accentColor)
                             }
                             Text(word.partOfSpeech ?? "")
                                 .foregroundColor(.secondary)
@@ -171,10 +169,10 @@ struct WordsListView: View {
     }
     
     private func removeWord() {
-        if selectedWord != nil {
-            viewContext.delete(selectedWord!)
+        if homeData.selectedWord != nil {
+            viewContext.delete(homeData.selectedWord!)
         }
-        selectedWord = nil
+        homeData.selectedWord = nil
         save()
     }
     

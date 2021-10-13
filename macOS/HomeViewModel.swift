@@ -10,12 +10,12 @@ import SwiftUI
 
 class HomeViewModel: ObservableObject{
     
-    @Published var selectedTab = ""
+    @Published var selectedTab = "Words"
             
     // Search...
     @Published var search = ""
     
-    // MEssage...
+    // Message...
     @Published var message = ""
     
     // Expanded View..
@@ -24,9 +24,9 @@ class HomeViewModel: ObservableObject{
     // Piced Expanded Tab...
     @Published var pickedTab = "Words"
     
-    // Send Message....
+    // Sorting
+    @Published var sortingState: SortingCases = .def
     
-    func fetchData() {
-        
-    }
+    // Selected word
+    @Published var selectedWord: Word?
 }
