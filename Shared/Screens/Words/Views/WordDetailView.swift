@@ -18,9 +18,7 @@ struct WordDetailView: View {
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
-    
-    @FocusState private var focusedField: Field?
-    
+        
     private var examples: [String] {
         guard let data = word.examples else {return []}
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
@@ -76,19 +74,14 @@ struct WordDetailView: View {
             Section {
                 if isEditingDefinition {
                     TextField("Definition", text: bindingWordDefinition, onCommit: {
-                        focusedField = nil
                         isEditingDefinition = false
                         save()
                     }).disableAutocorrection(true)
-                        .focused($focusedField, equals: .definition)
                 } else {
                     Text(word.definition ?? "")
                         .contextMenu {
                             Button("Edit", action: {
                                     isEditingDefinition = true
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                                    focusedField = .definition
-                                })
                             })
                         }
                 }
@@ -100,9 +93,6 @@ struct WordDetailView: View {
                     withAnimation {
                         isShowAddExample = true
                     }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
-                        focusedField = .example
-                    })
                 } label: {
                     Text("Add example")
                 }
@@ -121,13 +111,11 @@ struct WordDetailView: View {
                                 let newExamples = examples + [exampleTextFieldStr]
                                 let newExamplesData = try? JSONEncoder().encode(newExamples)
                                 word.examples = newExamplesData
-                                focusedField = nil
                                 save()
                             }
                             exampleTextFieldStr = ""
                         }
                     })
-                        .focused($focusedField, equals: .example)
                 }
             } header: {
                 Text("Examples")

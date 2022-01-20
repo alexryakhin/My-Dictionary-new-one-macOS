@@ -16,7 +16,6 @@ struct AddView: View {
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
-    @FocusState private var focusedField: Bool
     
     private var utterance: AVSpeechUtterance {
         let utterance = AVSpeechUtterance(string: vm.inputWord)
@@ -39,15 +38,9 @@ struct AddView: View {
                         } else {
                             print("type a word")
                         }
-                        focusedField = false
-                    }).focused($focusedField)
+                    })
                         .padding(.horizontal)
                         .padding(.top, 11)
-                        .onAppear(perform: {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                                focusedField = true
-                            }
-                        })
                     Divider().padding(.leading)
                     TextField("Word's definition", text: $descriptionField)
                         .padding(.horizontal)
@@ -183,9 +176,6 @@ struct AddView: View {
                 
                 .cornerRadius(15)
             }
-            .onDisappear(perform: {
-                focusedField = false
-            })
             .ignoresSafeArea(.all, edges: [.bottom])
             .background(Color("Background")
                             .ignoresSafeArea()
@@ -240,8 +230,4 @@ struct AddView_Previews: PreviewProvider {
     static var previews: some View {
         AddView(vm: DictionaryManager())
     }
-}
-
-fileprivate enum FieldFocus: Int, Hashable {
-    case wordInput
 }

@@ -84,7 +84,7 @@ struct WordsListView: View {
                             Button {
                                 withAnimation {
                                     vm.sortingState = .def
-                                    words.sortDescriptors = [SortDescriptor(\Word.timestamp)]
+//                                    words.sortDescriptors = [SortDescriptor(\Word.timestamp)]
                                 }
                             } label: {
                                 if vm.sortingState == .def {
@@ -95,7 +95,7 @@ struct WordsListView: View {
                             Button {
                                 withAnimation {
                                     vm.sortingState = .name
-                                    words.sortDescriptors = [SortDescriptor(\Word.wordItself)]
+//                                    words.sortDescriptors = [SortDescriptor(\Word.wordItself)]
                                 }
                             } label: {
                                 if vm.sortingState == .name {
@@ -106,7 +106,7 @@ struct WordsListView: View {
                             Button {
                                 withAnimation {
                                     vm.sortingState = .partOfSpeech
-                                    words.sortDescriptors = [SortDescriptor(\Word.partOfSpeech)]
+//                                    words.sortDescriptors = [SortDescriptor(\Word.partOfSpeech)]
                                 }
                             } label: {
                                 if vm.sortingState == .partOfSpeech {
@@ -129,7 +129,7 @@ struct WordsListView: View {
             }
             Text("Select an item")
         }
-        .searchable(text: $searchTerm)
+//        .searchable(text: $searchTerm)
     }
     
     private func addItem() {
