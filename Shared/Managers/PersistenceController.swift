@@ -77,6 +77,21 @@ final class PersistenceController: ObservableObject {
         save()
     }
     
+    // MARK: Removing from CD
+    func deleteWord(offsets: IndexSet) {
+        switch filterState {
+        case .none:
+            withAnimation {
+                offsets.map { words[$0] }.forEach(container.viewContext.delete)
+            }
+        case .favorite:
+            withAnimation {
+                offsets.map { words.filter { $0.isFavorite }[$0] }.forEach(container.viewContext.delete)
+                }
+            }
+        save()
+    }
+    
     /// Removes given word from Core Data
     func delete(word: Word) {
         container.viewContext.delete(word)

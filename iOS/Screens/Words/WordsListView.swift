@@ -49,8 +49,8 @@ struct WordsListView: View {
                                 }
                             }
                         }
-                        .onDelete(perform: { offset in
-                            
+                        .onDelete(perform: { indexSet in
+                            persistenceController.deleteWord(offsets: indexSet)
                         })
                     }
                 }
