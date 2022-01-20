@@ -10,9 +10,9 @@ import AVKit
 
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var persistenceController: PersistenceController
     
-    @ObservedObject var vm: DictionaryManager
+    @ObservedObject var vm: DictionaryViewModel
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
@@ -186,14 +186,11 @@ struct AddView: View {
             .navigationBarTitle("Add new word")
             .navigationBarItems(trailing: Button(action: {
                 if !vm.inputWord.isEmpty, !descriptionField.isEmpty {
-                    let newWord = Word(context: viewContext)
-                    newWord.id = UUID()
-                    newWord.wordItself = vm.inputWord.capitalizingFirstLetter()
-                    newWord.definition = descriptionField.capitalizingFirstLetter()
-                    newWord.partOfSpeech = partOfSpeech.rawValue
-                    newWord.phonetic = vm.resultWordDetails?.phonetic
-                    newWord.timestamp = Date()
-                    save()
+                    persistenceController.addNewWord(
+                        word: vm.inputWord.capitalizingFirstLetter(),
+                        definition: descriptionField.capitalizingFirstLetter(),
+                        partOfSpeech: partOfSpeech.rawValue,
+                        phonetic: vm.resultWordDetails?.phonetic)
                     self.presentationMode.wrappedValue.dismiss()
                     vm.resultWordDetails = nil
                     vm.inputWord = ""
@@ -211,23 +208,10 @@ struct AddView: View {
         }
     }
     
-    private func save() {
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            print(nsError.localizedDescription)
-        }
-    }
-    
-    private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for:nil)
-    }
-    
 }
 
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
-        AddView(vm: DictionaryManager())
+        AddView(vm: DictionaryViewModel())
     }
 }

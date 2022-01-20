@@ -8,11 +8,10 @@
 import SwiftUI
 import Combine
 
-class DictionaryManager: ObservableObject {
+class DictionaryViewModel: ObservableObject {
     @Published var status: FetchingStatus = .blank
     @Published var inputWord: String = ""
     @Published var resultWordDetails: WordElement?
-    @Published var sortingState: SortingCases = .def
     
     var cancellables = Set<AnyCancellable>()
     

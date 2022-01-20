@@ -13,7 +13,7 @@ struct AddView: View {
     @Binding var isShowingAddView: Bool
     @State private var definitionInput = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
-    @ObservedObject var vm = DictionaryManager()
+    @ObservedObject var vm = DictionaryViewModel()
     @State private var wordClassSelection = 0
     @State private var showingAlert = false
     

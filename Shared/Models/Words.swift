@@ -41,12 +41,6 @@ enum FetchingStatus {
     case error
 }
 
-enum SortingCases: String {
-    case def = "Default"
-    case name = "Name"
-    case partOfSpeech = "Part of Speech"
-}
-
 enum PartOfSpeech: String, CaseIterable {
     case noun
     case verb

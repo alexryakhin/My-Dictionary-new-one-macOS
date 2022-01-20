@@ -139,8 +139,7 @@ struct WordDetailView: View {
     }
     
     private func removeWord() {
-        persistenceController.container.viewContext.delete(word)
-        persistenceController.save()
+        persistenceController.delete(word: word)
         presentationMode.wrappedValue.dismiss()
     }
     

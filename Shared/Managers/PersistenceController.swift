@@ -9,10 +9,13 @@ import CoreData
 import SwiftUI
 import Combine
 
+
 final class PersistenceController: ObservableObject {
-    let container: NSPersistentCloudKitContainer
-    var bag = Set<AnyCancellable>()
+    private let container: NSPersistentCloudKitContainer
+    var cancellable = Set<AnyCancellable>()
     @Published var words: [Word] = []
+    @Published var sortingState: SortingCase = .def
+    @Published var filterState: FilterCase = .none
     
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "My_Dictionary")
@@ -20,8 +23,6 @@ final class PersistenceController: ObservableObject {
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         }
-//        RESET CORE DATA IF THERE ARE ERRORS WITH different versions of entities
-//        try? NSPersistentStoreCoordinator().destroyPersistentStore(at: container.persistentStoreDescriptions.first!.url!, ofType: "My_Dictionary", options: nil)
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
@@ -29,33 +30,32 @@ final class PersistenceController: ObservableObject {
             }
         })
         
-        // update data automatically
+        // Update data automatically
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy
-        
         NotificationCenter.default
             .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification, object: container.viewContext)
             .sink { _ in
                 self.fetchWords()
             }
-            .store(in: &bag)
+            .store(in: &cancellable)
         fetchWords()
     }
     
-    // MARK: - Core Data Saving support
+    // MARK: - Core Data Managing support
     
+    /// Fetches latest data from Core Data
     private func fetchWords() {
         let request = NSFetchRequest<Word>(entityName: "Word")
         do {
             words = try container.viewContext.fetch(request)
-            words.sort(by: { word1, word2 in
-                word1.timestamp! < word2.timestamp!
-            })
+            sortWords()
         } catch {
             print("Error fetching cities. \(error.localizedDescription)")
         }
     }
 
+    /// Saves all changes in Core Data
     func save() {
         do {
             try container.viewContext.save()
@@ -65,5 +65,43 @@ final class PersistenceController: ObservableObject {
         }
         objectWillChange.send()
     }
-
+    
+    func addNewWord(word: String, definition: String, partOfSpeech: String, phonetic: String?) {
+        let newWord = Word(context: container.viewContext)
+        newWord.id = UUID()
+        newWord.wordItself = word
+        newWord.definition = definition
+        newWord.partOfSpeech = partOfSpeech
+        newWord.phonetic = phonetic
+        newWord.timestamp = Date()
+        save()
+    }
+    
+    /// Removes given word from Core Data
+    func delete(word: Word) {
+        container.viewContext.delete(word)
+        save()
+    }
+    
+    // MARK: Sorting
+    var favoriteWords: [Word] {
+        return self.words.filter { $0.isFavorite }
+    }
+    
+    func sortWords() {
+        switch sortingState {
+        case .def:
+            words.sort(by: { word1, word2 in
+                word1.timestamp! < word2.timestamp!
+            })
+        case .name:
+            words.sort(by: { word1, word2 in
+                word1.wordItself! < word2.wordItself!
+            })
+        case .partOfSpeech:
+            words.sort(by: { word1, word2 in
+                word1.partOfSpeech! < word2.partOfSpeech!
+            })
+        }
+    }
 }

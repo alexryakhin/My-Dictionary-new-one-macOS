@@ -10,8 +10,8 @@ import CoreData
 
 struct WordsListView: View {
     @EnvironmentObject var persistenceController: PersistenceController
-
-    @StateObject var vm = DictionaryManager()
+    
+    @StateObject var vm = DictionaryViewModel()
     @State private var showingAddSheet = false
     @State private var searchTerm = ""
     
@@ -35,7 +35,7 @@ struct WordsListView: View {
                     }
                 } else {
                     List {
-                        ForEach(persistenceController.words) { word in
+                        ForEach(wordsToShow()) { word in
                             NavigationLink(destination: WordDetailView(word: word)) {
                                 HStack {
                                     Text(word.wordItself ?? "word")
@@ -67,48 +67,8 @@ struct WordsListView: View {
                 }
                 ToolbarItem(placement: .navigationBarLeading) {
                     Menu {
-                        Section {
-                            Label {
-                                Text("Sort By")
-                            } icon: {
-                                Image(systemName: "arrow.up.arrow.down")
-                            }
-                        }
-                        Section {
-                            Button {
-                                withAnimation {
-                                    vm.sortingState = .def
-//                                    words.sortDescriptors = [SortDescriptor(\Word.timestamp)]
-                                }
-                            } label: {
-                                if vm.sortingState == .def {
-                                    Image(systemName: "checkmark")
-                                }
-                                Text("Default")
-                            }
-                            Button {
-                                withAnimation {
-                                    vm.sortingState = .name
-//                                    words.sortDescriptors = [SortDescriptor(\Word.wordItself)]
-                                }
-                            } label: {
-                                if vm.sortingState == .name {
-                                    Image(systemName: "checkmark")
-                                }
-                                Text("Name")
-                            }
-                            Button {
-                                withAnimation {
-                                    vm.sortingState = .partOfSpeech
-//                                    words.sortDescriptors = [SortDescriptor(\Word.partOfSpeech)]
-                                }
-                            } label: {
-                                if vm.sortingState == .partOfSpeech {
-                                    Image(systemName: "checkmark")
-                                }
-                                Text("Part of speech")
-                            }
-                        }
+                        filterMenu
+                        sortMenu
                     } label: {
                         Image(systemName: "ellipsis.circle")
                     }
@@ -123,14 +83,97 @@ struct WordsListView: View {
             }
             Text("Select an item")
         }
-//        .searchable(text: $searchTerm)
+        //        .searchable(text: $searchTerm)
     }
     
     private func addItem() {
         showingAddSheet = true
     }
     
+    private func wordsToShow() -> [Word] {
+        switch persistenceController.filterState {
+        case .none:
+            return persistenceController.words
+        case .favorite:
+            return persistenceController.favoriteWords
+        }
+    }
     
+    private var filterMenu: some View {
+        Menu {
+            Button {
+                withAnimation {
+                    persistenceController.filterState = .none
+                }
+            } label: {
+                if persistenceController.filterState == .none {
+                    Image(systemName: "checkmark")
+                }
+                Text("None")
+            }
+            Button {
+                withAnimation {
+                    persistenceController.filterState = .favorite
+                }
+            } label: {
+                if persistenceController.filterState == .favorite {
+                    Image(systemName: "checkmark")
+                }
+                Text("Favorites")
+            }
+        } label: {
+            Label {
+                Text("Filter By")
+            } icon: {
+                Image(systemName: "circle.grid.cross.left.filled")
+            }
+        }
+    }
+    
+    private var sortMenu: some View {
+        Menu {
+            Button {
+                withAnimation {
+                    persistenceController.sortingState = .def
+                    persistenceController.sortWords()
+                }
+            } label: {
+                if persistenceController.sortingState == .def {
+                    Image(systemName: "checkmark")
+                }
+                Text("Default")
+            }
+            Button {
+                withAnimation {
+                    persistenceController.sortingState = .name
+                    persistenceController.sortWords()
+                }
+            } label: {
+                if persistenceController.sortingState == .name {
+                    Image(systemName: "checkmark")
+                }
+                Text("Name")
+            }
+            Button {
+                withAnimation {
+                    persistenceController.sortingState = .partOfSpeech
+                    persistenceController.sortWords()
+                }
+            } label: {
+                if persistenceController.sortingState == .partOfSpeech {
+                    Image(systemName: "checkmark")
+                }
+                Text("Part of speech")
+            }
+            
+        } label: {
+            Label {
+                Text("Sort By")
+            } icon: {
+                Image(systemName: "arrow.up.arrow.down")
+            }
+        }
+    }
 }
 
 private let itemFormatter: DateFormatter = {
