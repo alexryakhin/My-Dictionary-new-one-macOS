@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct My_DictionaryApp: App {
-    let persistenceController = PersistenceController.shared
+    @StateObject var persistenceController = PersistenceController()
 
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(persistenceController)
         }
         #if os(macOS)
         .windowStyle(HiddenTitleBarWindowStyle())

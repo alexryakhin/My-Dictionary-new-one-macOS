@@ -14,8 +14,8 @@
 		51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
 		51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
 		51423CE1270DE477006B94CB /* WordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCD270DE477006B94CB /* WordsListView.swift */; };
-		51423CE3270DE477006B94CB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* Persistence.swift */; };
-		51423CE4270DE477006B94CB /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* Persistence.swift */; };
+		51423CE3270DE477006B94CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* PersistenceController.swift */; };
+		51423CE4270DE477006B94CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* PersistenceController.swift */; };
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CE6270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51423CF1270DE658006B94CB /* CloudKit.framework */; };
@@ -51,7 +51,7 @@
 		51423CCB270DE477006B94CB /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
 		51423CCC270DE477006B94CB /* My_DictionaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_DictionaryApp.swift; sourceTree = "<group>"; };
 		51423CCD270DE477006B94CB /* WordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListView.swift; sourceTree = "<group>"; };
-		51423CCE270DE477006B94CB /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		51423CCE270DE477006B94CB /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		51423CCF270DE477006B94CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		51423CD4270DE477006B94CB /* My Dictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Dictionary.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51423CDA270DE477006B94CB /* My Dictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "My Dictionary.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -147,7 +147,6 @@
 				51423CCC270DE477006B94CB /* My_DictionaryApp.swift */,
 				517366DA270EB7CF0073651A /* Managers */,
 				517366D9270EB7BC0073651A /* Screens */,
-				51423CCE270DE477006B94CB /* Persistence.swift */,
 				51423CCF270DE477006B94CB /* Assets.xcassets */,
 				51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */,
 			);
@@ -200,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				517366E2270EB8D80073651A /* CurrentUser.swift */,
+				51423CCE270DE477006B94CB /* PersistenceController.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -377,7 +377,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
-				51423CE3270DE477006B94CB /* Persistence.swift in Sources */,
+				51423CE3270DE477006B94CB /* PersistenceController.swift in Sources */,
 				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
 				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
 				51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
@@ -404,7 +404,7 @@
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
 				519B8AA127119FE4003E5EDD /* SpellingQuizView.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
-				51423CE4270DE477006B94CB /* Persistence.swift in Sources */,
+				51423CE4270DE477006B94CB /* PersistenceController.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51719141270F84D20077B3C8 /* Words.swift in Sources */,
@@ -543,7 +543,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -559,7 +559,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dor.My-Dictionary";
 				PRODUCT_NAME = "My Dictionary";
 				SDKROOT = iphoneos;
@@ -576,7 +576,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -592,7 +592,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.dor.My-Dictionary";
 				PRODUCT_NAME = "My Dictionary";
 				SDKROOT = iphoneos;

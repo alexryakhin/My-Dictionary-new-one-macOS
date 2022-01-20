@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var persistenceController: PersistenceController
     @State private var showingOnboarding: Bool = !CurrentUserManager.shared.hasSeenOnboarding
     
     var body: some View {
@@ -15,11 +16,11 @@ struct MainTabView: View {
             WordsListView()
                 .tabItem {
                     Label("Words", systemImage: "textformat.abc")
-            }
-            QuizesView()
-                .tabItem {
-                    Label("Quizzes", systemImage: "a.magnify")
-                }
+                }.environmentObject(persistenceController)
+//            QuizesView()
+//                .tabItem {
+//                    Label("Quizzes", systemImage: "a.magnify")
+//                }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $showingOnboarding, onDismiss: {

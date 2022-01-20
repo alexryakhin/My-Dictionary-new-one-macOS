@@ -9,13 +9,8 @@ import SwiftUI
 import CoreData
 
 struct WordsListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    private var words: FetchedResults<Word>
-    
+    @EnvironmentObject var persistenceController: PersistenceController
+
     @StateObject var vm = DictionaryManager()
     @State private var showingAddSheet = false
     @State private var searchTerm = ""
@@ -23,7 +18,7 @@ struct WordsListView: View {
     var body: some View {
         NavigationView {
             VStack {
-                if words.isEmpty {
+                if persistenceController.words.isEmpty {
                     ZStack {
                         Color("Background").ignoresSafeArea()
                         VStack {
@@ -40,10 +35,7 @@ struct WordsListView: View {
                     }
                 } else {
                     List {
-                        ForEach(searchTerm.isEmpty ? Array(words) : words.filter({
-                            guard let wordItself = $0.wordItself else { return false }
-                            return wordItself.lowercased().starts(with: searchTerm.lowercased())})
-                        ) { word in
+                        ForEach(persistenceController.words) { word in
                             NavigationLink(destination: WordDetailView(word: word)) {
                                 HStack {
                                     Text(word.wordItself ?? "word")
@@ -57,7 +49,9 @@ struct WordsListView: View {
                                 }
                             }
                         }
-                        .onDelete(perform: deleteItems)
+                        .onDelete(perform: { offset in
+                            
+                        })
                     }
                 }
             }
@@ -136,27 +130,7 @@ struct WordsListView: View {
         showingAddSheet = true
     }
     
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            if searchTerm.isEmpty {
-                offsets.map { words[$0] }.forEach(viewContext.delete)
-            } else {
-                offsets.map { words.filter({
-                    guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})[$0] }.forEach(viewContext.delete)
-            }
-            save()
-        }
-    }
     
-    private func save() {
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            print(nsError.localizedDescription)
-        }
-    }
 }
 
 private let itemFormatter: DateFormatter = {
