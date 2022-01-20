@@ -10,10 +10,9 @@ import CoreData
 
 struct WordsListView: View {
     @EnvironmentObject var persistenceController: PersistenceController
-    
+    var searchBar = SearchBar()
     @StateObject var vm = DictionaryViewModel()
     @State private var showingAddSheet = false
-    @State private var searchTerm = ""
     
     var body: some View {
         NavigationView {
@@ -35,26 +34,42 @@ struct WordsListView: View {
                     }
                 } else {
                     List {
-                        ForEach(wordsToShow()) { word in
-                            NavigationLink(destination: WordDetailView(word: word)) {
-                                HStack {
-                                    Text(word.wordItself ?? "word")
-                                        .bold()
-                                    Spacer()
-                                    if word.isFavorite {
-                                        Image(systemName: "heart.fill").font(.caption).foregroundColor(.accentColor)
+                        Section {
+                            ForEach(wordsToShow()) { word in
+                                NavigationLink(destination: WordDetailView(word: word)) {
+                                    HStack {
+                                        Text(word.wordItself ?? "word")
+                                            .bold()
+                                        Spacer()
+                                        if word.isFavorite {
+                                            Image(systemName: "heart.fill").font(.caption).foregroundColor(.accentColor)
+                                        }
+                                        Text(word.partOfSpeech ?? "")
+                                            .foregroundColor(.secondary)
                                     }
-                                    Text(word.partOfSpeech ?? "")
-                                        .foregroundColor(.secondary)
                                 }
                             }
+                            .onDelete(perform: { indexSet in
+                                persistenceController.deleteWord(offsets: indexSet)
+                            })
+                        } footer: {
+                            if !wordsToShow().isEmpty {
+                                Text(wordsCount)
+                            }
                         }
-                        .onDelete(perform: { indexSet in
-                            persistenceController.deleteWord(offsets: indexSet)
-                        })
+                        if persistenceController.filterState == .search && wordsToShow().count < 10 {
+                            Button {
+                                vm.inputWord = persistenceController.searchText
+                                addItem()
+                            } label: {
+                                Text("Add '\(persistenceController.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                            }
+                        }
                     }
+                    .listStyle(.insetGrouped)
                 }
             }
+            .add(searchBar)
             .navigationTitle("Words")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -83,10 +98,10 @@ struct WordsListView: View {
             }
             Text("Select an item")
         }
-        //        .searchable(text: $searchTerm)
     }
     
     private func addItem() {
+        hideKeyboard()
         showingAddSheet = true
     }
     
@@ -96,6 +111,16 @@ struct WordsListView: View {
             return persistenceController.words
         case .favorite:
             return persistenceController.favoriteWords
+        case .search:
+            return persistenceController.searchResults
+        }
+    }
+    
+    private var wordsCount: String {
+        if wordsToShow().count == 1 {
+            return "1 word"
+        } else {
+            return "\(wordsToShow().count) words"
         }
     }
     

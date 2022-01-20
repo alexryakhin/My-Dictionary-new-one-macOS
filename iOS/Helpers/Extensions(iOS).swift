@@ -21,3 +21,7 @@ extension Color {
         return Color("Background")
     }
 }
+
+enum Publishers {
+    static let searchTerm = Notification.Name("dor.myDictionary.searchTerm")
+}

@@ -64,15 +64,7 @@ struct AddView: View {
                         }
                     Divider().padding(.leading)
                     Button(action: {
-                        if !vm.inputWord.isEmpty {
-                            do {
-                               try vm.fetchData()
-                            } catch {
-                                print(error.localizedDescription)
-                            }
-                        } else {
-                            print("type a word")
-                        }
+                        searchForWord()
                         hideKeyboard()
                     }, label: {
                         Text("Get definitions from the Internet")
@@ -204,10 +196,22 @@ struct AddView: View {
             .alert(isPresented: $showingAlert, content: {
                 Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
             })
-            
+            .onAppear {
+                searchForWord()
+            }
         }
     }
-    
+    private func searchForWord() {
+        if !vm.inputWord.isEmpty {
+            do {
+               try vm.fetchData()
+            } catch {
+                print(error.localizedDescription)
+            }
+        } else {
+            print("type a word")
+        }
+    }
 }
 
 struct AddView_Previews: PreviewProvider {

@@ -24,6 +24,7 @@ class DictionaryViewModel: ObservableObject {
         }
         
         URLSession.shared.dataTaskPublisher(for: url)
+            .retry(2)
             .receive(on: DispatchQueue.main)
             .tryMap { (data, response) -> Data in
                 guard let response = response as? HTTPURLResponse, response.statusCode >= 200 && response.statusCode < 300 else {

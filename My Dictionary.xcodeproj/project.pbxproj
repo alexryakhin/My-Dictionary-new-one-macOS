@@ -41,6 +41,8 @@
 		51EBFBEB270F4A970066782B /* WordCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEA270F4A970066782B /* WordCard.swift */; };
 		51EBFBED270F4A9E0066782B /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */; };
 		51EBFBEF270F4AAB0066782B /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEE270F4AAB0066782B /* Words.swift */; };
+		C0358EF22799DDC300E9C452 /* ViewControllerResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF12799DDC300E9C452 /* ViewControllerResolver.swift */; };
+		C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF32799DDCA00E9C452 /* SearchBar.swift */; };
 		C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */; };
 		C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BE27997FDC00BE0726 /* FilterCase.swift */; };
 		C0D377C12799833700BE0726 /* SortingCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377C02799833600BE0726 /* SortingCase.swift */; };
@@ -82,6 +84,8 @@
 		51EBFBEA270F4A970066782B /* WordCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordCard.swift; sourceTree = "<group>"; };
 		51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
 		51EBFBEE270F4AAB0066782B /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		C0358EF12799DDC300E9C452 /* ViewControllerResolver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewControllerResolver.swift; sourceTree = "<group>"; };
+		C0358EF32799DDCA00E9C452 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions(iOS).swift"; sourceTree = "<group>"; };
 		C0D377BE27997FDC00BE0726 /* FilterCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCase.swift; sourceTree = "<group>"; };
 		C0D377C02799833600BE0726 /* SortingCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCase.swift; sourceTree = "<group>"; };
@@ -244,6 +248,15 @@
 			path = Resourses;
 			sourceTree = "<group>";
 		};
+		C0358EF02799DDB600E9C452 /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				C0358EF12799DDC300E9C452 /* ViewControllerResolver.swift */,
+				C0358EF32799DDCA00E9C452 /* SearchBar.swift */,
+			);
+			path = SearchBar;
+			sourceTree = "<group>";
+		};
 		C0D377C4279984C900BE0726 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +309,7 @@
 		C0D377C9279985E600BE0726 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				C0358EF02799DDB600E9C452 /* SearchBar */,
 				C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */,
 			);
 			path = Helpers;
@@ -403,6 +417,7 @@
 				51423CE3270DE477006B94CB /* PersistenceController.swift in Sources */,
 				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
 				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
+				C0358EF22799DDC300E9C452 /* ViewControllerResolver.swift in Sources */,
 				51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				517366E1270EB8A50073651A /* OnboardingView.swift in Sources */,
 				513CBC64271099CF00A2F4EC /* ChooseDefinitionView.swift in Sources */,
@@ -413,6 +428,7 @@
 				C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */,
 				51EBFBEF270F4AAB0066782B /* Words.swift in Sources */,
 				C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */,
+				C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */,
 				517366DF270EB83F0073651A /* MainTabView.swift in Sources */,
 				C0D377C12799833700BE0726 /* SortingCase.swift in Sources */,
 				517366E6270EB99C0073651A /* QuizesView.swift in Sources */,

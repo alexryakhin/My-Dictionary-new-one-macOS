@@ -16,6 +16,7 @@ final class PersistenceController: ObservableObject {
     @Published var words: [Word] = []
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
+    var searchText = ""
     
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "My_Dictionary")
@@ -37,6 +38,18 @@ final class PersistenceController: ObservableObject {
             .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification, object: container.viewContext)
             .sink { _ in
                 self.fetchWords()
+            }
+            .store(in: &cancellable)
+        NotificationCenter.default
+            .publisher(for: Publishers.searchTerm)
+            .sink { notification in
+                let text = notification.userInfo!["SearchTerm"] as! String
+                self.searchText = text
+                if !text.isEmpty {
+                    self.filterState = .search
+                } else {
+                    self.filterState = .none
+                }
             }
             .store(in: &cancellable)
         fetchWords()
@@ -86,9 +99,13 @@ final class PersistenceController: ObservableObject {
             }
         case .favorite:
             withAnimation {
-                offsets.map { words.filter { $0.isFavorite }[$0] }.forEach(container.viewContext.delete)
-                }
+                offsets.map { favoriteWords[$0] }.forEach(container.viewContext.delete)
             }
+        case .search:
+            withAnimation {
+                offsets.map { searchResults[$0] }.forEach(container.viewContext.delete)
+            }
+        }
         save()
     }
     
@@ -101,6 +118,16 @@ final class PersistenceController: ObservableObject {
     // MARK: Sorting
     var favoriteWords: [Word] {
         return self.words.filter { $0.isFavorite }
+    }
+    
+    var searchResults: [Word] {
+        return self.words.filter { word in
+            if let wordItself = word.wordItself, !searchText.isEmpty {
+                return wordItself.localizedStandardContains(searchText)
+            } else {
+                return true
+            }
+        }
     }
     
     func sortWords() {
