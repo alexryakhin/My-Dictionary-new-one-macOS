@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @EnvironmentObject var persistenceController: PersistenceController
-    @State private var showingOnboarding: Bool = !CurrentUserManager.shared.hasSeenOnboarding
+    @AppStorage("isShowingOnboarding") var isShowingOnboarding: Bool = true
     
     var body: some View {
         TabView {
@@ -23,8 +23,8 @@ struct MainTabView: View {
 //                }
         }
         .navigationViewStyle(StackNavigationViewStyle())
-        .sheet(isPresented: $showingOnboarding, onDismiss: {
-            CurrentUserManager.shared.hasSeenOnboarding = true
+        .sheet(isPresented: $isShowingOnboarding, onDismiss: {
+            isShowingOnboarding = false
         }) {
             OnboardingView()
         }

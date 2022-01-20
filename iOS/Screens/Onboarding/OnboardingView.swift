@@ -46,7 +46,6 @@ struct OnboardingView: View {
                 
                 Button {
                     presentationMode.wrappedValue.dismiss()
-                    CurrentUserManager.shared.hasSeenOnboarding = true
                 } label: {
                     Text("Continue")
                         .bold()
