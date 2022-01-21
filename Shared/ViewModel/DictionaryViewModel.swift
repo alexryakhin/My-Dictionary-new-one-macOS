@@ -48,4 +48,8 @@ class DictionaryViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    deinit {
+        print("Dictionary VM deinit")
+    }
 }

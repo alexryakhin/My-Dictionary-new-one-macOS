@@ -10,7 +10,6 @@ import CoreData
 
 struct WordsListView: View {
     @EnvironmentObject var persistenceController: PersistenceController
-    @ObservedObject var vm = DictionaryViewModel()
     @State private var showingAddSheet = false
     
     var body: some View {
@@ -58,8 +57,6 @@ struct WordsListView: View {
                         }
                         if persistenceController.filterState == .search && wordsToShow().count < 10 {
                             Button {
-                                vm.inputWord = persistenceController.searchText
-                                try? vm.fetchData()
                                 addItem()
                             } label: {
                                 Text("Add '\(persistenceController.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
@@ -89,12 +86,8 @@ struct WordsListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingAddSheet, onDismiss: {
-                vm.resultWordDetails = nil
-                vm.inputWord = ""
-                vm.status = .blank
-            }) {
-                AddView(vm: vm)
+            .sheet(isPresented: $showingAddSheet) {
+                AddView(searchTerm: persistenceController.searchText)
             }
             Text("Select an item")
         }
