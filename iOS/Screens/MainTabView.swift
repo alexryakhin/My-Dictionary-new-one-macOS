@@ -17,6 +17,10 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Words", systemImage: "textformat.abc")
                 }.environmentObject(persistenceController)
+            IdiomsListView()
+                .tabItem {
+                    Label("Idioms", systemImage: "scroll")
+                }.environmentObject(persistenceController)
 //            QuizesView()
 //                .tabItem {
 //                    Label("Quizzes", systemImage: "a.magnify")

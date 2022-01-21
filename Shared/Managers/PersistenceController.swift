@@ -16,7 +16,7 @@ final class PersistenceController: ObservableObject {
     @Published var words: [Word] = []
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
-    var searchText = ""
+    @Published var searchText = ""
     
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "My_Dictionary")
@@ -40,18 +40,13 @@ final class PersistenceController: ObservableObject {
                 self.fetchWords()
             }
             .store(in: &cancellable)
-        NotificationCenter.default
-            .publisher(for: Publishers.searchTerm)
-            .sink { notification in
-                let text = notification.userInfo!["SearchTerm"] as! String
-                self.searchText = text
-                if !text.isEmpty {
-                    self.filterState = .search
-                } else {
-                    self.filterState = .none
-                }
+        $searchText.sink { value in
+            if value.isEmpty {
+                self.filterState = .none
+            } else {
+                self.filterState = .search
             }
-            .store(in: &cancellable)
+        }.store(in: &cancellable)
         fetchWords()
     }
     

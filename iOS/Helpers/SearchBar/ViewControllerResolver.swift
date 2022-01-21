@@ -2,7 +2,7 @@
 //  ViewControllerResolver.swift
 //  NativeSearchBar
 //
-//  Created by Haaris Iqubal on 5/26/21.
+//  Created by Alexander Ryakhin on 1/21/22.
 //
 
 import SwiftUI

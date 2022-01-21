@@ -9,9 +9,10 @@ import SwiftUI
 import Combine
 
 class SearchBar: NSObject {
+    @Binding var searchTerm: String
     let searchController: UISearchController = UISearchController(searchResultsController: nil)
-    
-    override init() {
+    init(searchTerm: Binding<String>) {
+        _searchTerm = searchTerm
         super.init()
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchResultsUpdater = self
@@ -21,13 +22,16 @@ class SearchBar: NSObject {
 extension SearchBar: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         if let searchBarText = searchController.searchBar.text {
-            NotificationCenter.default.post(name: Publishers.searchTerm, object: nil, userInfo: ["SearchTerm": searchBarText])
+            searchTerm = searchBarText
         }
     }
 }
 
 struct SearchBarModifier: ViewModifier {
     let searchBar: SearchBar
+    init(searchTerm: Binding<String>) {
+        searchBar = SearchBar(searchTerm: searchTerm)
+    }
     
     func body(content: Content) -> some View {
         content
@@ -39,7 +43,7 @@ struct SearchBarModifier: ViewModifier {
 }
 
 extension View {
-    func add(_ searchBar: SearchBar) -> some View {
-        modifier(SearchBarModifier(searchBar: searchBar))
+    func searchable(searchTerm: Binding<String>) -> some View {
+        modifier(SearchBarModifier(searchTerm: searchTerm))
     }
 }

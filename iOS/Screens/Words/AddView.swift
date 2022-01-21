@@ -11,7 +11,6 @@ import AVKit
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var persistenceController: PersistenceController
-    
     @ObservedObject var vm: DictionaryViewModel
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
@@ -45,23 +44,7 @@ struct AddView: View {
                     TextField("Word's definition", text: $descriptionField)
                         .padding(.horizontal)
                     Divider().padding(.leading)
-                    Text(partOfSpeech == .unknown ? "Part of speech" : partOfSpeech.rawValue)
-                        .padding(.horizontal)
-                        .foregroundColor(
-                            partOfSpeech == .unknown
-                            ? Color("TextFieldColor")
-                            : Color.primary
-                        )
-                        .contextMenu {
-                            ForEach(PartOfSpeech.allCases, id: \.self) { c in
-                                Button {
-                                    partOfSpeech = c
-                                } label: {
-                                    Text(c.rawValue)
-                                }
-
-                            }
-                        }
+                    partOfSpeechMenu
                     Divider().padding(.leading)
                     Button(action: {
                         searchForWord()
@@ -79,94 +62,7 @@ struct AddView: View {
                 .background(Color("TableBackground").cornerRadius(10))
                 .padding(.horizontal)
                 
-                Section {
-                    if vm.resultWordDetails != nil && vm.status == .ready {
-                        if vm.resultWordDetails!.phonetic != nil {
-                            HStack(spacing: 0) {
-                                HStack {
-                                    Text("Phonetic: ").bold()
-                                    + Text(vm.resultWordDetails!.phonetic ?? "")
-                                }.padding(.top)
-                                Spacer()
-                                Button {
-                                    synthesizer.speak(utterance)
-                                } label: {
-                                    Image(systemName: "speaker.wave.2.fill")
-                                        .font(.title3)
-                                        .padding(.vertical, 5)
-                                        .padding(.horizontal)
-                                        .background(Color.accentColor)
-                                        .cornerRadius(8)
-                                        .foregroundColor(.white)
-                                }
-                            }
-                            .padding(.horizontal)
-                        }
-                        
-                        WordCard(
-                            wordMeanings: vm.resultWordDetails!.meanings, tapGesture: { descriptionStr, partOfSpeechStr in
-                                descriptionField = descriptionStr
-                                
-                                switch partOfSpeechStr {
-                                case "noun":
-                                    partOfSpeech = .noun
-                                case "verb":
-                                    partOfSpeech = .verb
-                                case "adjective":
-                                    partOfSpeech = .adjective
-                                case "adverb":
-                                    partOfSpeech = .adverb
-                                case "exclamation":
-                                    partOfSpeech = .exclamation
-                                case "conjunction":
-                                    partOfSpeech = .conjunction
-                                case "pronoun":
-                                    partOfSpeech = .pronoun
-                                case "number":
-                                    partOfSpeech = .number
-                                default:
-                                    partOfSpeech = .unknown
-                                }
-                                
-                                hideKeyboard()
-                            })
-                    } else if vm.status == .loading {
-                        VStack {
-                            Spacer().frame(height: 50)
-                            ProgressView()
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            hideKeyboard()
-                        }
-                    } else if vm.status == .blank {
-                        VStack {
-                            Spacer().frame(height: 25)
-                            Text("*After the data shows up here, tap on word's definition to fill it into definition's field.")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .padding()
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            hideKeyboard()
-                        }
-                    } else if vm.status == .error {
-                        VStack {
-                            Spacer().frame(height: 25)
-                            Text("Couldn't get the word's data, check your spelling. Or you lost your internet connection, so check this out as well.")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .padding()
-                            Spacer()
-                        }
-                        .onTapGesture {
-                            hideKeyboard()
-                        }
-                    }
-                }
-                
-                .cornerRadius(15)
+                detailsView
             }
             .ignoresSafeArea(.all, edges: [.bottom])
             .background(Color("Background")
@@ -196,11 +92,9 @@ struct AddView: View {
             .alert(isPresented: $showingAlert, content: {
                 Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
             })
-            .onAppear {
-                searchForWord()
-            }
         }
     }
+    
     private func searchForWord() {
         if !vm.inputWord.isEmpty {
             do {
@@ -210,6 +104,131 @@ struct AddView: View {
             }
         } else {
             print("type a word")
+        }
+    }
+    
+    var errorView: some View {
+        VStack {
+            Spacer().frame(height: 25)
+            Text("Couldn't get the word's data, check your spelling. Or you lost your internet connection, so check this out as well.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .padding()
+            Spacer()
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+    
+    var blanckView: some View {
+        VStack {
+            Spacer().frame(height: 25)
+            Text("*After the data shows up here, tap on word's definition to fill it into definition's field.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+                .padding()
+            Spacer()
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+    
+    var loadingView: some View {
+        VStack {
+            Spacer().frame(height: 50)
+            ProgressView()
+            Spacer()
+        }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+    
+    var detailsView: some View {
+        Section {
+            if vm.resultWordDetails != nil && vm.status == .ready {
+                if vm.resultWordDetails!.phonetic != nil {
+                    HStack(spacing: 0) {
+                        HStack {
+                            Text("Phonetic: ").bold()
+                            + Text(vm.resultWordDetails!.phonetic ?? "")
+                        }.padding(.top)
+                        Spacer()
+                        Button {
+                            synthesizer.speak(utterance)
+                        } label: {
+                            Image(systemName: "speaker.wave.2.fill")
+                                .font(.title3)
+                                .padding(.vertical, 5)
+                                .padding(.horizontal)
+                                .background(Color.accentColor)
+                                .cornerRadius(8)
+                                .foregroundColor(.white)
+                        }
+                    }
+                    .padding(.horizontal)
+                }
+                
+                WordCard(
+                    wordMeanings: vm.resultWordDetails!.meanings, tapGesture: { descriptionStr, partOfSpeechStr in
+                        descriptionField = descriptionStr
+                        
+                        switch partOfSpeechStr {
+                        case "noun":
+                            partOfSpeech = .noun
+                        case "verb":
+                            partOfSpeech = .verb
+                        case "adjective":
+                            partOfSpeech = .adjective
+                        case "adverb":
+                            partOfSpeech = .adverb
+                        case "exclamation":
+                            partOfSpeech = .exclamation
+                        case "conjunction":
+                            partOfSpeech = .conjunction
+                        case "pronoun":
+                            partOfSpeech = .pronoun
+                        case "number":
+                            partOfSpeech = .number
+                        default:
+                            partOfSpeech = .unknown
+                        }
+                        
+                        hideKeyboard()
+                    })
+            } else if vm.status == .loading {
+                loadingView
+            } else if vm.status == .blank {
+                blanckView
+            } else if vm.status == .error {
+                errorView
+            }
+        }
+        .cornerRadius(15)
+    }
+    
+    var partOfSpeechMenu: some View {
+        Menu {
+            ForEach(PartOfSpeech.allCases, id: \.self) { c in
+                Button {
+                    partOfSpeech = c
+                } label: {
+                    if partOfSpeech == c {
+                        Image(systemName: "checkmark")
+                    }
+                    Text(c.rawValue)
+                }
+            }
+        } label: {
+            Text(partOfSpeech == .unknown ? "Part of speech" : partOfSpeech.rawValue)
+                .padding(.horizontal)
+                .foregroundColor(
+                    partOfSpeech == .unknown
+                    ? Color.accentColor
+                    : Color.primary
+                )
         }
     }
 }

@@ -10,8 +10,7 @@ import CoreData
 
 struct WordsListView: View {
     @EnvironmentObject var persistenceController: PersistenceController
-    var searchBar = SearchBar()
-    @StateObject var vm = DictionaryViewModel()
+    @ObservedObject var vm = DictionaryViewModel()
     @State private var showingAddSheet = false
     
     var body: some View {
@@ -60,6 +59,7 @@ struct WordsListView: View {
                         if persistenceController.filterState == .search && wordsToShow().count < 10 {
                             Button {
                                 vm.inputWord = persistenceController.searchText
+                                try? vm.fetchData()
                                 addItem()
                             } label: {
                                 Text("Add '\(persistenceController.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
@@ -69,7 +69,7 @@ struct WordsListView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .add(searchBar)
+            .searchable(searchTerm: $persistenceController.searchText)
             .navigationTitle("Words")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -101,7 +101,6 @@ struct WordsListView: View {
     }
     
     private func addItem() {
-        hideKeyboard()
         showingAddSheet = true
     }
     
