@@ -11,11 +11,15 @@ var screen = NSScreen.main!.visibleFrame
 
 struct MainTabView: View {
     @StateObject var homeData = HomeViewModel()
+    @StateObject var wordsViewModel = WordsViewModel()
+    @StateObject var quizzesViewModel = QuizzesViewModel()
+    @StateObject var idiomsViewModel = IdiomsViewModel()
     
     var body: some View {
         HStack(spacing: 0) {
             VStack {
                 TabButton(image: "textformat.abc", title: "Words", selectedTab: $homeData.selectedTab)
+                TabButton(image: "scroll", title: "Idioms", selectedTab: $homeData.selectedTab)
                 TabButton(image: "a.magnify", title: "Quizzes", selectedTab: $homeData.selectedTab)
                 Spacer()
 //                TabButton(image: "gear", title: "Settings", selectedTab: $homeData.selectedTab)
@@ -23,12 +27,12 @@ struct MainTabView: View {
             .padding()
             .padding(.top, 40)
             .background(BlurView())
-            
 
-            ZStack{
-                switch homeData.selectedTab{
-                case "Words": NavigationView{ WordsListView() }
-                case "Quizzes": NavigationView{ QuizzesView() }
+            ZStack {
+                switch homeData.selectedTab {
+                case "Words": NavigationView { WordsListView().environmentObject(wordsViewModel) }
+                case "Quizzes": NavigationView { QuizzesView().environmentObject(quizzesViewModel) }
+                case "Idioms": NavigationView { IdiomsListView().environmentObject(idiomsViewModel) }
 //                case "Settings": Text("Settings")
                 default : Text("Select an item")
                 }

@@ -35,7 +35,7 @@ struct WordsListView: View {
                         if !wordsToShow().isEmpty {
                             Section {
                                 ForEach(wordsToShow()) { word in
-                                    NavigationLink(destination: WordDetailView(word: word)) {
+                                    NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
                                         HStack {
                                             Text(word.wordItself ?? "word")
                                                 .bold()
@@ -197,13 +197,6 @@ struct WordsListView: View {
         }
     }
 }
-
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .long
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

@@ -10,17 +10,16 @@ import SwiftUI
 struct ChooseDefinitionView: View {
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
-    
-    @ObservedObject var vm: QuizzesViewModel
+    @EnvironmentObject var quizzesViewModel: QuizzesViewModel
     
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
 
-            Text(vm.words[rightAnswerIndex].wordItself ?? "")
+            Text(quizzesViewModel.words[rightAnswerIndex].wordItself ?? "")
                 .font(.largeTitle)
                 .bold()
-            Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
+            Text(quizzesViewModel.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
             
             Spacer()
@@ -29,7 +28,7 @@ struct ChooseDefinitionView: View {
                 .foregroundColor(.secondary)
             
             ForEach(0..<3) { index in
-                Text(vm.words[index].definition ?? "")
+                Text(quizzesViewModel.words[index].definition ?? "")
                     .foregroundColor(.primary)
                     .frame(width: 300)
                     .padding()
@@ -37,10 +36,10 @@ struct ChooseDefinitionView: View {
                     .cornerRadius(15)
                     .padding(3)
                     .onTapGesture {
-                        if vm.words[rightAnswerIndex].id == vm.words[index].id {
+                        if quizzesViewModel.words[rightAnswerIndex].id == quizzesViewModel.words[index].id {
                             withAnimation {
                                 isRightAnswer = true
-                                vm.words.shuffle()
+                                quizzesViewModel.words.shuffle()
                                 rightAnswerIndex = Int.random(in: 0...2)
                             }
                         } else {
@@ -60,14 +59,5 @@ struct ChooseDefinitionView: View {
             rightAnswerIndex = Int.random(in: 0...2)
         }
         
-    }
-}
-
-class QuizzesViewModel: ObservableObject {
-    @Published var words: [Word] = []
-    
-    init(words: [Word]) {
-        self.words = words
-        self.words.shuffle()
     }
 }

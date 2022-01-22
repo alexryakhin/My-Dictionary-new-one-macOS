@@ -8,13 +8,8 @@
 import SwiftUI
 
 struct SpellingQuizView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    private var words: FetchedResults<Word>
-    
+    @EnvironmentObject var quizzesViewModel: QuizzesViewModel
+
     @State private var randomWord: Word?
     @State private var answerTextField = ""
     @State private var isRightAnswer = true
@@ -26,13 +21,10 @@ struct SpellingQuizView: View {
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
-//            Text("Definition")
-//                .foregroundColor(.secondary)
             
             Text(randomWord?.definition ?? "Error")
                 .font(.title)
                 .bold()
-//                .padding(.vertical)
                 .padding(.horizontal, 30)
             
             Text(randomWord?.partOfSpeech ?? "error").foregroundColor(.secondary)
@@ -76,7 +68,7 @@ struct SpellingQuizView: View {
         }
         .navigationTitle("Spelling")
         .onAppear {
-            playingWords = Array(words)
+            playingWords = quizzesViewModel.words
             randomWord = playingWords.randomElement()
         }
         .alert(isPresented: $isShowAlert, content: {
@@ -126,9 +118,3 @@ struct SpellingQuizView: View {
         }
     }
 }
-
-//struct SpellingQuizView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SpellingQuizView()
-//    }
-//}

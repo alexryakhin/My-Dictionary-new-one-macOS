@@ -1,6 +1,6 @@
 //
 //  ContentView.swift
-//  Shared
+//  My Dictionary (macOS)
 //
 //  Created by Alexander Bonney on 10/6/21.
 //
@@ -10,16 +10,9 @@ import CoreData
 import AVFoundation
 
 struct WordsListView: View {
-    @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var wordsViewModel: WordsViewModel
     @EnvironmentObject var homeData: HomeViewModel
-        
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    private var words: FetchedResults<Word>
-    
     @State private var isShowingAddView = false
-    @State private var searchTerm = ""
     
     var body: some View {
         VStack {
@@ -36,42 +29,7 @@ struct WordsListView: View {
                             : .red)
                 }
                 Spacer()
-                Menu {
-                    Button {
-                        withAnimation {
-                            homeData.sortingState = .def
-                        }
-                    } label: {
-                        if homeData.sortingState == .def {
-                            Image(systemName: "checkmark")
-                        }
-                        Text("Default")
-                    }
-                    Button {
-                        withAnimation {
-                            homeData.sortingState = .name
-                        }
-                    } label: {
-                        if homeData.sortingState == .name {
-                            Image(systemName: "checkmark")
-                        }
-                        Text("Name")
-                    }
-                    Button {
-                        withAnimation {
-                            homeData.sortingState = .partOfSpeech
-                        }
-                    } label: {
-                        if homeData.sortingState == .partOfSpeech {
-                            Image(systemName: "checkmark")
-                        }
-                        Text("Part of speech")
-                    }
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                    Text(homeData.sortingState.rawValue)
-                }
-
+                sortMenu
                 Button {
                     showAddView()
                 } label: {
@@ -82,11 +40,9 @@ struct WordsListView: View {
             .padding(.horizontal, 10)
             // MARK: Search text field
             HStack {
-                
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
-                
-                TextField("Search", text: $searchTerm)
+                TextField("Search", text: $wordsViewModel.searchText)
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding(.vertical, 8)
@@ -95,38 +51,44 @@ struct WordsListView: View {
             .cornerRadius(8)
             .padding(.horizontal, 10)
             
-            List(selection: $homeData.selectedWord) {
-                //Search, if user type something into search field, show filtered array
-                ForEach(searchTerm.isEmpty ? Array(words.sorted(by: {
-                    switch homeData.sortingState {
-                    case .def:
-                        return $0.timestamp! < $1.timestamp!
-                    case .name:
-                        return $0.wordItself! < $1.wordItself!
-                    case .partOfSpeech:
-                        return $0.partOfSpeech! < $1.partOfSpeech!
-                    }
-                })) : words.filter({
-                    guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})
-                ) { word in
-                    NavigationLink(destination: WordDetailView(word: word)) {
-                        HStack {
-                            Text(word.wordItself ?? "word")
-                                .bold()
-                            Spacer()
-                            if word.isFavorite {
-                                Image(systemName: "heart.fill")
-                                    .font(.caption)
-                                    .foregroundColor(homeData.selectedWord == word ? .secondary : .accentColor)
+            Section {
+                List(selection: $homeData.selectedWord) {
+                    //Search, if user type something into search field, show filtered array
+                    ForEach(wordsToShow()) { word in
+                        NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
+                            HStack {
+                                Text(word.wordItself ?? "word")
+                                    .bold()
+                                Spacer()
+                                if word.isFavorite {
+                                    Image(systemName: "heart.fill")
+                                        .font(.caption)
+                                        .foregroundColor(homeData.selectedWord == word ? .secondary : .accentColor)
+                                }
+                                Text(word.partOfSpeech ?? "")
+                                    .foregroundColor(.secondary)
                             }
-                            Text(word.partOfSpeech ?? "")
-                                .foregroundColor(.secondary)
+                        }
+                        .tag(word)
+                    }
+                    .onDelete(perform: { indexSet in
+                        wordsViewModel.deleteWord(offsets: indexSet)
+                    })
+                    if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                        Button {
+                            showAddView()
+                        } label: {
+                            Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                         }
                     }
-                    .tag(word)
                 }
-                .onDelete(perform: deleteItems)
+            } footer: {
+                if !wordsToShow().isEmpty {
+                    Text(wordsCount)
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .padding(.bottom, 5)
+                }
             }
         }
         .ignoresSafeArea()
@@ -136,62 +98,114 @@ struct WordsListView: View {
         Text("Select an item")
     }
     
-    private func addItem() {
-        withAnimation {
-            let newWord = Word(context: viewContext)
-            newWord.id = UUID()
-            newWord.wordItself = "New Word"
-            newWord.definition = "Word's Definition"
-            newWord.partOfSpeech = "noun"
-            newWord.phonetic = "phonetic symbols"
-            newWord.timestamp = Date()
-            
-            save()
+    private var wordsCount: String {
+        if wordsToShow().count == 1 {
+            return "1 word"
+        } else {
+            return "\(wordsToShow().count) words"
         }
     }
-    
+        
     private func showAddView() {
         isShowingAddView = true
     }
     
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            if searchTerm.isEmpty {
-                offsets.map { words[$0] }.forEach(viewContext.delete)
-            } else {
-                offsets.map { words.filter({
-                    guard let wordItself = $0.wordItself else { return false }
-                    return wordItself.lowercased().starts(with: searchTerm.lowercased())})[$0] }.forEach(viewContext.delete)
-            }
-            
-            save()
+    private func wordsToShow() -> [Word] {
+        switch wordsViewModel.filterState {
+        case .none:
+            return wordsViewModel.words
+        case .favorite:
+            return wordsViewModel.favoriteWords
+        case .search:
+            return wordsViewModel.searchResults
         }
     }
     
     private func removeWord() {
         if homeData.selectedWord != nil {
-            viewContext.delete(homeData.selectedWord!)
+            wordsViewModel.delete(word: homeData.selectedWord!)
         }
         homeData.selectedWord = nil
-        save()
     }
     
-    private func save() {
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            print(nsError.localizedDescription)
+    private var sortMenu: some View {
+        Menu {
+            Section {
+                Button {
+                    withAnimation {
+                        wordsViewModel.sortingState = .def
+                        wordsViewModel.sortWords()
+                        homeData.selectedWord = nil
+                    }
+                } label: {
+                    if wordsViewModel.sortingState == .def {
+                        Image(systemName: "checkmark")
+                    }
+                    Text("Default")
+                }
+                Button {
+                    withAnimation {
+                        wordsViewModel.sortingState = .name
+                        wordsViewModel.sortWords()
+                        homeData.selectedWord = nil
+                    }
+                } label: {
+                    if wordsViewModel.sortingState == .name {
+                        Image(systemName: "checkmark")
+                    }
+                    Text("Name")
+                }
+                Button {
+                    withAnimation {
+                        wordsViewModel.sortingState = .partOfSpeech
+                        wordsViewModel.sortWords()
+                        homeData.selectedWord = nil
+                    }
+                } label: {
+                    if wordsViewModel.sortingState == .partOfSpeech {
+                        Image(systemName: "checkmark")
+                    }
+                    Text("Part of speech")
+                }
+            } header: {
+                Text("Sort by")
+            }
+            
+            Section {
+                Button {
+                    withAnimation {
+                        wordsViewModel.filterState = .none
+                        homeData.selectedWord = nil
+                    }
+                } label: {
+                    if wordsViewModel.filterState == .none {
+                        Image(systemName: "checkmark")
+                    }
+                    Text("None")
+                }
+                Button {
+                    withAnimation {
+                        wordsViewModel.filterState = .favorite
+                        homeData.selectedWord = nil
+                    }
+                } label: {
+                    if wordsViewModel.filterState == .favorite {
+                        Image(systemName: "checkmark")
+                    }
+                    Text("Favorites")
+                }
+            } header: {
+                Text("Filter by")
+            }
+            
+        } label: {
+            Image(systemName: "arrow.up.arrow.down")
+            Text(wordsViewModel.sortingState.rawValue)
         }
-    }
-}
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .long
-    formatter.timeStyle = .medium
-    return formatter
-}()
+    }
+    
+}
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

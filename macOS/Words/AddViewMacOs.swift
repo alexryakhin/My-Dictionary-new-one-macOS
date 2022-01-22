@@ -9,11 +9,11 @@ import SwiftUI
 import AVKit
 
 struct AddView: View {
-    @Environment(\.managedObjectContext) private var viewContext
     @Binding var isShowingAddView: Bool
     @State private var definitionInput = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
-    @ObservedObject var vm = DictionaryViewModel()
+    @EnvironmentObject var wordsViewModel: WordsViewModel
+    @StateObject var vm = DictionaryViewModel()
     @State private var wordClassSelection = 0
     @State private var showingAlert = false
     
@@ -59,10 +59,7 @@ struct AddView: View {
                         Text(c.rawValue)
                     }
                 }
-                
             }
-            
-            
             
             if vm.resultWordDetails != nil && vm.status == .ready {
                 VStack {
@@ -118,8 +115,7 @@ struct AddView: View {
                                 }
                             }.tabItem({
                                 Text("\(index + 1)")
-                            })
-                                .padding(.horizontal)
+                            }).padding(.horizontal)
                         }
                     }
                 }
@@ -133,7 +129,6 @@ struct AddView: View {
                 Spacer()
             }
             
-            
             Button {
                 saveNewWord()
             } label: {
@@ -146,6 +141,12 @@ struct AddView: View {
         .alert(isPresented: $showingAlert, content: {
             Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
         })
+        .onAppear {
+            if !wordsViewModel.searchText.isEmpty {
+                vm.inputWord = wordsViewModel.searchText
+                try? vm.fetchData()
+            }
+        }
     }
     
     private func fetchData() {
@@ -158,33 +159,13 @@ struct AddView: View {
     
     private func saveNewWord() {
         if !vm.inputWord.isEmpty, !definitionInput.isEmpty {
-            let newWord = Word(context: viewContext)
-            newWord.id = UUID()
-            newWord.wordItself = vm.inputWord.capitalizingFirstLetter()
-            newWord.definition = definitionInput.capitalizingFirstLetter()
-            if vm.resultWordDetails == nil {
-                newWord.partOfSpeech = partOfSpeech.rawValue
-            } else {
-                newWord.partOfSpeech = vm.resultWordDetails!.meanings[wordClassSelection].partOfSpeech
-            }
-            newWord.phonetic = vm.resultWordDetails?.phonetic
-            newWord.timestamp = Date()
-            save()
+            wordsViewModel.addNewWord(word: vm.inputWord.capitalizingFirstLetter(), definition: definitionInput.capitalizingFirstLetter(), partOfSpeech: partOfSpeech.rawValue, phonetic: vm.resultWordDetails?.phonetic)
             isShowingAddView = false
             vm.resultWordDetails = nil
             vm.inputWord = ""
             vm.status = .blank
         } else {
             showingAlert = true
-        }
-    }
-    
-    private func save() {
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            print(nsError.localizedDescription)
         }
     }
 }

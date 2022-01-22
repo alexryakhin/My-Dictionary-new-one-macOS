@@ -26,7 +26,7 @@ final class WordsViewModel: ObservableObject {
         // every time core data gets updated, call fetchWords()
         NotificationCenter.default
             .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification, object: persistenceController.container.viewContext)
-            .throttle(for: 10.0, scheduler: RunLoop.main, latest: true)
+            .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
             .sink { [unowned self] _ in
                 self.fetchWords()
             }

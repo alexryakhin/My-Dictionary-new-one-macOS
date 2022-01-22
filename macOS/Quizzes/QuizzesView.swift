@@ -8,18 +8,11 @@
 import SwiftUI
 
 struct QuizzesView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    var words: FetchedResults<Word>
-    
-    @State private var playingWords: [Word] = []
-    
+    @StateObject var quizzesViewModel = QuizzesViewModel()
+
     var body: some View {
         VStack(alignment: .leading) {
-            if words.count < 10 {
+            if quizzesViewModel.words.count < 10 {
                 HStack {
                     Text("Quizzes").font(.title2).bold().padding().padding(.top, 50)
                     Spacer()
@@ -33,10 +26,10 @@ struct QuizzesView: View {
             } else {
                 Text("Quizzes").font(.title2).bold().padding(.horizontal).padding(.top, 50)
                 List {
-                    NavigationLink(destination: SpellingQuizView()) {
+                    NavigationLink(destination: SpellingQuizView().environmentObject(quizzesViewModel)) {
                         Text("Spelling")
                     }
-                    NavigationLink(destination: ChooseDefinitionView(vm: QuizzesViewModel(words: playingWords))) {
+                    NavigationLink(destination: ChooseDefinitionView().environmentObject(quizzesViewModel)) {
                         Text("Choose the right definition")
                     }
                 }
@@ -44,9 +37,6 @@ struct QuizzesView: View {
         }
         .ignoresSafeArea()
         .navigationTitle("Quizzes")
-        .onAppear {
-            playingWords = Array(words)
-        }
     }
 }
 

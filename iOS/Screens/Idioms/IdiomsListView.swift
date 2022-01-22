@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct IdiomsListView: View {
+    @StateObject var idiomsViewModel = IdiomsViewModel()
     @State private var searchBarText = ""
     
     var body: some View {

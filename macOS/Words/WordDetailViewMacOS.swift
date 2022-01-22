@@ -9,15 +9,12 @@ import SwiftUI
 import AVKit
 
 struct WordDetailView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
     @ObservedObject var word: Word
-    
+    @EnvironmentObject var wordsViewModel: WordsViewModel
     @State private var isEditing = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
-
     
     private var examples: [String] {
         guard let data = word.examples else {return []}
@@ -41,7 +38,7 @@ struct WordDetailView: View {
                 Button(action: {
                     //favorites
                     word.isFavorite.toggle()
-                    save()
+                    wordsViewModel.save()
                 }, label: {
                     Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
                         .foregroundColor(.accentColor)
@@ -51,7 +48,7 @@ struct WordDetailView: View {
                         isEditing = true
                     } else {
                         word.partOfSpeech = partOfSpeech.rawValue
-                        save()
+                        wordsViewModel.save()
                         isEditing = false
                     }
                 }, label: {
@@ -68,7 +65,6 @@ struct WordDetailView: View {
             )
             
             ScrollView {
-                
                 HStack {
                     Text("Phonetics: ").bold()
                     + Text("[\(word.phonetic ?? "No transcription")]")
@@ -166,7 +162,7 @@ struct WordDetailView: View {
                                     let newExamples = examples + [exampleTextFieldStr]
                                     let newExamplesData = try? JSONEncoder().encode(newExamples)
                                     word.examples = newExamplesData
-                                    save()
+                                    wordsViewModel.save()
                                 }
                                 exampleTextFieldStr = ""
                             }
@@ -203,22 +199,13 @@ struct WordDetailView: View {
     }
     
     // MARK: Private methods
-    private func save() {
-        do {
-            try viewContext.save()
-        } catch {
-            let nsError = error as NSError
-            print(nsError.localizedDescription)
-        }
-    }
-    
     private func removeExample(of index: Int) {
         var examples = self.examples
         examples.remove(at: index)
         
         let newExamplesData = try? JSONEncoder().encode(examples)
         word.examples = newExamplesData
-        save()
+        wordsViewModel.save()
     }
 }
 
