@@ -37,6 +37,7 @@ struct IdiomsDetailView: View {
         List {
             Section {
                 Text(idiom.idiomItself ?? "")
+                    .font(.system(.headline, design: .rounded))
             } header: {
                 Text("Idiom")
             } footer: {
@@ -51,6 +52,7 @@ struct IdiomsDetailView: View {
                     Image(systemName: "speaker.wave.2.fill")
                     Text("Listen")
                 }
+                .foregroundColor(.accentColor)
             }
             
             Section {
@@ -86,6 +88,7 @@ struct IdiomsDetailView: View {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")
                     }
+                    .foregroundColor(.accentColor)
                 }
             }
             Section {

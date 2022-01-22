@@ -87,7 +87,9 @@ struct IdiomsListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $isShowingAddSheet) {
+            .sheet(isPresented: $isShowingAddSheet, onDismiss: {
+                idiomsViewModel.searchText = ""
+            }) {
                 AddIdiomView()
                     .environmentObject(idiomsViewModel)
             }

@@ -21,4 +21,7 @@ class HomeViewModel: ObservableObject{
     
     // Selected word
     @Published var selectedWord: Word?
+    
+    // Selected idiom
+    @Published var selectedIdiom: Idiom?
 }

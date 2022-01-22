@@ -9,6 +9,7 @@ import SwiftUI
 import StoreKit
 
 struct QuizzesView: View {
+    @AppStorage("isShowingRating") var isShowingRating: Bool = true
     @StateObject var quizzesViewModel = QuizzesViewModel()
 
     var body: some View {
@@ -52,10 +53,12 @@ struct QuizzesView: View {
                 .navigationTitle("Quizzes")
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            SKStoreReviewController.requestReview()
-                        } label: {
-                            Text("Rate app")
+                        if isShowingRating {
+                            Button {
+                                SKStoreReviewController.requestReview()
+                            } label: {
+                                Text("Rate app")
+                            }
                         }
                     }
                 }

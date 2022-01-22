@@ -32,7 +32,7 @@ struct MainTabView: View {
                 switch homeData.selectedTab {
                 case "Words": NavigationView { WordsListView().environmentObject(wordsViewModel) }
                 case "Quizzes": NavigationView { QuizzesView().environmentObject(quizzesViewModel) }
-                case "Idioms": NavigationView { IdiomsListView().environmentObject(idiomsViewModel) }
+                case "Idioms": NavigationView { IdiomsListViewMacOS().environmentObject(idiomsViewModel) }
 //                case "Settings": Text("Settings")
                 default : Text("Select an item")
                 }

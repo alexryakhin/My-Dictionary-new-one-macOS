@@ -97,6 +97,7 @@ struct WordDetailView: View {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")
                     }
+                    .foregroundColor(.accentColor)
                 }
             }
             Section {

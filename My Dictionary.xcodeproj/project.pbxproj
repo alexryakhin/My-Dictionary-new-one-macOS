@@ -19,7 +19,7 @@
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CE6270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51423CF1270DE658006B94CB /* CloudKit.framework */; };
-		51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */; };
+		51719135270F6F970077B3C8 /* AddViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */; };
 		51719138270F71850077B3C8 /* ExtensionsMacOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719137270F71850077B3C8 /* ExtensionsMacOs.swift */; };
 		5171913A270F74F20077B3C8 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719139270F74F20077B3C8 /* TabButton.swift */; };
 		5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913B270F75180077B3C8 /* HomeViewModel.swift */; };
@@ -41,6 +41,9 @@
 		51EBFBEB270F4A970066782B /* WordCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEA270F4A970066782B /* WordCard.swift */; };
 		51EBFBED270F4A9E0066782B /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */; };
 		51EBFBEF270F4AAB0066782B /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEE270F4AAB0066782B /* Words.swift */; };
+		C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CB279C51A20056968B /* IdiomsListViewMacOS.swift */; };
+		C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D9279C940E0056968B /* IdiomDetailViewMacOS.swift */; };
+		C0183966279C992E0034ED37 /* AddIdiomViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908DB279C94570056968B /* AddIdiomViewMacOS.swift */; };
 		C0358EF22799DDC300E9C452 /* ViewControllerResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF12799DDC300E9C452 /* ViewControllerResolver.swift */; };
 		C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF32799DDCA00E9C452 /* SearchBar.swift */; };
 		C0358EF6279A84F800E9C452 /* IdiomsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF5279A84F800E9C452 /* IdiomsListView.swift */; };
@@ -50,7 +53,6 @@
 		C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */; };
 		C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C3279C06080056968B /* IdiomsViewModel.swift */; };
 		C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C5279C062A0056968B /* QuizzesViewModel.swift */; };
-		C03908CC279C51A20056968B /* IdiomsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CB279C51A20056968B /* IdiomsListView.swift */; };
 		C03908D1279C68400056968B /* AddIdiomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CF279C683D0056968B /* AddIdiomView.swift */; };
 		C03908D2279C68430056968B /* IdiomsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CD279C682D0056968B /* IdiomsDetailView.swift */; };
 		C03908D7279C8B340056968B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D6279C8B340056968B /* Extensions.swift */; };
@@ -76,7 +78,7 @@
 		51423CEF270DE64E006B94CB /* My Dictionary (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Dictionary (iOS).entitlements"; sourceTree = "<group>"; };
 		51423CF1270DE658006B94CB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51423CF3270DEBD4006B94CB /* MyDictionaryInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MyDictionaryInfo.plist; sourceTree = "<group>"; };
-		51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOs.swift; sourceTree = "<group>"; };
+		51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOS.swift; sourceTree = "<group>"; };
 		51719137270F71850077B3C8 /* ExtensionsMacOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsMacOs.swift; sourceTree = "<group>"; };
 		51719139270F74F20077B3C8 /* TabButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		5171913B270F75180077B3C8 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
@@ -102,10 +104,12 @@
 		C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsViewModel.swift; sourceTree = "<group>"; };
 		C03908C3279C06080056968B /* IdiomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsViewModel.swift; sourceTree = "<group>"; };
 		C03908C5279C062A0056968B /* QuizzesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesViewModel.swift; sourceTree = "<group>"; };
-		C03908CB279C51A20056968B /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
+		C03908CB279C51A20056968B /* IdiomsListViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListViewMacOS.swift; sourceTree = "<group>"; };
 		C03908CD279C682D0056968B /* IdiomsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsDetailView.swift; sourceTree = "<group>"; };
 		C03908CF279C683D0056968B /* AddIdiomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdiomView.swift; sourceTree = "<group>"; };
 		C03908D6279C8B340056968B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		C03908D9279C940E0056968B /* IdiomDetailViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomDetailViewMacOS.swift; sourceTree = "<group>"; };
+		C03908DB279C94570056968B /* AddIdiomViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdiomViewMacOS.swift; sourceTree = "<group>"; };
 		C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions(iOS).swift"; sourceTree = "<group>"; };
 		C0D377BE27997FDC00BE0726 /* FilterCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCase.swift; sourceTree = "<group>"; };
 		C0D377C02799833600BE0726 /* SortingCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCase.swift; sourceTree = "<group>"; };
@@ -246,7 +250,7 @@
 		519B8AA42711B0B5003E5EDD /* Words */ = {
 			isa = PBXGroup;
 			children = (
-				51719132270F6E0D0077B3C8 /* AddViewMacOs.swift */,
+				51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */,
 				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
 				51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */,
 			);
@@ -285,7 +289,9 @@
 		C03908CA279C518B0056968B /* Idioms */ = {
 			isa = PBXGroup;
 			children = (
-				C03908CB279C51A20056968B /* IdiomsListView.swift */,
+				C03908CB279C51A20056968B /* IdiomsListViewMacOS.swift */,
+				C03908D9279C940E0056968B /* IdiomDetailViewMacOS.swift */,
+				C03908DB279C94570056968B /* AddIdiomViewMacOS.swift */,
 			);
 			path = Idioms;
 			sourceTree = "<group>";
@@ -483,14 +489,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				519B8AA32711A013003E5EDD /* ChooseDefinitionView.swift in Sources */,
-				C03908CC279C51A20056968B /* IdiomsListView.swift in Sources */,
 				51719142270F86370077B3C8 /* DictionaryViewModel.swift in Sources */,
 				C0D377C32799833A00BE0726 /* FilterCase.swift in Sources */,
+				C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */,
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
 				519B8AA127119FE4003E5EDD /* SpellingQuizView.swift in Sources */,
 				C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				51423CE4270DE477006B94CB /* PersistenceController.swift in Sources */,
+				C0183966279C992E0034ED37 /* AddIdiomViewMacOS.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51719141270F84D20077B3C8 /* Words.swift in Sources */,
@@ -498,11 +505,12 @@
 				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				5171913E270F76090077B3C8 /* BlurView.swift in Sources */,
 				C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */,
+				C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */,
 				519B8A9F27119D7F003E5EDD /* QuizzesView.swift in Sources */,
 				5171913A270F74F20077B3C8 /* TabButton.swift in Sources */,
 				C03908D8279C8B340056968B /* Extensions.swift in Sources */,
 				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
-				51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */,
+				51719135270F6F970077B3C8 /* AddViewMacOS.swift in Sources */,
 				C0D377C22799833700BE0726 /* SortingCase.swift in Sources */,
 				51719138270F71850077B3C8 /* ExtensionsMacOs.swift in Sources */,
 			);

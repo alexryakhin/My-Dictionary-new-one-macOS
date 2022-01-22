@@ -1,16 +1,16 @@
 //
-//  WordsListView.swift
+//  IdiomsListViewMacOS.swift
 //  My Dictionary (macOS)
 //
-//  Created by Alexander Bonney on 10/6/21.
+//  Created by Alexander Ryakhin on 1/22/22.
 //
 
 import SwiftUI
 import CoreData
 import AVFoundation
 
-struct WordsListView: View {
-    @EnvironmentObject var wordsViewModel: WordsViewModel
+struct IdiomsListViewMacOS: View {
+    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
     @EnvironmentObject var homeData: HomeViewModel
     @State private var isShowingAddView = false
     
@@ -20,11 +20,11 @@ struct WordsListView: View {
             // MARK: Toolbar
             HStack{
                 Button {
-                    removeWord()
+                    removeIdiom()
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(
-                            homeData.selectedWord == nil
+                            homeData.selectedIdiom == nil
                             ? .secondary
                             : .red)
                 }
@@ -42,7 +42,7 @@ struct WordsListView: View {
             HStack {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
-                TextField("Search", text: $wordsViewModel.searchText)
+                TextField("Search", text: $idiomsViewModel.searchText)
                     .textFieldStyle(PlainTextFieldStyle())
             }
             .padding(.vertical, 8)
@@ -52,39 +52,37 @@ struct WordsListView: View {
             .padding(.horizontal, 10)
             
             Section {
-                List(selection: $homeData.selectedWord) {
+                List(selection: $homeData.selectedIdiom) {
                     //Search, if user type something into search field, show filtered array
-                    ForEach(wordsToShow()) { word in
-                        NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
+                    ForEach(idiomsToShow()) { idiom in
+                        NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom).environmentObject(idiomsViewModel)) {
                             HStack {
-                                Text(word.wordItself ?? "word")
+                                Text(idiom.idiomItself ?? "word")
                                     .bold()
                                 Spacer()
-                                if word.isFavorite {
+                                if idiom.isFavorite {
                                     Image(systemName: "heart.fill")
                                         .font(.caption)
-                                        .foregroundColor(homeData.selectedWord == word ? .secondary : .accentColor)
+                                        .foregroundColor(homeData.selectedIdiom == idiom ? .secondary : .accentColor)
                                 }
-                                Text(word.partOfSpeech ?? "")
-                                    .foregroundColor(.secondary)
                             }
                         }
-                        .tag(word)
+                        .tag(idiom)
                     }
                     .onDelete(perform: { indexSet in
-                        wordsViewModel.deleteWord(offsets: indexSet)
+                        idiomsViewModel.deleteIdiom(offsets: indexSet)
                     })
-                    if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                    if idiomsViewModel.filterState == .search && idiomsToShow().count < 10 {
                         Button {
                             showAddView()
                         } label: {
-                            Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                            Text("Add '\(idiomsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                         }
                     }
                 }
             } footer: {
-                if !wordsToShow().isEmpty {
-                    Text(wordsCount)
+                if !idiomsToShow().isEmpty {
+                    Text(idiomCount)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .padding(.bottom, 5)
@@ -92,17 +90,19 @@ struct WordsListView: View {
             }
         }
         .ignoresSafeArea()
-        .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
-            AddView(isShowingAddView: $isShowingAddView)
+        .sheet(isPresented: $isShowingAddView, onDismiss: {
+            idiomsViewModel.searchText = ""
+        }) {
+            AddIdiomViewMacOS(isShowingAddView: $isShowingAddView)
         }
         Text("Select an item")
     }
     
-    private var wordsCount: String {
-        if wordsToShow().count == 1 {
-            return "1 word"
+    private var idiomCount: String {
+        if idiomsToShow().count == 1 {
+            return "1 idiom"
         } else {
-            return "\(wordsToShow().count) words"
+            return "\(idiomsToShow().count) idioms"
         }
     }
         
@@ -110,22 +110,22 @@ struct WordsListView: View {
         isShowingAddView = true
     }
     
-    private func wordsToShow() -> [Word] {
-        switch wordsViewModel.filterState {
+    private func idiomsToShow() -> [Idiom] {
+        switch idiomsViewModel.filterState {
         case .none:
-            return wordsViewModel.words
+            return idiomsViewModel.idioms
         case .favorite:
-            return wordsViewModel.favoriteWords
+            return idiomsViewModel.favoriteIdioms
         case .search:
-            return wordsViewModel.searchResults
+            return idiomsViewModel.searchResults
         }
     }
     
-    private func removeWord() {
-        if homeData.selectedWord != nil {
-            wordsViewModel.delete(word: homeData.selectedWord!)
+    private func removeIdiom() {
+        if homeData.selectedIdiom != nil {
+            idiomsViewModel.delete(idiom: homeData.selectedIdiom!)
         }
-        homeData.selectedWord = nil
+        homeData.selectedIdiom = nil
     }
     
     private var sortMenu: some View {
@@ -133,39 +133,27 @@ struct WordsListView: View {
             Section {
                 Button {
                     withAnimation {
-                        wordsViewModel.sortingState = .def
-                        wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
+                        idiomsViewModel.sortingState = .def
+                        idiomsViewModel.sortIdioms()
+                        homeData.selectedIdiom = nil
                     }
                 } label: {
-                    if wordsViewModel.sortingState == .def {
+                    if idiomsViewModel.sortingState == .def {
                         Image(systemName: "checkmark")
                     }
                     Text("Default")
                 }
                 Button {
                     withAnimation {
-                        wordsViewModel.sortingState = .name
-                        wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
+                        idiomsViewModel.sortingState = .name
+                        idiomsViewModel.sortIdioms()
+                        homeData.selectedIdiom = nil
                     }
                 } label: {
-                    if wordsViewModel.sortingState == .name {
+                    if idiomsViewModel.sortingState == .name {
                         Image(systemName: "checkmark")
                     }
                     Text("Name")
-                }
-                Button {
-                    withAnimation {
-                        wordsViewModel.sortingState = .partOfSpeech
-                        wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
-                    }
-                } label: {
-                    if wordsViewModel.sortingState == .partOfSpeech {
-                        Image(systemName: "checkmark")
-                    }
-                    Text("Part of speech")
                 }
             } header: {
                 Text("Sort by")
@@ -174,22 +162,22 @@ struct WordsListView: View {
             Section {
                 Button {
                     withAnimation {
-                        wordsViewModel.filterState = .none
-                        homeData.selectedWord = nil
+                        idiomsViewModel.filterState = .none
+                        homeData.selectedIdiom = nil
                     }
                 } label: {
-                    if wordsViewModel.filterState == .none {
+                    if idiomsViewModel.filterState == .none {
                         Image(systemName: "checkmark")
                     }
                     Text("None")
                 }
                 Button {
                     withAnimation {
-                        wordsViewModel.filterState = .favorite
-                        homeData.selectedWord = nil
+                        idiomsViewModel.filterState = .favorite
+                        homeData.selectedIdiom = nil
                     }
                 } label: {
-                    if wordsViewModel.filterState == .favorite {
+                    if idiomsViewModel.filterState == .favorite {
                         Image(systemName: "checkmark")
                     }
                     Text("Favorites")
@@ -200,7 +188,7 @@ struct WordsListView: View {
             
         } label: {
             Image(systemName: "arrow.up.arrow.down")
-            Text(wordsViewModel.sortingState.rawValue)
+            Text(idiomsViewModel.sortingState.rawValue)
         }
     }
 }
