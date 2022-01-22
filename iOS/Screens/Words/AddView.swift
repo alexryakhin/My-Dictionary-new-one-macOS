@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import StoreKit
 
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -72,7 +73,11 @@ struct AddView: View {
                     })
             )
             .navigationBarTitle("Add new word")
-            .navigationBarItems(trailing: Button(action: {
+            .navigationBarItems(leading: Button(action: {
+                SKStoreReviewController.requestReview()
+            }, label: {
+                Text("App store")
+            }), trailing: Button(action: {
                 if !vm.inputWord.isEmpty, !descriptionField.isEmpty {
                     wordsViewModel.addNewWord(
                         word: vm.inputWord.capitalizingFirstLetter(),

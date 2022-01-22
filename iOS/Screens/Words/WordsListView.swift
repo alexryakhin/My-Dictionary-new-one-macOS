@@ -10,7 +10,7 @@ import CoreData
 
 struct WordsListView: View {
     @StateObject var wordsViewModel = WordsViewModel()
-    @State private var showingAddSheet = false
+    @State private var isShowingAddSheet = false
     
     var body: some View {
         NavigationView {
@@ -90,7 +90,7 @@ struct WordsListView: View {
                     }
                 }
             }
-            .sheet(isPresented: $showingAddSheet) {
+            .sheet(isPresented: $isShowingAddSheet) {
                 AddView()
                     .environmentObject(wordsViewModel)
             }
@@ -99,7 +99,7 @@ struct WordsListView: View {
     }
     
     private func addItem() {
-        showingAddSheet = true
+        isShowingAddSheet = true
     }
     
     private func wordsToShow() -> [Word] {

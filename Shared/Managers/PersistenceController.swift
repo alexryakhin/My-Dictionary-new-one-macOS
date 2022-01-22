@@ -11,12 +11,12 @@ final class PersistenceController {
     let container: NSPersistentCloudKitContainer
     static let shared = PersistenceController()
     
-    private init(inMemory: Bool = false) {
+    private init() {
         container = NSPersistentCloudKitContainer(name: "My_Dictionary")
 
-        if inMemory {
-            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        }
+//        if inMemory {
+//            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+//        }
         
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

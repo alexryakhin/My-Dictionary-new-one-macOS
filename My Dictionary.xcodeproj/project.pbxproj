@@ -51,6 +51,10 @@
 		C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C3279C06080056968B /* IdiomsViewModel.swift */; };
 		C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C5279C062A0056968B /* QuizzesViewModel.swift */; };
 		C03908CC279C51A20056968B /* IdiomsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CB279C51A20056968B /* IdiomsListView.swift */; };
+		C03908D1279C68400056968B /* AddIdiomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CF279C683D0056968B /* AddIdiomView.swift */; };
+		C03908D2279C68430056968B /* IdiomsDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CD279C682D0056968B /* IdiomsDetailView.swift */; };
+		C03908D7279C8B340056968B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D6279C8B340056968B /* Extensions.swift */; };
+		C03908D8279C8B340056968B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D6279C8B340056968B /* Extensions.swift */; };
 		C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */; };
 		C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BE27997FDC00BE0726 /* FilterCase.swift */; };
 		C0D377C12799833700BE0726 /* SortingCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377C02799833600BE0726 /* SortingCase.swift */; };
@@ -99,6 +103,9 @@
 		C03908C3279C06080056968B /* IdiomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsViewModel.swift; sourceTree = "<group>"; };
 		C03908C5279C062A0056968B /* QuizzesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesViewModel.swift; sourceTree = "<group>"; };
 		C03908CB279C51A20056968B /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
+		C03908CD279C682D0056968B /* IdiomsDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsDetailView.swift; sourceTree = "<group>"; };
+		C03908CF279C683D0056968B /* AddIdiomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdiomView.swift; sourceTree = "<group>"; };
+		C03908D6279C8B340056968B /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions(iOS).swift"; sourceTree = "<group>"; };
 		C0D377BE27997FDC00BE0726 /* FilterCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCase.swift; sourceTree = "<group>"; };
 		C0D377C02799833600BE0726 /* SortingCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCase.swift; sourceTree = "<group>"; };
@@ -167,6 +174,7 @@
 				517366DA270EB7CF0073651A /* Managers */,
 				51423CCF270DE477006B94CB /* Assets.xcassets */,
 				51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */,
+				C03908D6279C8B340056968B /* Extensions.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -328,6 +336,8 @@
 			isa = PBXGroup;
 			children = (
 				C0358EF5279A84F800E9C452 /* IdiomsListView.swift */,
+				C03908CD279C682D0056968B /* IdiomsDetailView.swift */,
+				C03908CF279C683D0056968B /* AddIdiomView.swift */,
 			);
 			path = Idioms;
 			sourceTree = "<group>";
@@ -440,6 +450,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
+				C03908D7279C8B340056968B /* Extensions.swift in Sources */,
 				51423CE3270DE477006B94CB /* PersistenceController.swift in Sources */,
 				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
 				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
@@ -458,7 +469,9 @@
 				C03908C6279C062A0056968B /* QuizzesViewModel.swift in Sources */,
 				C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */,
 				C03908C4279C06080056968B /* IdiomsViewModel.swift in Sources */,
+				C03908D1279C68400056968B /* AddIdiomView.swift in Sources */,
 				C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */,
+				C03908D2279C68430056968B /* IdiomsDetailView.swift in Sources */,
 				517366DF270EB83F0073651A /* MainTabView.swift in Sources */,
 				C0D377C12799833700BE0726 /* SortingCase.swift in Sources */,
 				517366E6270EB99C0073651A /* QuizzesView.swift in Sources */,
@@ -487,6 +500,7 @@
 				C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */,
 				519B8A9F27119D7F003E5EDD /* QuizzesView.swift in Sources */,
 				5171913A270F74F20077B3C8 /* TabButton.swift in Sources */,
+				C03908D8279C8B340056968B /* Extensions.swift in Sources */,
 				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
 				51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */,
 				C0D377C22799833700BE0726 /* SortingCase.swift in Sources */,
@@ -619,7 +633,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -652,7 +666,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "My Dictionary (iOS).entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 69S862NXBP;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
