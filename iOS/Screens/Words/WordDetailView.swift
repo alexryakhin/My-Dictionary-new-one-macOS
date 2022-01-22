@@ -118,9 +118,8 @@ struct WordDetailView: View {
             } header: {
                 Text("Examples")
             }
-            
-            
         }
+        .listStyle(.insetGrouped)
         .navigationTitle(word.wordItself ?? "")
         .navigationBarItems(leading: Button(action: {
             //favorites

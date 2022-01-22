@@ -17,11 +17,10 @@ struct IdiomsListView: View {
                     Text("\(index + 1) Idiom")
                 }
             }
+            .listStyle(.insetGrouped)
             .navigationTitle("Idioms")
-            .searchable(searchTerm: $searchBarText)
-            .onChange(of: searchBarText) { newValue in
-                print(newValue)
-            }
+            .searchable(searchTerm: $searchBarText, hideWhenScrolling: false)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

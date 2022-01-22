@@ -32,27 +32,29 @@ struct WordsListView: View {
                     }
                 } else {
                     List {
-                        Section {
-                            ForEach(wordsToShow()) { word in
-                                NavigationLink(destination: WordDetailView(word: word)) {
-                                    HStack {
-                                        Text(word.wordItself ?? "word")
-                                            .bold()
-                                        Spacer()
-                                        if word.isFavorite {
-                                            Image(systemName: "heart.fill").font(.caption).foregroundColor(.accentColor)
+                        if !wordsToShow().isEmpty {
+                            Section {
+                                ForEach(wordsToShow()) { word in
+                                    NavigationLink(destination: WordDetailView(word: word)) {
+                                        HStack {
+                                            Text(word.wordItself ?? "word")
+                                                .bold()
+                                            Spacer()
+                                            if word.isFavorite {
+                                                Image(systemName:       "heart.fill").font(.caption).foregroundColor(.accentColor)
+                                            }
+                                            Text(word.partOfSpeech ?? "")
+                                                .foregroundColor(.secondary)
                                         }
-                                        Text(word.partOfSpeech ?? "")
-                                            .foregroundColor(.secondary)
                                     }
                                 }
-                            }
-                            .onDelete(perform: { indexSet in
-                                persistenceController.deleteWord(offsets: indexSet)
-                            })
-                        } footer: {
-                            if !wordsToShow().isEmpty {
-                                Text(wordsCount)
+                                .onDelete(perform: { indexSet in
+                                    persistenceController.deleteWord(offsets: indexSet)
+                                })
+                            } footer: {
+                                if !wordsToShow().isEmpty {
+                                    Text(wordsCount)
+                                }
                             }
                         }
                         if persistenceController.filterState == .search && wordsToShow().count < 10 {
@@ -66,8 +68,10 @@ struct WordsListView: View {
                     .listStyle(.insetGrouped)
                 }
             }
-            .searchable(searchTerm: $persistenceController.searchText)
+            .searchable(searchTerm: $persistenceController.searchText, hideWhenScrolling: false)
             .navigationTitle("Words")
+            .navigationBarTitleDisplayMode(.inline)
+            .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
@@ -142,7 +146,7 @@ struct WordsListView: View {
             Label {
                 Text("Filter By")
             } icon: {
-                Image(systemName: "circle.grid.cross.left.filled")
+                Image(systemName: "paperclip")
             }
         }
     }

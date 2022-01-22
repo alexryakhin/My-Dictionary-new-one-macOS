@@ -9,7 +9,6 @@ import CoreData
 import SwiftUI
 import Combine
 
-
 final class PersistenceController: ObservableObject {
     private let container: NSPersistentCloudKitContainer
     var cancellable = Set<AnyCancellable>()

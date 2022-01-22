@@ -29,8 +29,10 @@ extension SearchBar: UISearchResultsUpdating {
 
 struct SearchBarModifier: ViewModifier {
     let searchBar: SearchBar
-    init(searchTerm: Binding<String>) {
+    let hideWhenScrolling: Bool
+    init(searchTerm: Binding<String>, hideWhenScrolling: Bool) {
         searchBar = SearchBar(searchTerm: searchTerm)
+        self.hideWhenScrolling = hideWhenScrolling
     }
     
     func body(content: Content) -> some View {
@@ -38,12 +40,13 @@ struct SearchBarModifier: ViewModifier {
             .overlay(
                 ViewControllerResolver { viewController in
                     viewController.navigationItem.searchController = searchBar.searchController
+                    viewController.navigationItem.hidesSearchBarWhenScrolling = hideWhenScrolling
                 }.frame(width:0, height: 0))
     }
 }
 
 extension View {
-    func searchable(searchTerm: Binding<String>) -> some View {
-        modifier(SearchBarModifier(searchTerm: searchTerm))
+    func searchable(searchTerm: Binding<String>, hideWhenScrolling: Bool = true) -> some View {
+        modifier(SearchBarModifier(searchTerm: searchTerm, hideWhenScrolling: hideWhenScrolling))
     }
 }

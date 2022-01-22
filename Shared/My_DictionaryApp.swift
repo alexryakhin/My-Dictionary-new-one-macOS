@@ -15,6 +15,7 @@ struct My_DictionaryApp: App {
         WindowGroup {
             MainTabView()
                 .environmentObject(persistenceController)
+                .font(.system(.body, design: .rounded))
         }
         #if os(macOS)
         .windowStyle(HiddenTitleBarWindowStyle())
