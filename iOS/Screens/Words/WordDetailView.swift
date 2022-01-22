@@ -11,7 +11,7 @@ import AVKit
 
 struct WordDetailView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var persistenceController: PersistenceController
+    @EnvironmentObject var wordsViewModel: WordsViewModel
     var word: Word
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
@@ -60,7 +60,7 @@ struct WordDetailView: View {
                         ForEach(PartOfSpeech.allCases, id: \.self) { c in
                             Button {
                                 word.partOfSpeech = c.rawValue
-                                persistenceController.save()
+                                wordsViewModel.save()
                             } label: {
                                 Text(c.rawValue)
                             }
@@ -73,7 +73,7 @@ struct WordDetailView: View {
                 if isEditingDefinition {
                     TextField("Definition", text: bindingWordDefinition, onCommit: {
                         isEditingDefinition = false
-                        persistenceController.save()
+                        wordsViewModel.save()
                     }).disableAutocorrection(true)
                 } else {
                     Text(word.definition ?? "")
@@ -109,7 +109,7 @@ struct WordDetailView: View {
                                 let newExamples = examples + [exampleTextFieldStr]
                                 let newExamplesData = try? JSONEncoder().encode(newExamples)
                                 word.examples = newExamplesData
-                                persistenceController.save()
+                                wordsViewModel.save()
                             }
                             exampleTextFieldStr = ""
                         }
@@ -124,7 +124,7 @@ struct WordDetailView: View {
         .navigationBarItems(leading: Button(action: {
             //favorites
             word.isFavorite.toggle()
-            persistenceController.save()
+            wordsViewModel.save()
         }, label: {
             Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
         }),
@@ -138,7 +138,7 @@ struct WordDetailView: View {
     }
     
     private func removeWord() {
-        persistenceController.delete(word: word)
+        wordsViewModel.delete(word: word)
         presentationMode.wrappedValue.dismiss()
     }
     
@@ -148,7 +148,7 @@ struct WordDetailView: View {
         
         let newExamplesData = try? JSONEncoder().encode(examples)
         word.examples = newExamplesData
-        persistenceController.save()
+        wordsViewModel.save()
     }
 }
 

@@ -9,13 +9,13 @@ import SwiftUI
 import CoreData
 
 struct WordsListView: View {
-    @EnvironmentObject var persistenceController: PersistenceController
+    @EnvironmentObject var wordsViewModel: WordsViewModel
     @State private var showingAddSheet = false
     
     var body: some View {
         NavigationView {
             VStack {
-                if persistenceController.words.isEmpty {
+                if wordsViewModel.words.isEmpty {
                     ZStack {
                         Color("Background").ignoresSafeArea()
                         VStack {
@@ -49,7 +49,7 @@ struct WordsListView: View {
                                     }
                                 }
                                 .onDelete(perform: { indexSet in
-                                    persistenceController.deleteWord(offsets: indexSet)
+                                    wordsViewModel.deleteWord(offsets: indexSet)
                                 })
                             } footer: {
                                 if !wordsToShow().isEmpty {
@@ -57,18 +57,18 @@ struct WordsListView: View {
                                 }
                             }
                         }
-                        if persistenceController.filterState == .search && wordsToShow().count < 10 {
+                        if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
                             Button {
                                 addItem()
                             } label: {
-                                Text("Add '\(persistenceController.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                                Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                             }
                         }
                     }
                     .listStyle(.insetGrouped)
                 }
             }
-            .searchable(searchTerm: $persistenceController.searchText, hideWhenScrolling: false)
+            .searchable(searchTerm: $wordsViewModel.searchText, hideWhenScrolling: false)
             .navigationTitle("Words")
             .navigationBarTitleDisplayMode(.inline)
             .listStyle(.insetGrouped)
@@ -91,7 +91,7 @@ struct WordsListView: View {
                 }
             }
             .sheet(isPresented: $showingAddSheet) {
-                AddView(searchTerm: persistenceController.searchText)
+                AddView(searchTerm: wordsViewModel.searchText)
             }
             Text("Select an item")
         }
@@ -102,13 +102,13 @@ struct WordsListView: View {
     }
     
     private func wordsToShow() -> [Word] {
-        switch persistenceController.filterState {
+        switch wordsViewModel.filterState {
         case .none:
-            return persistenceController.words
+            return wordsViewModel.words
         case .favorite:
-            return persistenceController.favoriteWords
+            return wordsViewModel.favoriteWords
         case .search:
-            return persistenceController.searchResults
+            return wordsViewModel.searchResults
         }
     }
     
@@ -124,20 +124,20 @@ struct WordsListView: View {
         Menu {
             Button {
                 withAnimation {
-                    persistenceController.filterState = .none
+                    wordsViewModel.filterState = .none
                 }
             } label: {
-                if persistenceController.filterState == .none {
+                if wordsViewModel.filterState == .none {
                     Image(systemName: "checkmark")
                 }
                 Text("None")
             }
             Button {
                 withAnimation {
-                    persistenceController.filterState = .favorite
+                    wordsViewModel.filterState = .favorite
                 }
             } label: {
-                if persistenceController.filterState == .favorite {
+                if wordsViewModel.filterState == .favorite {
                     Image(systemName: "checkmark")
                 }
                 Text("Favorites")
@@ -155,33 +155,33 @@ struct WordsListView: View {
         Menu {
             Button {
                 withAnimation {
-                    persistenceController.sortingState = .def
-                    persistenceController.sortWords()
+                    wordsViewModel.sortingState = .def
+                    wordsViewModel.sortWords()
                 }
             } label: {
-                if persistenceController.sortingState == .def {
+                if wordsViewModel.sortingState == .def {
                     Image(systemName: "checkmark")
                 }
                 Text("Default")
             }
             Button {
                 withAnimation {
-                    persistenceController.sortingState = .name
-                    persistenceController.sortWords()
+                    wordsViewModel.sortingState = .name
+                    wordsViewModel.sortWords()
                 }
             } label: {
-                if persistenceController.sortingState == .name {
+                if wordsViewModel.sortingState == .name {
                     Image(systemName: "checkmark")
                 }
                 Text("Name")
             }
             Button {
                 withAnimation {
-                    persistenceController.sortingState = .partOfSpeech
-                    persistenceController.sortWords()
+                    wordsViewModel.sortingState = .partOfSpeech
+                    wordsViewModel.sortWords()
                 }
             } label: {
-                if persistenceController.sortingState == .partOfSpeech {
+                if wordsViewModel.sortingState == .partOfSpeech {
                     Image(systemName: "checkmark")
                 }
                 Text("Part of speech")

@@ -10,7 +10,7 @@ import AVKit
 
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var persistenceController: PersistenceController
+    @EnvironmentObject var wordsViewModel: WordsViewModel
     @StateObject var vm = DictionaryViewModel()
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
@@ -75,7 +75,7 @@ struct AddView: View {
             .navigationBarTitle("Add new word")
             .navigationBarItems(trailing: Button(action: {
                 if !vm.inputWord.isEmpty, !descriptionField.isEmpty {
-                    persistenceController.addNewWord(
+                    wordsViewModel.addNewWord(
                         word: vm.inputWord.capitalizingFirstLetter(),
                         definition: descriptionField.capitalizingFirstLetter(),
                         partOfSpeech: partOfSpeech.rawValue,
@@ -89,6 +89,7 @@ struct AddView: View {
                 }
             }, label: {
                 Text("Save")
+                    .font(.system(.headline, design: .rounded))
             }))
             .alert(isPresented: $showingAlert, content: {
                 Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
