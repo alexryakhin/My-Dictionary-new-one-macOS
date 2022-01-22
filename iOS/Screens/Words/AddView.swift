@@ -15,7 +15,6 @@ struct AddView: View {
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
-    var searchTerm: String
     
     private var utterance: AVSpeechUtterance {
         let utterance = AVSpeechUtterance(string: vm.inputWord)
@@ -95,8 +94,8 @@ struct AddView: View {
                 Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
             })
             .onAppear {
-                if !searchTerm.isEmpty {
-                    vm.inputWord = searchTerm
+                if !wordsViewModel.searchText.isEmpty {
+                    vm.inputWord = wordsViewModel.searchText
                     try? vm.fetchData()
                 }
             }
@@ -243,6 +242,6 @@ struct AddView: View {
 
 struct AddView_Previews: PreviewProvider {
     static var previews: some View {
-        AddView(searchTerm: "Hello")
+        AddView()
     }
 }

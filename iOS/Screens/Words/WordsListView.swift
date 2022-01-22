@@ -91,7 +91,8 @@ struct WordsListView: View {
                 }
             }
             .sheet(isPresented: $showingAddSheet) {
-                AddView(searchTerm: wordsViewModel.searchText)
+                AddView()
+                    .environmentObject(wordsViewModel)
             }
             Text("Select an item")
         }
