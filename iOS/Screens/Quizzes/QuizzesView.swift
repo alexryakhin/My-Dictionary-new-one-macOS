@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import StoreKit
 
 struct QuizzesView: View {
     @StateObject var quizzesViewModel = QuizzesViewModel()
@@ -49,6 +50,15 @@ struct QuizzesView: View {
                 }
                 .listStyle(.insetGrouped)
                 .navigationTitle("Quizzes")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            SKStoreReviewController.requestReview()
+                        } label: {
+                            Text("Rate app")
+                        }
+                    }
+                }
             }
         }
     }

@@ -7,8 +7,10 @@
 
 import SwiftUI
 import CoreData
+import StoreKit
 
 struct WordsListView: View {
+    @AppStorage("isShowingRating") var isShowingRating: Bool = true
     @StateObject var wordsViewModel = WordsViewModel()
     @State private var isShowingAddSheet = false
     
@@ -99,6 +101,10 @@ struct WordsListView: View {
     }
     
     private func addItem() {
+        if isShowingRating && wordsViewModel.words.count > 15 {
+            SKStoreReviewController.requestReview()
+            isShowingRating = false
+        }
         isShowingAddSheet = true
     }
     

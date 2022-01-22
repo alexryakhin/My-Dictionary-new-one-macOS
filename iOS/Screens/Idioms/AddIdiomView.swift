@@ -28,6 +28,9 @@ struct AddIdiomView: View {
                     Text("Definition")
                 }
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
             .navigationBarTitle("Add new idiom")
             .navigationBarItems(trailing: Button(action: {
                 if !idiomsViewModel.searchText.isEmpty, !inputDefinition.isEmpty {
