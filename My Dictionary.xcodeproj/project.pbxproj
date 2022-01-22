@@ -29,7 +29,7 @@
 		51719142270F86370077B3C8 /* DictionaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */; };
 		517366DF270EB83F0073651A /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366DE270EB83F0073651A /* MainTabView.swift */; };
 		517366E1270EB8A50073651A /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E0270EB8A50073651A /* OnboardingView.swift */; };
-		517366E6270EB99C0073651A /* QuizesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizesView.swift */; };
+		517366E6270EB99C0073651A /* QuizzesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366E5270EB99C0073651A /* QuizzesView.swift */; };
 		517366ED270EFCC70073651A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517366EC270EFCC70073651A /* CloudKit.framework */; };
 		517366EF270EFF860073651A /* WordDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailView.swift */; };
 		517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366FA270F31030073651A /* WordDetailViewMacOS.swift */; };
@@ -45,6 +45,11 @@
 		C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF32799DDCA00E9C452 /* SearchBar.swift */; };
 		C0358EF6279A84F800E9C452 /* IdiomsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF5279A84F800E9C452 /* IdiomsListView.swift */; };
 		C0358EF8279A8BCD00E9C452 /* WordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */; };
+		C03908C4279C06080056968B /* IdiomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C3279C06080056968B /* IdiomsViewModel.swift */; };
+		C03908C6279C062A0056968B /* QuizzesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C5279C062A0056968B /* QuizzesViewModel.swift */; };
+		C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */; };
+		C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C3279C06080056968B /* IdiomsViewModel.swift */; };
+		C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908C5279C062A0056968B /* QuizzesViewModel.swift */; };
 		C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */; };
 		C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377BE27997FDC00BE0726 /* FilterCase.swift */; };
 		C0D377C12799833700BE0726 /* SortingCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D377C02799833600BE0726 /* SortingCase.swift */; };
@@ -74,7 +79,7 @@
 		5171913F270F7F000077B3C8 /* MainTabViewMacOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewMacOs.swift; sourceTree = "<group>"; };
 		517366DE270EB83F0073651A /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		517366E0270EB8A50073651A /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		517366E5270EB99C0073651A /* QuizesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizesView.swift; sourceTree = "<group>"; };
+		517366E5270EB99C0073651A /* QuizzesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuizzesView.swift; sourceTree = "<group>"; };
 		517366EC270EFCC70073651A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		517366EE270EFF860073651A /* WordDetailView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordDetailView.swift; sourceTree = "<group>"; };
 		517366FA270F31030073651A /* WordDetailViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailViewMacOS.swift; sourceTree = "<group>"; };
@@ -90,6 +95,8 @@
 		C0358EF32799DDCA00E9C452 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		C0358EF5279A84F800E9C452 /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
 		C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsViewModel.swift; sourceTree = "<group>"; };
+		C03908C3279C06080056968B /* IdiomsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsViewModel.swift; sourceTree = "<group>"; };
+		C03908C5279C062A0056968B /* QuizzesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesViewModel.swift; sourceTree = "<group>"; };
 		C0D377BC27997D7000BE0726 /* Extensions(iOS).swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Extensions(iOS).swift"; sourceTree = "<group>"; };
 		C0D377BE27997FDC00BE0726 /* FilterCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCase.swift; sourceTree = "<group>"; };
 		C0D377C02799833600BE0726 /* SortingCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortingCase.swift; sourceTree = "<group>"; };
@@ -129,6 +136,9 @@
 			isa = PBXGroup;
 			children = (
 				51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */,
+				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
+				C03908C3279C06080056968B /* IdiomsViewModel.swift */,
+				C03908C5279C062A0056968B /* QuizzesViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -194,7 +204,6 @@
 			isa = PBXGroup;
 			children = (
 				51423CCE270DE477006B94CB /* PersistenceController.swift */,
-				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -277,7 +286,7 @@
 				517366DE270EB83F0073651A /* MainTabView.swift */,
 				517366DB270EB7FA0073651A /* Onboarding */,
 				C0D377C82799854F00BE0726 /* Idioms */,
-				C0D377C72799854900BE0726 /* Games */,
+				C0D377C72799854900BE0726 /* Quizzes */,
 				C0D377C62799853700BE0726 /* Words */,
 			);
 			path = Screens;
@@ -294,14 +303,14 @@
 			path = Words;
 			sourceTree = "<group>";
 		};
-		C0D377C72799854900BE0726 /* Games */ = {
+		C0D377C72799854900BE0726 /* Quizzes */ = {
 			isa = PBXGroup;
 			children = (
-				517366E5270EB99C0073651A /* QuizesView.swift */,
+				517366E5270EB99C0073651A /* QuizzesView.swift */,
 				517366E8270EB9BF0073651A /* SpellingQuiz */,
 				517366E9270EB9CD0073651A /* ChooseDefinitionQuiz */,
 			);
-			path = Games;
+			path = Quizzes;
 			sourceTree = "<group>";
 		};
 		C0D377C82799854F00BE0726 /* Idioms */ = {
@@ -435,11 +444,13 @@
 				51EBFBEB270F4A970066782B /* WordCard.swift in Sources */,
 				C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */,
 				51EBFBEF270F4AAB0066782B /* Words.swift in Sources */,
+				C03908C6279C062A0056968B /* QuizzesViewModel.swift in Sources */,
 				C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */,
+				C03908C4279C06080056968B /* IdiomsViewModel.swift in Sources */,
 				C0358EF42799DDCA00E9C452 /* SearchBar.swift in Sources */,
 				517366DF270EB83F0073651A /* MainTabView.swift in Sources */,
 				C0D377C12799833700BE0726 /* SortingCase.swift in Sources */,
-				517366E6270EB99C0073651A /* QuizesView.swift in Sources */,
+				517366E6270EB99C0073651A /* QuizzesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -452,6 +463,7 @@
 				C0D377C32799833A00BE0726 /* FilterCase.swift in Sources */,
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
 				519B8AA127119FE4003E5EDD /* SpellingQuizView.swift in Sources */,
+				C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				51423CE4270DE477006B94CB /* PersistenceController.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
@@ -460,8 +472,10 @@
 				5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */,
 				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
 				5171913E270F76090077B3C8 /* BlurView.swift in Sources */,
+				C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */,
 				519B8A9F27119D7F003E5EDD /* QuizzesView.swift in Sources */,
 				5171913A270F74F20077B3C8 /* TabButton.swift in Sources */,
+				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
 				51719135270F6F970077B3C8 /* AddViewMacOs.swift in Sources */,
 				C0D377C22799833700BE0726 /* SortingCase.swift in Sources */,
 				51719138270F71850077B3C8 /* ExtensionsMacOs.swift in Sources */,

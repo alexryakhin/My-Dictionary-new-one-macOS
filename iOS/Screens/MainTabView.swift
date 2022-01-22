@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject var wordsViewModel = WordsViewModel()
     @AppStorage("isShowingOnboarding") var isShowingOnboarding: Bool = true
     
     var body: some View {
@@ -17,17 +16,14 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Words", systemImage: "textformat.abc")
                 }
-                .environmentObject(wordsViewModel)
             IdiomsListView()
                 .tabItem {
                     Label("Idioms", systemImage: "scroll")
                 }
-//                .environmentObject(persistenceController)
-//            QuizesView()
-//                .tabItem {
-//                    Label("Quizzes", systemImage: "a.magnify")
-//                }
-//                .environmentObject(wordsViewModel)
+            QuizzesView()
+                .tabItem {
+                    Label("Quizzes", systemImage: "a.magnify")
+                }
         }
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $isShowingOnboarding, onDismiss: {

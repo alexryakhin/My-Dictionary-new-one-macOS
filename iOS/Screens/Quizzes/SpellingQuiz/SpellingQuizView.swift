@@ -9,12 +9,7 @@ import SwiftUI
 
 struct SpellingQuizView: View {
     @Environment(\.presentationMode) var presentationMode
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    private var words: FetchedResults<Word>
+    @EnvironmentObject var quizzesViewModel: QuizzesViewModel
     
     @State private var randomWord: Word?
     @State private var answerTextField = ""
@@ -59,9 +54,10 @@ struct SpellingQuizView: View {
 
             }
         }
+        .listStyle(.insetGrouped)
         .navigationTitle("Spelling")
         .onAppear {
-            playingWords = Array(words)
+            playingWords = quizzesViewModel.words
             randomWord = playingWords.randomElement()
         }
         .alert(isPresented: $isShowAlert, content: {

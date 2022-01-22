@@ -1,6 +1,6 @@
 //
 //  WordsViewModel.swift
-//  My Dictionary (iOS)
+//  My Dictionary (Shared)
 //
 //  Created by Alexander Ryakhin on 1/21/22.
 //

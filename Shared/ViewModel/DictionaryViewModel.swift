@@ -1,6 +1,6 @@
 //
 //  DictionaryViewModel.swift
-//  My Dictionary
+//  My Dictionary (Shared)
 //
 //  Created by Alexander Bonney on 6/20/21.
 //

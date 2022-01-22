@@ -1,5 +1,5 @@
 //
-//  QuizesView.swift
+//  QuizzesView.swift
 //  My Dictionary
 //
 //  Created by Alexander Bonney on 9/30/21.
@@ -7,19 +7,12 @@
 
 import SwiftUI
 
-struct QuizesView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    var words: FetchedResults<Word>
-    
-    @State private var playingWords: [Word] = []
+struct QuizzesView: View {
+    @StateObject var quizzesViewModel = QuizzesViewModel()
 
     var body: some View {
         NavigationView {
-            if words.count < 10 {
+            if quizzesViewModel.words.count < 10 {
                 ZStack {
                     Color("Background").ignoresSafeArea()
                     VStack {
@@ -39,12 +32,14 @@ struct QuizesView: View {
                     Section {
                         NavigationLink {
                             SpellingQuizView()
+                                .environmentObject(quizzesViewModel)
                         } label: {
                             Text("Spelling")
                         }
 
                         NavigationLink {
-                            ChooseDefinitionView(vm: QuizzesViewModel(words: playingWords))
+                            ChooseDefinitionView()
+                                .environmentObject(quizzesViewModel)
                         } label: {
                             Text("Choose the right definition")
                         }
@@ -52,10 +47,8 @@ struct QuizesView: View {
                         Text("All words are from your list.")
                     }
                 }
+                .listStyle(.insetGrouped)
                 .navigationTitle("Quizzes")
-                .onAppear {
-                    playingWords = Array(words)
-                }
             }
         }
     }
@@ -63,6 +56,6 @@ struct QuizesView: View {
 
 struct QuizesView_Previews: PreviewProvider {
     static var previews: some View {
-        QuizesView()
+        QuizzesView()
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 struct WordsListView: View {
-    @EnvironmentObject var wordsViewModel: WordsViewModel
+    @StateObject var wordsViewModel = WordsViewModel()
     @State private var showingAddSheet = false
     
     var body: some View {

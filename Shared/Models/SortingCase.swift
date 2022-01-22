@@ -1,6 +1,6 @@
 //
 //  SortingCase.swift
-//  My Dictionary
+//  My Dictionary (Shared)
 //
 //  Created by Alexander Ryakhin on 1/20/22.
 //
