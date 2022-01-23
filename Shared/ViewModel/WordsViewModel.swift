@@ -16,22 +16,23 @@ final class WordsViewModel: ObservableObject {
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
-        
+
     init() {
         setupBindings()
         fetchWords()
     }
-    
+
     private func setupBindings() {
         // every time core data gets updated, call fetchWords()
         NotificationCenter.default
-            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification, object: persistenceController.container.viewContext)
+            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
+                          object: persistenceController.container.viewContext)
             .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
             .sink { [unowned self] _ in
                 self.fetchWords()
             }
             .store(in: &cancellable)
-        
+
         // react to search input from user
         $searchText.sink { [unowned self] value in
             if value.isEmpty {
@@ -41,9 +42,9 @@ final class WordsViewModel: ObservableObject {
             }
         }.store(in: &cancellable)
     }
-    
+
     // MARK: - Core Data Managing support
-    
+
     /// Fetches latest data from Core Data
     private func fetchWords() {
         let request = NSFetchRequest<Word>(entityName: "Word")
@@ -65,7 +66,7 @@ final class WordsViewModel: ObservableObject {
         }
         objectWillChange.send()
     }
-    
+
     func addNewWord(word: String, definition: String, partOfSpeech: String, phonetic: String?) {
         let newWord = Word(context: persistenceController.container.viewContext)
         newWord.id = UUID()
@@ -76,7 +77,7 @@ final class WordsViewModel: ObservableObject {
         newWord.timestamp = Date()
         save()
     }
-    
+
     // MARK: Removing from CD
     func deleteWord(offsets: IndexSet) {
         switch filterState {
@@ -95,18 +96,18 @@ final class WordsViewModel: ObservableObject {
         }
         save()
     }
-    
+
     /// Removes given word from Core Data
     func delete(word: Word) {
         persistenceController.container.viewContext.delete(word)
         save()
     }
-    
+
     // MARK: Sorting
     var favoriteWords: [Word] {
         return self.words.filter { $0.isFavorite }
     }
-    
+
     var searchResults: [Word] {
         return self.words.filter { word in
             if let wordItself = word.wordItself, !searchText.isEmpty {
@@ -116,7 +117,7 @@ final class WordsViewModel: ObservableObject {
             }
         }
     }
-    
+
     func sortWords() {
         switch sortingState {
         case .def:

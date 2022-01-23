@@ -48,7 +48,10 @@ struct AddIdiomViewMacOS: View {
         .frame(width: 500, height: 300)
         .padding()
         .alert(isPresented: $showingAlert, content: {
-            Alert(title: Text("Ooops..."), message: Text("You should enter an idiom and its definition before saving it"), dismissButton: .default(Text("Got it")))
+            Alert(
+                title: Text("Ooops..."),
+                message: Text("You should enter an idiom and its definition before saving it"),
+                dismissButton: .default(Text("Got it")))
         })
         .onAppear {
             if !idiomsViewModel.searchText.isEmpty {
@@ -56,7 +59,7 @@ struct AddIdiomViewMacOS: View {
             }
         }
     }
-    
+
     private func saveNewIdiom() {
         if !inputIdiom.isEmpty, !inputDefinition.isEmpty {
             idiomsViewModel.addNewIdiom(idiom: inputIdiom, definition: inputDefinition)

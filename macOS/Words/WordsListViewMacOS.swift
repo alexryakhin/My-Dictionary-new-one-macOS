@@ -13,12 +13,12 @@ struct WordsListView: View {
     @EnvironmentObject var wordsViewModel: WordsViewModel
     @EnvironmentObject var homeData: HomeViewModel
     @State private var isShowingAddView = false
-    
+
     var body: some View {
         VStack {
             Spacer().frame(height: 27)
             // MARK: Toolbar
-            HStack{
+            HStack {
                 Button {
                     removeWord()
                 } label: {
@@ -50,10 +50,10 @@ struct WordsListView: View {
             .background(Color.primary.opacity(0.15))
             .cornerRadius(8)
             .padding(.horizontal, 10)
-            
+
             Section {
                 List(selection: $homeData.selectedWord) {
-                    //Search, if user type something into search field, show filtered array
+                    // Search, if user type something into search field, show filtered array
                     ForEach(wordsToShow()) { word in
                         NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
                             HStack {
@@ -97,7 +97,7 @@ struct WordsListView: View {
         }
         Text("Select an item")
     }
-    
+
     private var wordsCount: String {
         if wordsToShow().count == 1 {
             return "1 word"
@@ -105,11 +105,11 @@ struct WordsListView: View {
             return "\(wordsToShow().count) words"
         }
     }
-        
+
     private func showAddView() {
         isShowingAddView = true
     }
-    
+
     private func wordsToShow() -> [Word] {
         switch wordsViewModel.filterState {
         case .none:
@@ -120,14 +120,14 @@ struct WordsListView: View {
             return wordsViewModel.searchResults
         }
     }
-    
+
     private func removeWord() {
         if homeData.selectedWord != nil {
             wordsViewModel.delete(word: homeData.selectedWord!)
         }
         homeData.selectedWord = nil
     }
-    
+
     private var sortMenu: some View {
         Menu {
             Section {
@@ -170,7 +170,7 @@ struct WordsListView: View {
             } header: {
                 Text("Sort by")
             }
-            
+
             Section {
                 Button {
                     withAnimation {
@@ -197,7 +197,7 @@ struct WordsListView: View {
             } header: {
                 Text("Filter by")
             }
-            
+
         } label: {
             Image(systemName: "arrow.up.arrow.down")
             Text(wordsViewModel.sortingState.rawValue)

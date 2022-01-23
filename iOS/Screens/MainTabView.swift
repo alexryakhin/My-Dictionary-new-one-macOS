@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainTabView: View {
     @AppStorage("isShowingOnboarding") var isShowingOnboarding: Bool = true
-    
+
     var body: some View {
         TabView {
             WordsListView()
@@ -28,9 +28,9 @@ struct MainTabView: View {
         .navigationViewStyle(StackNavigationViewStyle())
         .sheet(isPresented: $isShowingOnboarding, onDismiss: {
             isShowingOnboarding = false
-        }) {
+        }, content: {
             OnboardingView()
-        }
+        })
     }
 }
 
@@ -39,4 +39,3 @@ struct MainTabView_Previews: PreviewProvider {
         MainTabView()
     }
 }
-

@@ -1,5 +1,5 @@
 //
-//  My_DictionaryApp.swift
+//  MyDictionaryApp.swift
 //  My Dictionary (Shared)
 //
 //  Created by Alexander Bonney on 10/6/21.
@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct My_DictionaryApp: App {
+struct MyDictionaryApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()

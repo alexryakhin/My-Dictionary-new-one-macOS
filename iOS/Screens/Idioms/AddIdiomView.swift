@@ -12,7 +12,7 @@ struct AddIdiomView: View {
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
     @State private var inputDefinition: String = ""
     @State private var isShowingAlert = false
-    
+
     var body: some View {
         NavigationView {
             List {
@@ -45,7 +45,10 @@ struct AddIdiomView: View {
                     .font(.system(.headline, design: .rounded))
             }))
             .alert(isPresented: $isShowingAlert, content: {
-                Alert(title: Text("Ooops..."), message: Text("You should enter an idiom and its definition before saving it"), dismissButton: .default(Text("Got it")))
+                Alert(
+                    title: Text("Ooops..."),
+                    message: Text("You should enter an idiom and its definition before saving it"),
+                    dismissButton: .default(Text("Got it")))
             })
         }
     }

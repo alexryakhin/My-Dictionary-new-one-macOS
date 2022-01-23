@@ -14,7 +14,7 @@ struct MainTabView: View {
     @StateObject var wordsViewModel = WordsViewModel()
     @StateObject var quizzesViewModel = QuizzesViewModel()
     @StateObject var idiomsViewModel = IdiomsViewModel()
-    
+
     var body: some View {
         HStack(spacing: 0) {
             VStack {

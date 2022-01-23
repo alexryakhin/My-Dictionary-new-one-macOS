@@ -16,23 +16,23 @@ struct WordDetailView: View {
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
-        
+
     private var examples: [String] {
         guard let data = word.examples else {return []}
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
         return examples
     }
-    
+
     private let synthesizer = AVSpeechSynthesizer()
-    
+
     var body: some View {
-        let bindingWordDefinition = Binding (
+        let bindingWordDefinition = Binding(
             get: { word.definition ?? "" },
             set: {
                 word.definition = $0
             }
         )
-        
+
         List {
             Section {
                 HStack {
@@ -52,16 +52,16 @@ struct WordDetailView: View {
             } header: {
                 Text("Phonetics")
             }
-            
+
             Section {
                 Text(word.partOfSpeech ?? "")
                     .contextMenu {
-                        ForEach(PartOfSpeech.allCases, id: \.self) { c in
+                        ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
                             Button {
-                                word.partOfSpeech = c.rawValue
+                                word.partOfSpeech = partCase.rawValue
                                 wordsViewModel.save()
                             } label: {
-                                Text(c.rawValue)
+                                Text(partCase.rawValue)
                             }
                         }
                     }
@@ -108,16 +108,16 @@ struct WordDetailView: View {
                 } label: {
                     Text("Add example")
                 }
-                
+
                 ForEach(examples, id: \.self) { example in
                     Text(example)
-                }.onDelete(perform: removeExample)
-                
-                
+                }
+                .onDelete(perform: removeExample)
+
                 if isShowAddExample {
                     TextField("Type an example here", text: $exampleTextFieldStr, onCommit: {
                         withAnimation(.easeInOut) {
-                            //save
+                            // save
                             isShowAddExample = false
                             if exampleTextFieldStr != "" {
                                 let newExamples = examples + [exampleTextFieldStr]
@@ -136,7 +136,7 @@ struct WordDetailView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(word.wordItself ?? "")
         .navigationBarItems(leading: Button(action: {
-            //favorites
+            // favorites
             word.isFavorite.toggle()
             wordsViewModel.save()
         }, label: {
@@ -150,16 +150,16 @@ struct WordDetailView: View {
                 .foregroundColor(.red)
         }))
     }
-    
+
     private func removeWord() {
         wordsViewModel.delete(word: word)
         presentationMode.wrappedValue.dismiss()
     }
-    
+
     private func removeExample(offsets: IndexSet) {
         var examples = self.examples
         examples.remove(atOffsets: offsets)
-        
+
         let newExamplesData = try? JSONEncoder().encode(examples)
         word.examples = newExamplesData
         wordsViewModel.save()

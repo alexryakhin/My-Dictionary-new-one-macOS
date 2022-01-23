@@ -10,7 +10,7 @@ import SwiftUI
 struct IdiomsListView: View {
     @StateObject var idiomsViewModel = IdiomsViewModel()
     @State private var isShowingAddSheet = false
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -34,13 +34,16 @@ struct IdiomsListView: View {
                         if !idiomsToShow().isEmpty {
                             Section {
                                 ForEach(idiomsToShow()) { idiom in
-                                    NavigationLink(destination: IdiomsDetailView(idiom: idiom).environmentObject(idiomsViewModel)) {
+                                    NavigationLink(destination: IdiomsDetailView(idiom: idiom)
+                                                    .environmentObject(idiomsViewModel)) {
                                         HStack {
                                             Text(idiom.idiomItself ?? "word")
                                                 .bold()
                                             Spacer()
                                             if idiom.isFavorite {
-                                                Image(systemName:       "heart.fill").font(.caption).foregroundColor(.accentColor)
+                                                Image(systemName: "heart.fill")
+                                                    .font(.caption)
+                                                    .foregroundColor(.accentColor)
                                             }
                                         }
                                     }
@@ -89,18 +92,18 @@ struct IdiomsListView: View {
             }
             .sheet(isPresented: $isShowingAddSheet, onDismiss: {
                 idiomsViewModel.searchText = ""
-            }) {
+            }, content: {
                 AddIdiomView()
                     .environmentObject(idiomsViewModel)
-            }
+            })
             Text("Select an item")
         }
     }
-    
+
     private func addItem() {
         isShowingAddSheet = true
     }
-    
+
     private func idiomsToShow() -> [Idiom] {
         switch idiomsViewModel.filterState {
         case .none:
@@ -111,7 +114,7 @@ struct IdiomsListView: View {
             return idiomsViewModel.searchResults
         }
     }
-    
+
     private var idiomsCount: String {
         if idiomsToShow().count == 1 {
             return "1 idiom"
@@ -119,7 +122,7 @@ struct IdiomsListView: View {
             return "\(idiomsToShow().count) idioms"
         }
     }
-    
+
     private var filterMenu: some View {
         Menu {
             Button {
@@ -150,7 +153,7 @@ struct IdiomsListView: View {
             }
         }
     }
-    
+
     private var sortMenu: some View {
         Menu {
             Button {
@@ -182,11 +185,5 @@ struct IdiomsListView: View {
                 Image(systemName: "arrow.up.arrow.down")
             }
         }
-    }
-}
-
-struct IdiomsListView_Previews: PreviewProvider {
-    static var previews: some View {
-        IdiomsListView()
     }
 }

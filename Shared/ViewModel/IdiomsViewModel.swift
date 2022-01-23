@@ -21,17 +21,18 @@ final class IdiomsViewModel: ObservableObject {
         setupBindings()
         fetchIdioms()
     }
-    
+
     private func setupBindings() {
         // every time core data gets updated, call fetchWords()
         NotificationCenter.default
-            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification, object: persistenceController.container.viewContext)
+            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
+                          object: persistenceController.container.viewContext)
             .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
             .sink { [unowned self] _ in
                 self.fetchIdioms()
             }
             .store(in: &cancellable)
-        
+
         // react to search input from user
         $searchText.sink { [unowned self] value in
             if value.isEmpty {
@@ -41,9 +42,9 @@ final class IdiomsViewModel: ObservableObject {
             }
         }.store(in: &cancellable)
     }
-    
+
     // MARK: - Core Data Managing support
-    
+
     /// Fetches latest data from Core Data
     private func fetchIdioms() {
         let request = NSFetchRequest<Idiom>(entityName: "Idiom")
@@ -65,7 +66,7 @@ final class IdiomsViewModel: ObservableObject {
         }
         objectWillChange.send()
     }
-    
+
     func addNewIdiom(idiom: String, definition: String) {
         let newIdiom = Idiom(context: persistenceController.container.viewContext)
         newIdiom.id = UUID()
@@ -74,7 +75,7 @@ final class IdiomsViewModel: ObservableObject {
         newIdiom.timestamp = Date()
         save()
     }
-    
+
     // MARK: Removing from CD
     func deleteIdiom(offsets: IndexSet) {
         switch filterState {
@@ -93,18 +94,18 @@ final class IdiomsViewModel: ObservableObject {
         }
         save()
     }
-    
+
     /// Removes given word from Core Data
     func delete(idiom: Idiom) {
         persistenceController.container.viewContext.delete(idiom)
         save()
     }
-    
+
     // MARK: Sorting
     var favoriteIdioms: [Idiom] {
         return self.idioms.filter { $0.isFavorite }
     }
-    
+
     var searchResults: [Idiom] {
         return self.idioms.filter { idiom in
             if let idiomItself = idiom.idiomItself, !searchText.isEmpty {
@@ -114,7 +115,7 @@ final class IdiomsViewModel: ObservableObject {
             }
         }
     }
-    
+
     func sortIdioms() {
         switch sortingState {
         case .def:
@@ -129,5 +130,4 @@ final class IdiomsViewModel: ObservableObject {
             break
         }
     }
-
 }

@@ -9,7 +9,6 @@ import SwiftUI
 import CoreData
 import AVKit
 
-
 struct IdiomsDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
@@ -17,23 +16,23 @@ struct IdiomsDetailView: View {
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
-    
+
     private var examples: [String] {
         guard let data = idiom.examples else {return []}
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
         return examples
     }
-    
+
     private let synthesizer = AVSpeechSynthesizer()
-    
+
     var body: some View {
-        let bindingIdiomDefinition = Binding (
+        let bindingIdiomDefinition = Binding(
             get: { idiom.definition ?? "" },
             set: {
                 idiom.definition = $0
             }
         )
-        
+
         List {
             Section {
                 Text(idiom.idiomItself ?? "")
@@ -54,7 +53,7 @@ struct IdiomsDetailView: View {
                 }
                 .foregroundColor(.accentColor)
             }
-            
+
             Section {
                 if isEditingDefinition {
                     TextEditor(text: bindingIdiomDefinition)
@@ -99,7 +98,7 @@ struct IdiomsDetailView: View {
                         }
                     } else {
                         withAnimation(.easeInOut) {
-                            //save
+                            // save
                             isShowAddExample = false
                             if exampleTextFieldStr != "" {
                                 let newExamples = examples + [exampleTextFieldStr]
@@ -113,15 +112,16 @@ struct IdiomsDetailView: View {
                 } label: {
                     Text("Add example")
                 }
-                
+
                 ForEach(examples, id: \.self) { example in
                     Text(example)
-                }.onDelete(perform: removeExample)
-                
+                }
+                .onDelete(perform: removeExample)
+
                 if isShowAddExample {
                     TextField("Type an example here", text: $exampleTextFieldStr, onCommit: {
                         withAnimation(.easeInOut) {
-                            //save
+                            // save
                             isShowAddExample = false
                             if exampleTextFieldStr != "" {
                                 let newExamples = examples + [exampleTextFieldStr]
@@ -140,7 +140,7 @@ struct IdiomsDetailView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("Details")
         .navigationBarItems(leading: Button(action: {
-            //favorites
+            // favorites
             idiom.isFavorite.toggle()
             idiomsViewModel.save()
         }, label: {
@@ -153,16 +153,15 @@ struct IdiomsDetailView: View {
                 .foregroundColor(.red)
         }))
     }
-    
+
     private func removeIdiom() {
         idiomsViewModel.delete(idiom: idiom)
         presentationMode.wrappedValue.dismiss()
     }
-    
+
     private func removeExample(offsets: IndexSet) {
         var examples = self.examples
         examples.remove(atOffsets: offsets)
-        
         let newExamplesData = try? JSONEncoder().encode(examples)
         idiom.examples = newExamplesData
         idiomsViewModel.save()

@@ -18,9 +18,9 @@ struct WordCard: View {
         wordMeanings[wordClassSelection].definitions
     }
     var tapGesture: (String, String) -> Void
-    
+
     var body: some View {
-        
+
         VStack(alignment: .leading) {
             Picker(selection: $wordClassSelection) {
                 ForEach(wordMeanings.indices, id: \.self) { index in
@@ -31,8 +31,8 @@ struct WordCard: View {
             }
             .pickerStyle(SegmentedPickerStyle())
             .padding(.horizontal)
-            
-            TabView() {
+
+            TabView {
                 ForEach(indices, id: \.self) { index in
                     ScrollView {
                         VStack(alignment: .leading) {
@@ -46,7 +46,7 @@ struct WordCard: View {
                                     partOfSpeech = wordMeanings[wordClassSelection].partOfSpeech
                                     tapGesture(definitions[index].definition, partOfSpeech)
                                 }
-                                
+
                             }
                             if definitions[index].example != nil {
                                 Divider()
@@ -72,4 +72,3 @@ struct WordCard: View {
         }
     }
 }
-

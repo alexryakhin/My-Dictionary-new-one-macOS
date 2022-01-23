@@ -12,7 +12,9 @@ import UIKit
 
 extension View {
     func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for:nil)
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil)
     }
 }
 
@@ -24,14 +26,14 @@ extension Color {
 
 extension UIImage {
     static func getImageFrom(gradientLayer: CAGradientLayer) -> UIImage? {
-        var gradientImage:UIImage?
+        var gradientImage: UIImage?
         UIGraphicsBeginImageContext(gradientLayer.frame.size)
         if let context = UIGraphicsGetCurrentContext() {
             gradientLayer.render(in: context)
-            gradientImage = UIGraphicsGetImageFromCurrentImageContext()?.resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch)
+            gradientImage = UIGraphicsGetImageFromCurrentImageContext()?
+                .resizableImage(withCapInsets: UIEdgeInsets.zero, resizingMode: .stretch)
         }
         UIGraphicsEndImageContext()
         return gradientImage
     }
 }
-

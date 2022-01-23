@@ -9,7 +9,7 @@ import SwiftUI
 
 struct OnboardingView: View {
     @Environment(\.presentationMode) var presentationMode
-    
+
     var body: some View {
         ZStack {
             Color("Background").ignoresSafeArea()
@@ -18,9 +18,9 @@ struct OnboardingView: View {
                     .multilineTextAlignment(.center)
                     .font(.system(size: 35, weight: .bold))
                     .padding(.top, 70)
-                
+
                 Spacer()
-                
+
                 VStack(alignment: .leading, spacing: 25) {
                     ForEach(onboardingCases, id: \.self) { oCase in
                         HStack {
@@ -41,9 +41,9 @@ struct OnboardingView: View {
                     }
                 }
                 .padding()
-                
+
                 Spacer()
-                
+
                 Button {
                     presentationMode.wrappedValue.dismiss()
                 } label: {
@@ -61,17 +61,26 @@ struct OnboardingView: View {
             }
         }
     }
-    
+
     struct OnboardingCase: Hashable {
         var icon: String
         var title: String
         var subTitle: String
     }
-    
+
     private var onboardingCases = [
-        OnboardingCase(icon: "text.justify", title: "Your own list of words", subTitle: "Note any words you want, write your own definitions and examples"),
-        OnboardingCase(icon: "network", title: "Get definitions from the Internet", subTitle: "Some words might mean totally different thing!"),
-        OnboardingCase(icon: "a.magnify", title: "Quizzes", subTitle: "Expand your vocabulary with quizzes from your word list.")
+        OnboardingCase(
+            icon: "text.justify",
+            title: "Your own list of words",
+            subTitle: "Note any words you want, write your own definitions and examples"),
+        OnboardingCase(
+            icon: "network",
+            title: "Get definitions from the Internet",
+            subTitle: "Some words might mean totally different thing!"),
+        OnboardingCase(
+            icon: "a.magnify",
+            title: "Quizzes",
+            subTitle: "Expand your vocabulary with quizzes from your word list.")
     ]
 }
 
@@ -80,4 +89,3 @@ struct OnboardingView_Previews: PreviewProvider {
         OnboardingView()
     }
 }
-

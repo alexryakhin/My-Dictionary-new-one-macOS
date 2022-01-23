@@ -12,9 +12,8 @@ class DictionaryViewModel: ObservableObject {
     @Published var status: FetchingStatus = .blank
     @Published var inputWord: String = ""
     @Published var resultWordDetails: WordElement?
-    
     var cancellables = Set<AnyCancellable>()
-    
+
     func fetchData() throws {
         status = .loading
         let stringURL = "https://api.dictionaryapi.dev/api/v2/entries/en/\(inputWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))"
@@ -22,12 +21,13 @@ class DictionaryViewModel: ObservableObject {
             status = .error
             throw URLError(.badURL)
         }
-        
+
         URLSession.shared.dataTaskPublisher(for: url)
             .retry(2)
             .receive(on: DispatchQueue.main)
             .tryMap { (data, response) -> Data in
-                guard let response = response as? HTTPURLResponse, response.statusCode >= 200 && response.statusCode < 300 else {
+                guard let response = response as? HTTPURLResponse,
+                        response.statusCode >= 200 && response.statusCode < 300 else {
                     self.status = .error
                     throw URLError(.badServerResponse)
                 }
@@ -47,9 +47,5 @@ class DictionaryViewModel: ObservableObject {
                 self?.status = .ready
             }
             .store(in: &cancellables)
-    }
-    
-    deinit {
-        print("Dictionary VM deinit")
     }
 }

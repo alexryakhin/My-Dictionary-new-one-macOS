@@ -11,7 +11,7 @@ struct ChooseDefinitionView: View {
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
     @EnvironmentObject var quizzesViewModel: QuizzesViewModel
-    
+
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
@@ -21,12 +21,12 @@ struct ChooseDefinitionView: View {
                 .bold()
             Text(quizzesViewModel.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
-            
+
             Spacer()
             Text("Choose from given definitions below")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+
             ForEach(0..<3) { index in
                 Text(quizzesViewModel.words[index].definition ?? "")
                     .foregroundColor(.primary)
@@ -49,7 +49,7 @@ struct ChooseDefinitionView: View {
                         }
                     }
             }
-            
+
             Text(isRightAnswer ? "" : "Incorrect. Try Arain")
             Spacer().frame(height: 100)
         }
@@ -58,6 +58,5 @@ struct ChooseDefinitionView: View {
         .onAppear {
             rightAnswerIndex = Int.random(in: 0...2)
         }
-        
     }
 }

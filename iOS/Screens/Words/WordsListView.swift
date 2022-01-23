@@ -13,7 +13,7 @@ struct WordsListView: View {
     @AppStorage("isShowingRating") var isShowingRating: Bool = true
     @StateObject var wordsViewModel = WordsViewModel()
     @State private var isShowingAddSheet = false
-    
+
     var body: some View {
         NavigationView {
             VStack {
@@ -37,13 +37,16 @@ struct WordsListView: View {
                         if !wordsToShow().isEmpty {
                             Section {
                                 ForEach(wordsToShow()) { word in
-                                    NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
+                                    NavigationLink(destination: WordDetailView(word: word)
+                                                    .environmentObject(wordsViewModel)) {
                                         HStack {
                                             Text(word.wordItself ?? "word")
                                                 .bold()
                                             Spacer()
                                             if word.isFavorite {
-                                                Image(systemName:       "heart.fill").font(.caption).foregroundColor(.accentColor)
+                                                Image(systemName: "heart.fill")
+                                                    .font(.caption)
+                                                    .foregroundColor(.accentColor)
                                             }
                                             Text(word.partOfSpeech ?? "")
                                                 .foregroundColor(.secondary)
@@ -99,7 +102,7 @@ struct WordsListView: View {
             Text("Select an item")
         }
     }
-    
+
     private func addItem() {
         if isShowingRating && wordsViewModel.words.count > 15 {
             SKStoreReviewController.requestReview()
@@ -107,7 +110,7 @@ struct WordsListView: View {
         }
         isShowingAddSheet = true
     }
-    
+
     private func wordsToShow() -> [Word] {
         switch wordsViewModel.filterState {
         case .none:
@@ -118,7 +121,7 @@ struct WordsListView: View {
             return wordsViewModel.searchResults
         }
     }
-    
+
     private var wordsCount: String {
         if wordsToShow().count == 1 {
             return "1 word"
@@ -126,7 +129,7 @@ struct WordsListView: View {
             return "\(wordsToShow().count) words"
         }
     }
-    
+
     private var filterMenu: some View {
         Menu {
             Button {
@@ -157,7 +160,7 @@ struct WordsListView: View {
             }
         }
     }
-    
+
     private var sortMenu: some View {
         Menu {
             Button {
@@ -193,7 +196,7 @@ struct WordsListView: View {
                 }
                 Text("Part of speech")
             }
-            
+
         } label: {
             Label {
                 Text("Sort By")

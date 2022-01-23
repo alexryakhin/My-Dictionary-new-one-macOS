@@ -11,7 +11,7 @@ struct ChooseDefinitionView: View {
     @EnvironmentObject var quizzesViewModel: QuizzesViewModel
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
-        
+
     var body: some View {
         List {
             Section {
@@ -22,13 +22,13 @@ struct ChooseDefinitionView: View {
                     Text(quizzesViewModel.words[rightAnswerIndex].partOfSpeech ?? "")
                         .foregroundColor(.secondary)
                 }
-                
+
             } header: {
                 Text("Given word")
             } footer: {
                 Text("Choose from given definitions below")
             }
-            
+
             Section {
                 ForEach(0..<3) { index in
                     Button {

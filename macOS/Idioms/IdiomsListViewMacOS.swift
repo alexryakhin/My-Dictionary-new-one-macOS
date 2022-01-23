@@ -13,12 +13,12 @@ struct IdiomsListViewMacOS: View {
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
     @EnvironmentObject var homeData: HomeViewModel
     @State private var isShowingAddView = false
-    
+
     var body: some View {
         VStack {
             Spacer().frame(height: 27)
             // MARK: Toolbar
-            HStack{
+            HStack {
                 Button {
                     removeIdiom()
                 } label: {
@@ -50,12 +50,13 @@ struct IdiomsListViewMacOS: View {
             .background(Color.primary.opacity(0.15))
             .cornerRadius(8)
             .padding(.horizontal, 10)
-            
+
             Section {
                 List(selection: $homeData.selectedIdiom) {
-                    //Search, if user type something into search field, show filtered array
+                    // Search, if user type something into search field, show filtered array
                     ForEach(idiomsToShow()) { idiom in
-                        NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom).environmentObject(idiomsViewModel)) {
+                        NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom)
+                                        .environmentObject(idiomsViewModel)) {
                             HStack {
                                 Text(idiom.idiomItself ?? "word")
                                     .bold()
@@ -92,12 +93,12 @@ struct IdiomsListViewMacOS: View {
         .ignoresSafeArea()
         .sheet(isPresented: $isShowingAddView, onDismiss: {
             idiomsViewModel.searchText = ""
-        }) {
+        }, content: {
             AddIdiomViewMacOS(isShowingAddView: $isShowingAddView)
-        }
+        })
         Text("Select an item")
     }
-    
+
     private var idiomCount: String {
         if idiomsToShow().count == 1 {
             return "1 idiom"
@@ -105,11 +106,11 @@ struct IdiomsListViewMacOS: View {
             return "\(idiomsToShow().count) idioms"
         }
     }
-        
+
     private func showAddView() {
         isShowingAddView = true
     }
-    
+
     private func idiomsToShow() -> [Idiom] {
         switch idiomsViewModel.filterState {
         case .none:
@@ -120,14 +121,14 @@ struct IdiomsListViewMacOS: View {
             return idiomsViewModel.searchResults
         }
     }
-    
+
     private func removeIdiom() {
         if homeData.selectedIdiom != nil {
             idiomsViewModel.delete(idiom: homeData.selectedIdiom!)
         }
         homeData.selectedIdiom = nil
     }
-    
+
     private var sortMenu: some View {
         Menu {
             Section {
@@ -158,7 +159,7 @@ struct IdiomsListViewMacOS: View {
             } header: {
                 Text("Sort by")
             }
-            
+
             Section {
                 Button {
                     withAnimation {
@@ -185,7 +186,7 @@ struct IdiomsListViewMacOS: View {
             } header: {
                 Text("Filter by")
             }
-            
+
         } label: {
             Image(systemName: "arrow.up.arrow.down")
             Text(idiomsViewModel.sortingState.rawValue)

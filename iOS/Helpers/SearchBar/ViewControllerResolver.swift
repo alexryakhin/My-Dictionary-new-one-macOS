@@ -9,7 +9,7 @@ import SwiftUI
 
 final class ViewControllerResolver: UIViewControllerRepresentable {
     let onResolve: (UIViewController) -> Void
-    
+
     init(onResolve: @escaping (UIViewController) -> Void) {
         self.onResolve = onResolve
     }
@@ -17,14 +17,14 @@ final class ViewControllerResolver: UIViewControllerRepresentable {
         ParentResolverViewController(onResolve: onResolve)
     }
     func updateUIViewController(_ uiViewController: ParentResolverViewController, context: Context) {
-        
+
     }
 }
 
-class ParentResolverViewController: UIViewController{
+class ParentResolverViewController: UIViewController {
     let onResolve: (UIViewController) -> Void
-    
-    init(onResolve: @escaping (UIViewController) -> Void){
+
+    init(onResolve: @escaping (UIViewController) -> Void) {
         self.onResolve = onResolve
         super.init(nibName: nil, bundle: nil)
     }
@@ -33,7 +33,7 @@ class ParentResolverViewController: UIViewController{
     }
     override func didMove(toParent parent: UIViewController?) {
         super.didMove(toParent: parent)
-        if let parent = parent{
+        if let parent = parent {
             onResolve(parent)
         }
     }

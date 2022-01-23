@@ -12,11 +12,11 @@ final class QuizzesViewModel: ObservableObject {
     let persistenceController = PersistenceController.shared
 
     @Published var words: [Word] = []
-    
+
     init() {
         fetchWords()
     }
-    
+
     /// Fetches latest data from Core Data
     private func fetchWords() {
         let request = NSFetchRequest<Word>(entityName: "Word")

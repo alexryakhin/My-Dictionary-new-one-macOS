@@ -11,16 +11,16 @@
 		513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 513CBC65271099D800A2F4EC /* SpellingQuizView.swift */; };
 		51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */; };
 		51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */; };
-		51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
-		51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* My_DictionaryApp.swift */; };
+		51423CDF270DE477006B94CB /* MyDictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* MyDictionaryApp.swift */; };
+		51423CE0270DE477006B94CB /* MyDictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCC270DE477006B94CB /* MyDictionaryApp.swift */; };
 		51423CE1270DE477006B94CB /* WordsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCD270DE477006B94CB /* WordsListView.swift */; };
 		51423CE3270DE477006B94CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* PersistenceController.swift */; };
 		51423CE4270DE477006B94CB /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51423CCE270DE477006B94CB /* PersistenceController.swift */; };
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CE6270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51423CF1270DE658006B94CB /* CloudKit.framework */; };
-		51719135270F6F970077B3C8 /* AddViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */; };
-		51719138270F71850077B3C8 /* ExtensionsMacOs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719137270F71850077B3C8 /* ExtensionsMacOs.swift */; };
+		51719135270F6F970077B3C8 /* AddViewMacOs1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */; };
+		51719138270F71850077B3C8 /* ExtensionsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719137270F71850077B3C8 /* ExtensionsMacOS.swift */; };
 		5171913A270F74F20077B3C8 /* TabButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719139270F74F20077B3C8 /* TabButton.swift */; };
 		5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913B270F75180077B3C8 /* HomeViewModel.swift */; };
 		5171913E270F76090077B3C8 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913D270F76090077B3C8 /* BlurView.swift */; };
@@ -68,7 +68,7 @@
 		513CBC63271099CF00A2F4EC /* ChooseDefinitionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChooseDefinitionView.swift; sourceTree = "<group>"; };
 		513CBC65271099D800A2F4EC /* SpellingQuizView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpellingQuizView.swift; sourceTree = "<group>"; };
 		51423CCB270DE477006B94CB /* Shared.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Shared.xcdatamodel; sourceTree = "<group>"; };
-		51423CCC270DE477006B94CB /* My_DictionaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = My_DictionaryApp.swift; sourceTree = "<group>"; };
+		51423CCC270DE477006B94CB /* MyDictionaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDictionaryApp.swift; sourceTree = "<group>"; };
 		51423CCD270DE477006B94CB /* WordsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListView.swift; sourceTree = "<group>"; };
 		51423CCE270DE477006B94CB /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
 		51423CCF270DE477006B94CB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -78,8 +78,8 @@
 		51423CEF270DE64E006B94CB /* My Dictionary (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Dictionary (iOS).entitlements"; sourceTree = "<group>"; };
 		51423CF1270DE658006B94CB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51423CF3270DEBD4006B94CB /* MyDictionaryInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MyDictionaryInfo.plist; sourceTree = "<group>"; };
-		51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOS.swift; sourceTree = "<group>"; };
-		51719137270F71850077B3C8 /* ExtensionsMacOs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsMacOs.swift; sourceTree = "<group>"; };
+		51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOs1.swift; sourceTree = "<group>"; };
+		51719137270F71850077B3C8 /* ExtensionsMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsMacOS.swift; sourceTree = "<group>"; };
 		51719139270F74F20077B3C8 /* TabButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabButton.swift; sourceTree = "<group>"; };
 		5171913B270F75180077B3C8 /* HomeViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		5171913D270F76090077B3C8 /* BlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
@@ -172,7 +172,7 @@
 		51423CC9270DE476006B94CB /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				51423CCC270DE477006B94CB /* My_DictionaryApp.swift */,
+				51423CCC270DE477006B94CB /* MyDictionaryApp.swift */,
 				51332CC227117216004686D2 /* Models */,
 				51332CC32711721C004686D2 /* ViewModel */,
 				517366DA270EB7CF0073651A /* Managers */,
@@ -250,7 +250,7 @@
 		519B8AA42711B0B5003E5EDD /* Words */ = {
 			isa = PBXGroup;
 			children = (
-				51719132270F6E0D0077B3C8 /* AddViewMacOS.swift */,
+				51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */,
 				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
 				51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */,
 			);
@@ -270,7 +270,7 @@
 		519B8AA62711B0C1003E5EDD /* Resourses */ = {
 			isa = PBXGroup;
 			children = (
-				51719137270F71850077B3C8 /* ExtensionsMacOs.swift */,
+				51719137270F71850077B3C8 /* ExtensionsMacOS.swift */,
 				5171913D270F76090077B3C8 /* BlurView.swift */,
 				51719139270F74F20077B3C8 /* TabButton.swift */,
 			);
@@ -367,6 +367,7 @@
 				51423CD0270DE477006B94CB /* Sources */,
 				51423CD1270DE477006B94CB /* Frameworks */,
 				51423CD2270DE477006B94CB /* Resources */,
+				C0183967279D20FB0034ED37 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -450,6 +451,27 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		C0183967279D20FB0034ED37 /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		51423CD0270DE477006B94CB /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -461,7 +483,7 @@
 				51EBFBE9270F4A7E0066782B /* AddView.swift in Sources */,
 				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
 				C0358EF22799DDC300E9C452 /* ViewControllerResolver.swift in Sources */,
-				51423CDF270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
+				51423CDF270DE477006B94CB /* MyDictionaryApp.swift in Sources */,
 				517366E1270EB8A50073651A /* OnboardingView.swift in Sources */,
 				C0358EF6279A84F800E9C452 /* IdiomsListView.swift in Sources */,
 				513CBC64271099CF00A2F4EC /* ChooseDefinitionView.swift in Sources */,
@@ -502,7 +524,7 @@
 				51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */,
 				51719141270F84D20077B3C8 /* Words.swift in Sources */,
 				5171913C270F75180077B3C8 /* HomeViewModel.swift in Sources */,
-				51423CE0270DE477006B94CB /* My_DictionaryApp.swift in Sources */,
+				51423CE0270DE477006B94CB /* MyDictionaryApp.swift in Sources */,
 				5171913E270F76090077B3C8 /* BlurView.swift in Sources */,
 				C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */,
 				C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */,
@@ -510,9 +532,9 @@
 				5171913A270F74F20077B3C8 /* TabButton.swift in Sources */,
 				C03908D8279C8B340056968B /* Extensions.swift in Sources */,
 				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
-				51719135270F6F970077B3C8 /* AddViewMacOS.swift in Sources */,
+				51719135270F6F970077B3C8 /* AddViewMacOs1.swift in Sources */,
 				C0D377C22799833700BE0726 /* SortingCase.swift in Sources */,
-				51719138270F71850077B3C8 /* ExtensionsMacOs.swift in Sources */,
+				51719138270F71850077B3C8 /* ExtensionsMacOS.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

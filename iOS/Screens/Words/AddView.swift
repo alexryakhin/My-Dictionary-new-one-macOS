@@ -11,26 +11,26 @@ import AVKit
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var wordsViewModel: WordsViewModel
-    @StateObject var vm = DictionaryViewModel()
+    @StateObject var dictionaryViewModel = DictionaryViewModel()
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
-    
+
     private var utterance: AVSpeechUtterance {
-        let utterance = AVSpeechUtterance(string: vm.inputWord)
+        let utterance = AVSpeechUtterance(string: dictionaryViewModel.inputWord)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
         return utterance
     }
     private let synthesizer = AVSpeechSynthesizer()
-    
+
     var body: some View {
         NavigationView {
             VStack {
                 VStack(alignment: .leading, spacing: 11) {
-                    TextField("Enter your word", text: $vm.inputWord, onCommit: {
-                        if !vm.inputWord.isEmpty {
+                    TextField("Enter your word", text: $dictionaryViewModel.inputWord, onCommit: {
+                        if !dictionaryViewModel.inputWord.isEmpty {
                             do {
-                                try vm.fetchData()
+                                try dictionaryViewModel.fetchData()
                             } catch {
                                 print(error.localizedDescription)
                             }
@@ -54,14 +54,14 @@ struct AddView: View {
                             .padding(.vertical, 1)
                     })
                         .padding(.bottom, 11)
-                        .foregroundColor(vm.inputWord.isEmpty ? Color.gray.opacity(0.5) : .green)
+                        .foregroundColor(dictionaryViewModel.inputWord.isEmpty ? Color.gray.opacity(0.5) : .green)
                         .cornerRadius(10)
                         .padding(.horizontal)
-                        .disabled(vm.inputWord.isEmpty)
+                        .disabled(dictionaryViewModel.inputWord.isEmpty)
                 }
                 .background(Color("TableBackground").cornerRadius(10))
                 .padding(.horizontal)
-                
+
                 detailsView
             }
             .ignoresSafeArea(.all, edges: [.bottom])
@@ -73,16 +73,16 @@ struct AddView: View {
             )
             .navigationBarTitle("Add new word")
             .navigationBarItems(trailing: Button(action: {
-                if !vm.inputWord.isEmpty, !descriptionField.isEmpty {
+                if !dictionaryViewModel.inputWord.isEmpty, !descriptionField.isEmpty {
                     wordsViewModel.addNewWord(
-                        word: vm.inputWord.capitalizingFirstLetter(),
+                        word: dictionaryViewModel.inputWord.capitalizingFirstLetter(),
                         definition: descriptionField.capitalizingFirstLetter(),
                         partOfSpeech: partOfSpeech.rawValue,
-                        phonetic: vm.resultWordDetails?.phonetic)
+                        phonetic: dictionaryViewModel.resultWordDetails?.phonetic)
                     self.presentationMode.wrappedValue.dismiss()
-                    vm.resultWordDetails = nil
-                    vm.inputWord = ""
-                    vm.status = .blank
+                    dictionaryViewModel.resultWordDetails = nil
+                    dictionaryViewModel.inputWord = ""
+                    dictionaryViewModel.status = .blank
                 } else {
                     showingAlert = true
                 }
@@ -91,21 +91,24 @@ struct AddView: View {
                     .font(.system(.headline, design: .rounded))
             }))
             .alert(isPresented: $showingAlert, content: {
-                Alert(title: Text("Ooops..."), message: Text("You should enter a word and its definition before saving it"), dismissButton: .default(Text("Got it")))
+                Alert(
+                    title: Text("Ooops..."),
+                    message: Text("You should enter a word and its definition before saving it"),
+                    dismissButton: .default(Text("Got it")))
             })
             .onAppear {
                 if !wordsViewModel.searchText.isEmpty {
-                    vm.inputWord = wordsViewModel.searchText
-                    try? vm.fetchData()
+                    dictionaryViewModel.inputWord = wordsViewModel.searchText
+                    try? dictionaryViewModel.fetchData()
                 }
             }
         }
     }
-    
+
     private func searchForWord() {
-        if !vm.inputWord.isEmpty {
+        if !dictionaryViewModel.inputWord.isEmpty {
             do {
-               try vm.fetchData()
+               try dictionaryViewModel.fetchData()
             } catch {
                 print(error.localizedDescription)
             }
@@ -113,7 +116,7 @@ struct AddView: View {
             print("type a word")
         }
     }
-    
+
     var errorView: some View {
         VStack {
             Spacer().frame(height: 25)
@@ -127,7 +130,7 @@ struct AddView: View {
             hideKeyboard()
         }
     }
-    
+
     var blanckView: some View {
         VStack {
             Spacer().frame(height: 25)
@@ -141,7 +144,7 @@ struct AddView: View {
             hideKeyboard()
         }
     }
-    
+
     var loadingView: some View {
         VStack {
             Spacer().frame(height: 50)
@@ -152,15 +155,15 @@ struct AddView: View {
             hideKeyboard()
         }
     }
-    
+
     var detailsView: some View {
         Section {
-            if vm.resultWordDetails != nil && vm.status == .ready {
-                if vm.resultWordDetails!.phonetic != nil {
+            if dictionaryViewModel.resultWordDetails != nil && dictionaryViewModel.status == .ready {
+                if dictionaryViewModel.resultWordDetails!.phonetic != nil {
                     HStack(spacing: 0) {
                         HStack {
                             Text("Phonetic: ").bold()
-                            + Text(vm.resultWordDetails!.phonetic ?? "")
+                            + Text(dictionaryViewModel.resultWordDetails!.phonetic ?? "")
                         }.padding(.top)
                         Spacer()
                         Button {
@@ -177,11 +180,12 @@ struct AddView: View {
                     }
                     .padding(.horizontal)
                 }
-                
+
                 WordCard(
-                    wordMeanings: vm.resultWordDetails!.meanings, tapGesture: { descriptionStr, partOfSpeechStr in
+                    wordMeanings: dictionaryViewModel.resultWordDetails!.meanings,
+                    tapGesture: { descriptionStr, partOfSpeechStr in
                         descriptionField = descriptionStr
-                        
+
                         switch partOfSpeechStr {
                         case "noun":
                             partOfSpeech = .noun
@@ -202,30 +206,30 @@ struct AddView: View {
                         default:
                             partOfSpeech = .unknown
                         }
-                        
+
                         hideKeyboard()
                     })
-            } else if vm.status == .loading {
+            } else if dictionaryViewModel.status == .loading {
                 loadingView
-            } else if vm.status == .blank {
+            } else if dictionaryViewModel.status == .blank {
                 blanckView
-            } else if vm.status == .error {
+            } else if dictionaryViewModel.status == .error {
                 errorView
             }
         }
         .cornerRadius(15)
     }
-    
+
     var partOfSpeechMenu: some View {
         Menu {
-            ForEach(PartOfSpeech.allCases, id: \.self) { c in
+            ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
                 Button {
-                    partOfSpeech = c
+                    partOfSpeech = partCase
                 } label: {
-                    if partOfSpeech == c {
+                    if partOfSpeech == partCase {
                         Image(systemName: "checkmark")
                     }
-                    Text(c.rawValue)
+                    Text(partCase.rawValue)
                 }
             }
         } label: {
@@ -237,11 +241,5 @@ struct AddView: View {
                     : Color.primary
                 )
         }
-    }
-}
-
-struct AddView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddView()
     }
 }

@@ -34,14 +34,15 @@ struct SearchBarModifier: ViewModifier {
         searchBar = SearchBar(searchTerm: searchTerm)
         self.hideWhenScrolling = hideWhenScrolling
     }
-    
+
     func body(content: Content) -> some View {
         content
             .overlay(
                 ViewControllerResolver { viewController in
                     viewController.navigationItem.searchController = searchBar.searchController
                     viewController.navigationItem.hidesSearchBarWhenScrolling = hideWhenScrolling
-                }.frame(width:0, height: 0))
+                }
+            .frame(width: 0, height: 0))
     }
 }
 

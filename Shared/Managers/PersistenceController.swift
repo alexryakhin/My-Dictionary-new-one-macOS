@@ -10,20 +10,15 @@ import CoreData
 final class PersistenceController {
     let container: NSPersistentCloudKitContainer
     static let shared = PersistenceController()
-    
+
     private init() {
         container = NSPersistentCloudKitContainer(name: "My_Dictionary")
-
-//        if inMemory {
-//            container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-//        }
-        
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+        container.loadPersistentStores(completionHandler: { _, error in
             if let error = error as NSError? {
                 print(error.localizedDescription)
             }
         })
-        
+
         // Update data automatically
         container.viewContext.automaticallyMergesChangesFromParent = true
         container.viewContext.mergePolicy = NSMergeByPropertyStoreTrumpMergePolicy

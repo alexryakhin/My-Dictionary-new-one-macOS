@@ -21,9 +21,9 @@ struct IdiomDetailViewMacOS: View {
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
         return examples
     }
-    
+
     let synthesizer = AVSpeechSynthesizer()
-    
+
     var body: some View {
         VStack {
             // MARK: Title and toolbar
@@ -41,7 +41,6 @@ struct IdiomDetailViewMacOS: View {
                     Image(systemName: "speaker.wave.2.fill")
                 }
                 Button(action: {
-                    //favorites
                     idiom.isFavorite.toggle()
                     idiomsViewModel.save()
                 }, label: {
@@ -61,13 +60,13 @@ struct IdiomDetailViewMacOS: View {
             }
             // MARK: Primary Content
 
-            let bindingIdiomDefinition = Binding (
+            let bindingIdiomDefinition = Binding(
                 get: { idiom.definition ?? "" },
                 set: {
                     idiom.definition = $0
                 }
             )
-            
+
             ScrollView {
                 HStack {
                     if isEditing {
@@ -91,9 +90,9 @@ struct IdiomDetailViewMacOS: View {
                         Image(systemName: "speaker.wave.2.fill")
                     }
                 }
-                
+
                 Divider()
-                
+
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Examples:").bold()
@@ -108,7 +107,7 @@ struct IdiomDetailViewMacOS: View {
                             }
                         }
                     }
-                    
+
                     if !examples.isEmpty {
                         ForEach(examples.indices, id: \.self) { index in
                             if !isEditing {
@@ -136,11 +135,10 @@ struct IdiomDetailViewMacOS: View {
                             }
                         }
                     }
-                    
+
                     if isShowAddExample {
                         TextField("Type an example here", text: $exampleTextFieldStr, onCommit: {
                             withAnimation(.easeInOut) {
-                                //save
                                 isShowAddExample = false
                                 if exampleTextFieldStr != "" {
                                     let newExamples = examples + [exampleTextFieldStr]
@@ -158,12 +156,12 @@ struct IdiomDetailViewMacOS: View {
         .padding()
         .navigationTitle(idiom.idiomItself ?? "")
     }
-    
+
     // MARK: Private methods
     private func removeExample(of index: Int) {
         var examples = self.examples
         examples.remove(at: index)
-        
+
         let newExamplesData = try? JSONEncoder().encode(examples)
         idiom.examples = newExamplesData
         idiomsViewModel.save()
