@@ -105,6 +105,16 @@ struct WordDetailView: View {
                         + Text(word.definition ?? "")
                     }
                     Spacer()
+                    Button {
+                        var utterance: AVSpeechUtterance {
+                            let utterance = AVSpeechUtterance(string: word.definition ?? "")
+                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+                            return utterance
+                        }
+                        synthesizer.speak(utterance)
+                    } label: {
+                        Image(systemName: "speaker.wave.2.fill")
+                    }
                 }
                 
                 Divider()
@@ -170,7 +180,6 @@ struct WordDetailView: View {
                     }
                 }
             }
-            
         }
         .padding()
         .navigationTitle(word.wordItself ?? "")
