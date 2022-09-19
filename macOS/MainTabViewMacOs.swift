@@ -7,42 +7,32 @@
 
 import SwiftUI
 
-var screen = NSScreen.main!.visibleFrame
-
 struct MainTabView: View {
-    @StateObject var homeData = HomeViewModel()
     @StateObject var wordsViewModel = WordsViewModel()
     @StateObject var quizzesViewModel = QuizzesViewModel()
     @StateObject var idiomsViewModel = IdiomsViewModel()
+    
+    @State var selectedTab: TabButton.TabButtonCase = .words
 
     var body: some View {
-        HStack(spacing: 0) {
+        NavigationView {
             VStack {
-                TabButton(image: "textformat.abc", title: "Words", selectedTab: $homeData.selectedTab)
-                TabButton(image: "scroll", title: "Idioms", selectedTab: $homeData.selectedTab)
-                TabButton(image: "a.magnify", title: "Quizzes", selectedTab: $homeData.selectedTab)
-                Spacer()
-//                TabButton(image: "gear", title: "Settings", selectedTab: $homeData.selectedTab)
-            }
-            .padding()
-            .padding(.top, 40)
-            .background(BlurView())
-
-            ZStack {
-                switch homeData.selectedTab {
-                case "Words": NavigationView { WordsListView().environmentObject(wordsViewModel) }
-                case "Quizzes": NavigationView { QuizzesView().environmentObject(quizzesViewModel) }
-                case "Idioms": NavigationView { IdiomsListViewMacOS().environmentObject(idiomsViewModel) }
-//                case "Settings": Text("Settings")
-                default : Text("Select an item")
+                switch selectedTab {
+                case .words: WordsListView().environmentObject(wordsViewModel)
+                case .idioms: IdiomsListViewMacOS().environmentObject(idiomsViewModel)
+                case .quizzes: QuizzesView().environmentObject(quizzesViewModel)
                 }
+                HStack {
+                    ForEach(TabButton.TabButtonCase.allCases, id: \.self) { button in
+                        TabButton(button: button, selectedTab: $selectedTab)
+                    }
+                }
+                .padding(.bottom)
+                .padding(.horizontal)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.none)
+            Text("Select an item")
         }
-        .ignoresSafeArea(.container, edges: .all)
-        .frame(minWidth: 800, minHeight: 600)
-        .environmentObject(homeData)
+        .frame(minWidth: 700, minHeight: 300)
     }
 }
 

@@ -17,5 +17,17 @@ struct MyDictionaryApp: App {
         #if os(macOS)
         .windowStyle(HiddenTitleBarWindowStyle())
         #endif
+        
+        #if !os(watchOS)
+        .commands {
+            DictionaryCommands()
+        }
+        #endif
+        
+        #if os(macOS)
+        Settings {
+            DictionarySettings()
+        }
+        #endif
     }
 }

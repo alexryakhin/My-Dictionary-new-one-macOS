@@ -11,8 +11,8 @@ import AVFoundation
 
 struct IdiomsListViewMacOS: View {
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
-    @EnvironmentObject var homeData: HomeViewModel
     @State private var isShowingAddView = false
+    @State private var selectedIdiom: Idiom?
 
     var body: some View {
         VStack {
@@ -24,7 +24,7 @@ struct IdiomsListViewMacOS: View {
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(
-                            homeData.selectedIdiom == nil
+                            selectedIdiom == nil
                             ? .secondary
                             : .red)
                 }
@@ -52,7 +52,7 @@ struct IdiomsListViewMacOS: View {
             .padding(.horizontal, 10)
 
             Section {
-                List(selection: $homeData.selectedIdiom) {
+                List(selection: $selectedIdiom) {
                     // Search, if user type something into search field, show filtered array
                     ForEach(idiomsToShow()) { idiom in
                         NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom)
@@ -64,7 +64,7 @@ struct IdiomsListViewMacOS: View {
                                 if idiom.isFavorite {
                                     Image(systemName: "heart.fill")
                                         .font(.caption)
-                                        .foregroundColor(homeData.selectedIdiom == idiom ? .secondary : .accentColor)
+                                        .foregroundColor(selectedIdiom == idiom ? .secondary : .accentColor)
                                 }
                             }
                         }
@@ -96,7 +96,9 @@ struct IdiomsListViewMacOS: View {
         }, content: {
             AddIdiomViewMacOS(isShowingAddView: $isShowingAddView)
         })
-        Text("Select an item")
+        .onDisappear {
+            selectedIdiom = nil
+        }
     }
 
     private var idiomCount: String {
@@ -123,10 +125,10 @@ struct IdiomsListViewMacOS: View {
     }
 
     private func removeIdiom() {
-        if homeData.selectedIdiom != nil {
-            idiomsViewModel.delete(idiom: homeData.selectedIdiom!)
+        if selectedIdiom != nil {
+            idiomsViewModel.delete(idiom: selectedIdiom!)
         }
-        homeData.selectedIdiom = nil
+        selectedIdiom = nil
     }
 
     private var sortMenu: some View {
@@ -136,7 +138,7 @@ struct IdiomsListViewMacOS: View {
                     withAnimation {
                         idiomsViewModel.sortingState = .def
                         idiomsViewModel.sortIdioms()
-                        homeData.selectedIdiom = nil
+                        selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.sortingState == .def {
@@ -148,7 +150,7 @@ struct IdiomsListViewMacOS: View {
                     withAnimation {
                         idiomsViewModel.sortingState = .name
                         idiomsViewModel.sortIdioms()
-                        homeData.selectedIdiom = nil
+                        selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.sortingState == .name {
@@ -164,7 +166,7 @@ struct IdiomsListViewMacOS: View {
                 Button {
                     withAnimation {
                         idiomsViewModel.filterState = .none
-                        homeData.selectedIdiom = nil
+                        selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.filterState == .none {
@@ -175,7 +177,7 @@ struct IdiomsListViewMacOS: View {
                 Button {
                     withAnimation {
                         idiomsViewModel.filterState = .favorite
-                        homeData.selectedIdiom = nil
+                        selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.filterState == .favorite {

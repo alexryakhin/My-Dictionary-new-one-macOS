@@ -8,32 +8,59 @@
 import SwiftUI
 
 struct TabButton: View {
-    var image: String
-    var title: String
-    @Binding var selectedTab: String
+    var button: TabButtonCase
+    @Binding var selectedTab: TabButtonCase
 
     var body: some View {
         Button(action: {
             withAnimation {
-                selectedTab = title
+                selectedTab = button
             }
         }, label: {
             VStack(spacing: 7) {
-                Image(systemName: image)
+                button.image
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(selectedTab == title ? .primary : .gray)
+                    .foregroundColor(selectedTab == button ? .primary : .gray)
 
-                Text(title)
+                Text(button.title)
                     .fontWeight(.semibold)
                     .font(.system(size: 11))
-                    .foregroundColor(selectedTab == title ? .primary : .gray)
+                    .foregroundColor(selectedTab == button ? .primary : .gray)
             }
             .padding(.vertical, 8)
             .frame(width: 70)
             .contentShape(Rectangle())
-            .background(Color.primary.opacity(selectedTab == title ? 0.15 : 0))
+            .background(Color.primary.opacity(selectedTab == button ? 0.15 : 0))
             .cornerRadius(10)
         })
         .buttonStyle(PlainButtonStyle())
+    }
+    
+    enum TabButtonCase: CaseIterable {
+        case words
+        case idioms
+        case quizzes
+        
+        var title: String {
+            switch self {
+            case .words:
+                return "Words"
+            case .idioms:
+                return "Idioms"
+            case .quizzes:
+                return "Quizzes"
+            }
+        }
+        
+        var image: Image {
+            switch self {
+            case .words:
+                return Image(systemName: "textformat.abc")
+            case .idioms:
+                return Image(systemName: "scroll")
+            case .quizzes:
+                return Image(systemName: "a.magnify")
+            }
+        }
     }
 }

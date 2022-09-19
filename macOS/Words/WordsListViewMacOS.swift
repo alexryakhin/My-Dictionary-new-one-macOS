@@ -11,8 +11,8 @@ import AVFoundation
 
 struct WordsListView: View {
     @EnvironmentObject var wordsViewModel: WordsViewModel
-    @EnvironmentObject var homeData: HomeViewModel
     @State private var isShowingAddView = false
+    @State private var selectedWord: Word?
 
     var body: some View {
         VStack {
@@ -24,7 +24,7 @@ struct WordsListView: View {
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(
-                            homeData.selectedWord == nil
+                            selectedWord == nil
                             ? .secondary
                             : .red)
                 }
@@ -52,7 +52,7 @@ struct WordsListView: View {
             .padding(.horizontal, 10)
 
             Section {
-                List(selection: $homeData.selectedWord) {
+                List(selection: $selectedWord) {
                     // Search, if user type something into search field, show filtered array
                     ForEach(wordsToShow()) { word in
                         NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
@@ -63,7 +63,7 @@ struct WordsListView: View {
                                 if word.isFavorite {
                                     Image(systemName: "heart.fill")
                                         .font(.caption)
-                                        .foregroundColor(homeData.selectedWord == word ? .secondary : .accentColor)
+                                        .foregroundColor(selectedWord == word ? .secondary : .accentColor)
                                 }
                                 Text(word.partOfSpeech ?? "")
                                     .foregroundColor(.secondary)
@@ -91,11 +91,11 @@ struct WordsListView: View {
                 }
             }
         }
+        .navigationTitle("My Dictionary")
         .ignoresSafeArea()
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
             AddView(isShowingAddView: $isShowingAddView)
         }
-        Text("Select an item")
     }
 
     private var wordsCount: String {
@@ -122,10 +122,10 @@ struct WordsListView: View {
     }
 
     private func removeWord() {
-        if homeData.selectedWord != nil {
-            wordsViewModel.delete(word: homeData.selectedWord!)
+        if selectedWord != nil {
+            wordsViewModel.delete(word: selectedWord!)
         }
-        homeData.selectedWord = nil
+        selectedWord = nil
     }
 
     private var sortMenu: some View {
@@ -135,7 +135,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .def
                         wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
+                        selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .def {
@@ -147,7 +147,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .name
                         wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
+                        selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .name {
@@ -159,7 +159,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .partOfSpeech
                         wordsViewModel.sortWords()
-                        homeData.selectedWord = nil
+                        selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .partOfSpeech {
@@ -175,7 +175,7 @@ struct WordsListView: View {
                 Button {
                     withAnimation {
                         wordsViewModel.filterState = .none
-                        homeData.selectedWord = nil
+                        selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.filterState == .none {
@@ -186,7 +186,7 @@ struct WordsListView: View {
                 Button {
                     withAnimation {
                         wordsViewModel.filterState = .favorite
-                        homeData.selectedWord = nil
+                        selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.filterState == .favorite {
