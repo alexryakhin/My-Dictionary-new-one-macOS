@@ -1,12 +1,4 @@
-//
-//  WordsDetailViewMacOS.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/7/21.
-//
-
 import SwiftUI
-import AVKit
 
 struct WordDetailView: View {
     @ObservedObject var word: Word
@@ -22,12 +14,7 @@ struct WordDetailView: View {
         return examples
     }
 
-    var utterance: AVSpeechUtterance {
-        let utterance = AVSpeechUtterance(string: word.wordItself ?? "")
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        return utterance
-    }
-    let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         VStack {
@@ -68,7 +55,7 @@ struct WordDetailView: View {
                     + Text("[\(word.phonetic ?? "No transcription")]")
                     Spacer()
                     Button {
-                        synthesizer.speak(utterance)
+                        synthesizer.speak(word.wordItself ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -103,12 +90,7 @@ struct WordDetailView: View {
                     }
                     Spacer()
                     Button {
-                        var utterance: AVSpeechUtterance {
-                            let utterance = AVSpeechUtterance(string: word.definition ?? "")
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            return utterance
-                        }
-                        synthesizer.speak(utterance)
+                        synthesizer.speak(word.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }

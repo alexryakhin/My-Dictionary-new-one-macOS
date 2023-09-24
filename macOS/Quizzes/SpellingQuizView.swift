@@ -1,10 +1,3 @@
-//
-//  SpellingQuizView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/9/21.
-//
-
 import SwiftUI
 
 struct SpellingQuizView: View {
@@ -25,8 +18,10 @@ struct SpellingQuizView: View {
                 .font(.title)
                 .bold()
                 .padding(.horizontal, 30)
+                .multilineTextAlignment(.center)
 
-            Text(randomWord?.partOfSpeech ?? "error").foregroundColor(.secondary)
+            Text(randomWord?.partOfSpeech ?? "error")
+                .foregroundColor(.secondary)
 
             Spacer()
 

@@ -1,13 +1,5 @@
-//
-//  IdiomsListViewMacOS.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
 import CoreData
-import AVFoundation
 
 struct IdiomsListViewMacOS: View {
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
@@ -15,72 +7,60 @@ struct IdiomsListViewMacOS: View {
     @State private var selectedIdiom: Idiom?
 
     var body: some View {
-        VStack {
-            Spacer().frame(height: 27)
-            // MARK: Toolbar
-            HStack {
-                Button {
-                    removeIdiom()
-                } label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(
-                            selectedIdiom == nil
-                            ? .secondary
-                            : .red)
-                }
-                Spacer()
-                sortMenu
-                Button {
-                    showAddView()
-                } label: {
-                    Image(systemName: "plus")
-                        .foregroundColor(.accentColor)
-                }
-            }
-            .padding(.horizontal, 10)
-            // MARK: Search text field
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                TextField("Search", text: $idiomsViewModel.searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal)
-            .background(Color.primary.opacity(0.15))
-            .cornerRadius(8)
-            .padding(.horizontal, 10)
-
+        List(selection: $selectedIdiom) {
             Section {
-                List(selection: $selectedIdiom) {
-                    // Search, if user type something into search field, show filtered array
-                    ForEach(idiomsToShow()) { idiom in
-                        NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom)
-                                        .environmentObject(idiomsViewModel)) {
-                            HStack {
-                                Text(idiom.idiomItself ?? "word")
-                                    .bold()
-                                Spacer()
-                                if idiom.isFavorite {
-                                    Image(systemName: "heart.fill")
-                                        .font(.caption)
-                                        .foregroundColor(selectedIdiom == idiom ? .secondary : .accentColor)
-                                }
-                            }
+                // Search, if user type something into search field, show filtered array
+                ForEach(idiomsToShow()) { idiom in
+                    NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom)
+                        .environmentObject(idiomsViewModel)) {
+                            IdiomsListCellView(model: .init(
+                                idiom: idiom.idiomItself ?? "word",
+                                isFavorite: idiom.isFavorite)
+                            )
                         }
                         .tag(idiom)
+                }
+                .onDelete(perform: { indexSet in
+                    idiomsViewModel.deleteIdiom(offsets: indexSet)
+                })
+                if idiomsViewModel.filterState == .search && idiomsToShow().count < 10 {
+                    Button {
+                        showAddView()
+                    } label: {
+                        Text("Add '\(idiomsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                     }
-                    .onDelete(perform: { indexSet in
-                        idiomsViewModel.deleteIdiom(offsets: indexSet)
-                    })
-                    if idiomsViewModel.filterState == .search && idiomsToShow().count < 10 {
+                }
+            } header: {
+                // MARK: - Toolbar
+                VStack(spacing: 16) {
+                    HStack {
+                        Button {
+                            removeIdiom()
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundColor(
+                                    selectedIdiom == nil
+                                    ? .secondary
+                                    : .red)
+                        }
+                        Spacer()
+                        sortMenu
                         Button {
                             showAddView()
                         } label: {
-                            Text("Add '\(idiomsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                            Image(systemName: "plus")
+                                .foregroundColor(.accentColor)
                         }
                     }
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        TextField("Search", text: $idiomsViewModel.searchText)
+                            .textFieldStyle(PlainTextFieldStyle())
+                    }
                 }
+                .padding(8)
+                .padding(.top, 40)
             } footer: {
                 if !idiomsToShow().isEmpty {
                     Text(idiomCount)
@@ -193,5 +173,31 @@ struct IdiomsListViewMacOS: View {
             Image(systemName: "arrow.up.arrow.down")
             Text(idiomsViewModel.sortingState.rawValue)
         }
+    }
+}
+
+struct IdiomsListCellView: View {
+    var model: Model
+
+    var body: some View {
+        HStack {
+            Text(model.idiom)
+                .bold()
+            Spacer()
+            if model.isFavorite {
+                Label {
+                    EmptyView()
+                } icon: {
+                    Image(systemName: "heart.fill")
+                        .font(.caption)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    struct Model {
+        let idiom: String
+        let isFavorite: Bool
     }
 }

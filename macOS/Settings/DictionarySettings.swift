@@ -1,10 +1,3 @@
-//
-//  DictionarySettings.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Ryakhin on 9/19/22.
-//
-
 import SwiftUI
 
 struct DictionarySettings: View {

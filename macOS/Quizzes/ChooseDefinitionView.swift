@@ -1,10 +1,3 @@
-//
-//  ChooseDefinitionView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/9/21.
-//
-
 import SwiftUI
 
 struct ChooseDefinitionView: View {

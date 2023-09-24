@@ -1,13 +1,5 @@
-//
-//  IdiomsDetailView.swift
-//  My Dictionary (iOS)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
 import CoreData
-import AVKit
 
 struct IdiomsDetailView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -23,7 +15,7 @@ struct IdiomsDetailView: View {
         return examples
     }
 
-    private let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         let bindingIdiomDefinition = Binding(
@@ -41,12 +33,7 @@ struct IdiomsDetailView: View {
                 Text("Idiom")
             } footer: {
                 Button {
-                    var utterance: AVSpeechUtterance {
-                        let utterance = AVSpeechUtterance(string: idiom.idiomItself ?? "")
-                        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                        return utterance
-                    }
-                    synthesizer.speak(utterance)
+                    synthesizer.speak(idiom.idiomItself ?? "")
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                     Text("Listen")
@@ -77,12 +64,7 @@ struct IdiomsDetailView: View {
             } footer: {
                 if !isEditingDefinition {
                     Button {
-                        var utterance: AVSpeechUtterance {
-                            let utterance = AVSpeechUtterance(string: idiom.definition ?? "")
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            return utterance
-                        }
-                        synthesizer.speak(utterance)
+                        synthesizer.speak(idiom.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")

@@ -1,10 +1,3 @@
-//
-//  WordsViewModel.swift
-//  My Dictionary (Shared)
-//
-//  Created by Alexander Ryakhin on 1/21/22.
-//
-
 import SwiftUI
 import Combine
 import CoreData
@@ -16,6 +9,7 @@ final class WordsViewModel: ObservableObject {
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
+    @Published var selectedWord: Word?
 
     init() {
         setupBindings()

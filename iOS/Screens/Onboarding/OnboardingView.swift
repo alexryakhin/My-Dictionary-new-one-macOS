@@ -1,10 +1,3 @@
-//
-//  OnboardingView.swift
-//  My Dictionary (iOS)
-//
-//  Created by Alexander Bonney on 10/7/21.
-//
-
 import SwiftUI
 
 struct OnboardingView: View {

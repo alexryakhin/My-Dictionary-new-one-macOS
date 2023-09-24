@@ -1,10 +1,3 @@
-//
-//  QuizzesView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/9/21.
-//
-
 import SwiftUI
 
 struct QuizzesView: View {
@@ -24,19 +17,27 @@ struct QuizzesView: View {
                     .padding(.horizontal)
                 Spacer()
             } else {
-                Text("Quizzes").font(.title2).bold().padding(.horizontal).padding(.top, 50)
                 List {
-                    NavigationLink(destination: SpellingQuizView().environmentObject(quizzesViewModel)) {
-                        Text("Spelling")
-                    }
-                    NavigationLink(destination: ChooseDefinitionView().environmentObject(quizzesViewModel)) {
-                        Text("Choose the right definition")
+                    Section {
+                        NavigationLink(destination: SpellingQuizView().environmentObject(quizzesViewModel)) {
+                            Text("Spelling")
+                                .padding(.vertical, 8)
+                        }
+                        NavigationLink(destination: ChooseDefinitionView().environmentObject(quizzesViewModel)) {
+                            Text("Choose the right definition")
+                                .padding(.vertical, 8)
+                        }
+                    } header: {
+                        Text("Quizzes").font(.title2).bold().padding(.vertical, 16).padding(.top, 16)
                     }
                 }
             }
         }
         .ignoresSafeArea()
         .navigationTitle("Quizzes")
+        .onAppear {
+            quizzesViewModel.fetchWords()
+        }
     }
 }
 

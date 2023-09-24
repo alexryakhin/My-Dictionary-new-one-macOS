@@ -1,12 +1,4 @@
-//
-//  AddViewMacOs1.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/7/21.
-//
-
 import SwiftUI
-import AVKit
 
 struct AddView: View {
     @Binding var isShowingAddView: Bool
@@ -21,12 +13,7 @@ struct AddView: View {
         dictionaryViewModel.resultWordDetails!.meanings[wordClassSelection].definitions
     }
 
-    var utterance: AVSpeechUtterance {
-        let utterance = AVSpeechUtterance(string: dictionaryViewModel.inputWord)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        return utterance
-    }
-    let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         VStack {
@@ -74,7 +61,7 @@ struct AddView: View {
                             Text(dictionaryViewModel.resultWordDetails!.phonetic ?? "")
                             Spacer()
                             Button {
-                                synthesizer.speak(utterance)
+                                synthesizer.speak(dictionaryViewModel.inputWord)
                             } label: {
                                 Image(systemName: "speaker.wave.2.fill")
                             }

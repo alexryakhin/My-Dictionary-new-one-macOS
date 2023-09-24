@@ -1,13 +1,4 @@
-//
-//  IdiomDetailViewMacOS.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
-import AVKit
-import CryptoKit
 
 struct IdiomDetailViewMacOS: View {
     @EnvironmentObject var idiomsViewModel: IdiomsViewModel
@@ -22,7 +13,7 @@ struct IdiomDetailViewMacOS: View {
         return examples
     }
 
-    let synthesizer = AVSpeechSynthesizer()
+    let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         VStack {
@@ -31,12 +22,7 @@ struct IdiomDetailViewMacOS: View {
                 Text(idiom.idiomItself ?? "").font(.title).bold()
                 Spacer()
                 Button {
-                    var utterance: AVSpeechUtterance {
-                        let utterance = AVSpeechUtterance(string: idiom.idiomItself ?? "")
-                        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                        return utterance
-                    }
-                    synthesizer.speak(utterance)
+                    synthesizer.speak(idiom.idiomItself ?? "")
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                 }
@@ -80,12 +66,7 @@ struct IdiomDetailViewMacOS: View {
                     }
                     Spacer()
                     Button {
-                        var utterance: AVSpeechUtterance {
-                            let utterance = AVSpeechUtterance(string: idiom.definition ?? "")
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            return utterance
-                        }
-                        synthesizer.speak(utterance)
+                        synthesizer.speak(idiom.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }

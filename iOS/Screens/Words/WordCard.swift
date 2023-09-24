@@ -1,10 +1,3 @@
-//
-//  WordCard.swift
-//  My Dictionary
-//
-//  Created by Alexander Bonney on 9/28/21.
-//
-
 import SwiftUI
 
 struct WordCard: View {
@@ -48,10 +41,10 @@ struct WordCard: View {
                                 }
 
                             }
-                            if definitions[index].example != nil {
+                            if let example = definitions[index].example {
                                 Divider()
                                 Text("Example: ").bold()
-                                + Text(definitions[index].example!)
+                                + Text(example)
                             }
                             if !definitions[index].synonyms.isEmpty {
                                 Divider()

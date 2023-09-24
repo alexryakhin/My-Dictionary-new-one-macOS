@@ -1,10 +1,3 @@
-//
-//  AddIdiomViewMacOS.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
 
 struct AddIdiomViewMacOS: View {

@@ -1,76 +1,52 @@
-//
-//  IdiomsListView.swift
-//  My Dictionary (iOS)
-//
-//  Created by Alexander Ryakhin on 1/21/22.
-//
-
 import SwiftUI
 
 struct IdiomsListView: View {
     @StateObject var idiomsViewModel = IdiomsViewModel()
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if idiomsViewModel.idioms.isEmpty {
-                    ZStack {
-                        Color("Background").ignoresSafeArea()
-                        VStack {
-                            Spacer()
-                            Text("Begin to add idioms to your list\nby tapping on plus icon in upper left corner")
-                                .padding(20)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(10)
-                                .font(.title3)
-                                .foregroundColor(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                            Spacer()
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            List(selection: $idiomsViewModel.selectedIdiom) {
+                if !idiomsToShow().isEmpty {
+                    Section {
+                        ForEach(idiomsToShow()) { idiom in
+                            NavigationLink(value: idiom) {
+                                IdiomListCellView(model: .init(
+                                    idiom: idiom.idiomItself ?? "idiom",
+                                    isFavorite: idiom.isFavorite)
+                                )
+                            }
                         }
-                    }
-                } else {
-                    List {
+                        .onDelete(perform: { indexSet in
+                            idiomsViewModel.deleteIdiom(offsets: indexSet)
+                        })
+                    } header: {
+                        if let title = idiomsViewModel.filterState.title {
+                            Text(title)
+                        }
+                    } footer: {
                         if !idiomsToShow().isEmpty {
-                            Section {
-                                ForEach(idiomsToShow()) { idiom in
-                                    NavigationLink(destination: IdiomsDetailView(idiom: idiom)
-                                                    .environmentObject(idiomsViewModel)) {
-                                        HStack {
-                                            Text(idiom.idiomItself ?? "word")
-                                                .bold()
-                                            Spacer()
-                                            if idiom.isFavorite {
-                                                Image(systemName: "heart.fill")
-                                                    .font(.caption)
-                                                    .foregroundColor(.accentColor)
-                                            }
-                                        }
-                                    }
-                                }
-                                .onDelete(perform: { indexSet in
-                                    idiomsViewModel.deleteIdiom(offsets: indexSet)
-                                })
-                            } footer: {
-                                if !idiomsToShow().isEmpty {
-                                    Text(idiomsCount)
-                                }
-                            }
-                        }
-                        if idiomsViewModel.filterState == .search && idiomsToShow().count < 10 {
-                            Button {
-                                addItem()
-                            } label: {
-                                Text("Add '\(idiomsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
-                            }
+                            Text(idiomsCount)
                         }
                     }
-                    .listStyle(.insetGrouped)
+                }
+                if idiomsViewModel.filterState == .search && idiomsToShow().count < 10 {
+                    Button {
+                        addItem()
+                    } label: {
+                        Text("Add '\(idiomsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                    }
                 }
             }
-            .searchable(searchTerm: $idiomsViewModel.searchText, hideWhenScrolling: false)
+            .listStyle(.insetGrouped)
+            .overlay {
+                if idiomsViewModel.idioms.isEmpty {
+                    EmptyListView(text: "Begin to add idioms to your list\nby tapping on plus icon in upper left corner")
+                }
+            }
+            .searchable(text: $idiomsViewModel.searchText)
             .navigationTitle("Idioms")
-            .navigationBarTitleDisplayMode(.inline)
             .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -96,8 +72,15 @@ struct IdiomsListView: View {
                 AddIdiomView()
                     .environmentObject(idiomsViewModel)
             })
-            Text("Select an item")
+        } detail: {
+            if let idiom = idiomsViewModel.selectedIdiom, !idiomsViewModel.idioms.isEmpty  {
+                IdiomsDetailView(idiom: idiom)
+                    .environmentObject(idiomsViewModel)
+            } else {
+                Text("Select an idiom")
+            }
         }
+        .navigationSplitViewStyle(.balanced)
     }
 
     private func addItem() {
@@ -185,5 +168,30 @@ struct IdiomsListView: View {
                 Image(systemName: "arrow.up.arrow.down")
             }
         }
+    }
+}
+
+struct IdiomListCellView: View {
+    var model: Model
+
+    var body: some View {
+        HStack {
+            Text(model.idiom)
+                .bold()
+            Spacer()
+            if model.isFavorite {
+                Label {
+                    EmptyView()
+                } icon: {
+                    Image(systemName: "heart.fill")
+                        .font(.caption)
+                }
+            }
+        }
+    }
+
+    struct Model {
+        var idiom: String
+        var isFavorite: Bool
     }
 }

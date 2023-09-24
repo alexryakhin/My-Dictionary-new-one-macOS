@@ -1,10 +1,3 @@
-//
-//  DictionaryViewModel.swift
-//  My Dictionary (Shared)
-//
-//  Created by Alexander Bonney on 6/20/21.
-//
-
 import SwiftUI
 import Combine
 

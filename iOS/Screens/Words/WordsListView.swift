@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  Shared
-//
-//  Created by Alexander Bonney on 10/6/21.
-//
-
 import SwiftUI
 import CoreData
 import StoreKit
@@ -12,70 +5,52 @@ import StoreKit
 struct WordsListView: View {
     @AppStorage("isShowingRating") var isShowingRating: Bool = true
     @StateObject var wordsViewModel = WordsViewModel()
+    @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if wordsViewModel.words.isEmpty {
-                    ZStack {
-                        Color("Background").ignoresSafeArea()
-                        VStack {
-                            Spacer()
-                            Text("Begin to add words to your list\nby tapping on plus icon in upper left corner")
-                                .padding(20)
-                                .multilineTextAlignment(.center)
-                                .lineSpacing(10)
-                                .font(.title3)
-                                .foregroundColor(.secondary)
-                                .fixedSize(horizontal: false, vertical: true)
-                            Spacer()
+        NavigationSplitView(columnVisibility: $columnVisibility) {
+            List(selection: $wordsViewModel.selectedWord) {
+                if !wordsToShow().isEmpty {
+                    Section {
+                        ForEach(wordsToShow()) { word in
+                            NavigationLink(value: word) {
+                                WordListCellView(model: .init(
+                                    word: word.wordItself ?? "word",
+                                    isFavorite: word.isFavorite,
+                                    partOfSpeech: word.partOfSpeech ?? "")
+                                )
+                            }
                         }
-                    }
-                } else {
-                    List {
+                        .onDelete(perform: { indexSet in
+                            wordsViewModel.deleteWord(offsets: indexSet)
+                        })
+                    } header: {
+                        if let title = wordsViewModel.filterState.title {
+                            Text(title)
+                        }
+                    } footer: {
                         if !wordsToShow().isEmpty {
-                            Section {
-                                ForEach(wordsToShow()) { word in
-                                    NavigationLink(destination: WordDetailView(word: word)
-                                                    .environmentObject(wordsViewModel)) {
-                                        HStack {
-                                            Text(word.wordItself ?? "word")
-                                                .bold()
-                                            Spacer()
-                                            if word.isFavorite {
-                                                Image(systemName: "heart.fill")
-                                                    .font(.caption)
-                                                    .foregroundColor(.accentColor)
-                                            }
-                                            Text(word.partOfSpeech ?? "")
-                                                .foregroundColor(.secondary)
-                                        }
-                                    }
-                                }
-                                .onDelete(perform: { indexSet in
-                                    wordsViewModel.deleteWord(offsets: indexSet)
-                                })
-                            } footer: {
-                                if !wordsToShow().isEmpty {
-                                    Text(wordsCount)
-                                }
-                            }
-                        }
-                        if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
-                            Button {
-                                addItem()
-                            } label: {
-                                Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
-                            }
+                            Text(wordsCount)
                         }
                     }
-                    .listStyle(.insetGrouped)
+                }
+                if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                    Button {
+                        addItem()
+                    } label: {
+                        Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                    }
                 }
             }
-            .searchable(searchTerm: $wordsViewModel.searchText, hideWhenScrolling: false)
+            .listStyle(.insetGrouped)
+            .overlay {
+                if wordsViewModel.words.isEmpty {
+                    EmptyListView(text: "Begin to add words to your list\nby tapping on plus icon in upper left corner")
+                }
+            }
+            .searchable(text: $wordsViewModel.searchText)
             .navigationTitle("Words")
-            .navigationBarTitleDisplayMode(.inline)
             .listStyle(.insetGrouped)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -99,8 +74,15 @@ struct WordsListView: View {
                 AddView()
                     .environmentObject(wordsViewModel)
             }
-            Text("Select an item")
+        } detail: {
+            if let word = wordsViewModel.selectedWord, !wordsViewModel.words.isEmpty {
+                WordDetailView(word: word)
+                    .environmentObject(wordsViewModel)
+            } else {
+                Text("Select a word")
+            }
         }
+        .navigationSplitViewStyle(.balanced)
     }
 
     private func addItem() {
@@ -210,5 +192,33 @@ struct WordsListView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         WordsListView()
+    }
+}
+
+struct WordListCellView: View {
+    var model: Model
+
+    var body: some View {
+        HStack {
+            Text(model.word)
+                .bold()
+            Spacer()
+            if model.isFavorite {
+                Label {
+                    EmptyView()
+                } icon: {
+                    Image(systemName: "heart.fill")
+                        .font(.caption)
+                }
+            }
+            Text(model.partOfSpeech)
+                .foregroundColor(.secondary)
+        }
+    }
+
+    struct Model {
+        let word: String
+        let isFavorite: Bool
+        let partOfSpeech: String
     }
 }

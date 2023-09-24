@@ -1,10 +1,3 @@
-//
-//  Extensions.swift
-//  My Dictionary (Shared)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import Foundation
 
 extension UserDefaults {

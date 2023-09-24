@@ -1,10 +1,3 @@
-//
-//  AddIdiomView.swift
-//  My Dictionary (iOS)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
 
 struct AddIdiomView: View {
@@ -14,7 +7,7 @@ struct AddIdiomView: View {
     @State private var isShowingAlert = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     TextField("Idiom", text: $idiomsViewModel.searchText)

@@ -1,10 +1,3 @@
-//
-//  IdiomsViewModel.swift
-//  My Dictionary (Shared)
-//
-//  Created by Alexander Ryakhin on 1/22/22.
-//
-
 import SwiftUI
 import Combine
 import CoreData
@@ -16,6 +9,7 @@ final class IdiomsViewModel: ObservableObject {
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
+    @Published var selectedIdiom: Idiom?
 
     init() {
         setupBindings()

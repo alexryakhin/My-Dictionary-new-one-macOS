@@ -1,10 +1,3 @@
-//
-//  QuizzesView.swift
-//  My Dictionary
-//
-//  Created by Alexander Bonney on 9/30/21.
-//
-
 import SwiftUI
 import StoreKit
 
@@ -13,55 +6,46 @@ struct QuizzesView: View {
     @StateObject var quizzesViewModel = QuizzesViewModel()
 
     var body: some View {
-        NavigationView {
-            if quizzesViewModel.words.count < 10 {
-                ZStack {
-                    Color("Background").ignoresSafeArea()
-                    VStack {
-                        Spacer()
-                        Text("Add at least 10 words\nto your list to play!")
-                            .multilineTextAlignment(.center)
-                            .lineSpacing(10)
-                            .font(.title3)
-                            .foregroundColor(.secondary)
-                            .fixedSize(horizontal: false, vertical: true)
-                        Spacer()
+        NavigationStack {
+            List {
+                Section {
+                    NavigationLink {
+                        SpellingQuizView()
+                            .environmentObject(quizzesViewModel)
+                    } label: {
+                        Text("Spelling")
                     }
-                }
-                .navigationTitle("Quizzes")
-            } else {
-                List {
-                    Section {
-                        NavigationLink {
-                            SpellingQuizView()
-                                .environmentObject(quizzesViewModel)
-                        } label: {
-                            Text("Spelling")
-                        }
 
-                        NavigationLink {
-                            ChooseDefinitionView()
-                                .environmentObject(quizzesViewModel)
+                    NavigationLink {
+                        ChooseDefinitionView()
+                            .environmentObject(quizzesViewModel)
+                    } label: {
+                        Text("Choose the right definition")
+                    }
+                } footer: {
+                    Text("All words are from your list.")
+                }
+            }
+            .listStyle(.insetGrouped)
+            .overlay {
+                if quizzesViewModel.words.count < 10 {
+                    EmptyListView(text: "Add at least 10 words\nto your list to play!")
+                }
+            }
+            .navigationTitle("Quizzes")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    if isShowingRating {
+                        Button {
+                            SKStoreReviewController.requestReview()
                         } label: {
-                            Text("Choose the right definition")
-                        }
-                    } footer: {
-                        Text("All words are from your list.")
-                    }
-                }
-                .listStyle(.insetGrouped)
-                .navigationTitle("Quizzes")
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        if isShowingRating {
-                            Button {
-                                SKStoreReviewController.requestReview()
-                            } label: {
-                                Text("Rate app")
-                            }
+                            Text("Rate app")
                         }
                     }
                 }
+            }
+            .onAppear {
+                quizzesViewModel.fetchWords()
             }
         }
     }

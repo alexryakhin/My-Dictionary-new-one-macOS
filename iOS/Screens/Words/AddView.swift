@@ -1,12 +1,4 @@
-//
-//  AddView.swift
-//  My Dictionary
-//
-//  Created by Alexander Bonney on 6/20/21.
-//
-
 import SwiftUI
-import AVKit
 
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -16,15 +8,10 @@ struct AddView: View {
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
 
-    private var utterance: AVSpeechUtterance {
-        let utterance = AVSpeechUtterance(string: dictionaryViewModel.inputWord)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        return utterance
-    }
-    private let synthesizer = AVSpeechSynthesizer()
+    private let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 VStack(alignment: .leading, spacing: 11) {
                     TextField("Enter your word", text: $dictionaryViewModel.inputWord, onCommit: {
@@ -65,9 +52,10 @@ struct AddView: View {
                 detailsView
             }
             .ignoresSafeArea(.all, edges: [.bottom])
-            .background(Color("Background")
-                            .ignoresSafeArea()
-                            .onTapGesture(perform: {
+            .background(
+                Color("Background")
+                    .ignoresSafeArea()
+                    .onTapGesture(perform: {
                         hideKeyboard()
                     })
             )
@@ -158,16 +146,18 @@ struct AddView: View {
 
     var detailsView: some View {
         Section {
-            if dictionaryViewModel.resultWordDetails != nil && dictionaryViewModel.status == .ready {
-                if dictionaryViewModel.resultWordDetails!.phonetic != nil {
+            if let resultWordDetails = dictionaryViewModel.resultWordDetails,
+                dictionaryViewModel.status == .ready
+            {
+                if let phonetic = resultWordDetails.phonetic {
                     HStack(spacing: 0) {
                         HStack {
                             Text("Phonetic: ").bold()
-                            + Text(dictionaryViewModel.resultWordDetails!.phonetic ?? "")
+                            + Text(phonetic)
                         }.padding(.top)
                         Spacer()
                         Button {
-                            synthesizer.speak(utterance)
+                            synthesizer.speak(dictionaryViewModel.inputWord)
                         } label: {
                             Image(systemName: "speaker.wave.2.fill")
                                 .font(.title3)
@@ -182,7 +172,7 @@ struct AddView: View {
                 }
 
                 WordCard(
-                    wordMeanings: dictionaryViewModel.resultWordDetails!.meanings,
+                    wordMeanings: resultWordDetails.meanings,
                     tapGesture: { descriptionStr, partOfSpeechStr in
                         descriptionField = descriptionStr
 
@@ -209,6 +199,13 @@ struct AddView: View {
 
                         hideKeyboard()
                     })
+                .onAppear {
+                    if let meaning = resultWordDetails.meanings.first,
+                        let definition = meaning.definitions.first {
+                        descriptionField = definition.definition
+                        partOfSpeech = .noun
+                    }
+                }
             } else if dictionaryViewModel.status == .loading {
                 loadingView
             } else if dictionaryViewModel.status == .blank {

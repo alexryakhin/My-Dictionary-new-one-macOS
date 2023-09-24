@@ -1,13 +1,5 @@
-//
-//  WordsListView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/6/21.
-//
-
 import SwiftUI
 import CoreData
-import AVFoundation
 
 struct WordsListView: View {
     @EnvironmentObject var wordsViewModel: WordsViewModel
@@ -15,73 +7,60 @@ struct WordsListView: View {
     @State private var selectedWord: Word?
 
     var body: some View {
-        VStack {
-            Spacer().frame(height: 27)
-            // MARK: Toolbar
-            HStack {
-                Button {
-                    removeWord()
-                } label: {
-                    Image(systemName: "trash")
-                        .foregroundColor(
-                            selectedWord == nil
-                            ? .secondary
-                            : .red)
-                }
-                Spacer()
-                sortMenu
-                Button {
-                    showAddView()
-                } label: {
-                    Image(systemName: "plus")
-                        .foregroundColor(.accentColor)
-                }
-            }
-            .padding(.horizontal, 10)
-            // MARK: Search text field
-            HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                TextField("Search", text: $wordsViewModel.searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
-            }
-            .padding(.vertical, 8)
-            .padding(.horizontal)
-            .background(Color.primary.opacity(0.15))
-            .cornerRadius(8)
-            .padding(.horizontal, 10)
-
+        List(selection: $selectedWord) {
             Section {
-                List(selection: $selectedWord) {
-                    // Search, if user type something into search field, show filtered array
-                    ForEach(wordsToShow()) { word in
-                        NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
-                            HStack {
-                                Text(word.wordItself ?? "word")
-                                    .bold()
-                                Spacer()
-                                if word.isFavorite {
-                                    Image(systemName: "heart.fill")
-                                        .font(.caption)
-                                        .foregroundColor(selectedWord == word ? .secondary : .accentColor)
-                                }
-                                Text(word.partOfSpeech ?? "")
-                                    .foregroundColor(.secondary)
-                            }
-                        }
-                        .tag(word)
+                // Search, if user type something into search field, show filtered array
+                ForEach(wordsToShow()) { word in
+                    NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
+                        WordsListCellView(model: .init(
+                            word: word.wordItself ?? "word",
+                            isFavorite: word.isFavorite,
+                            partOfSpeech: word.partOfSpeech ?? "")
+                        )
                     }
-                    .onDelete(perform: { indexSet in
-                        wordsViewModel.deleteWord(offsets: indexSet)
-                    })
-                    if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                    .tag(word)
+                }
+                .onDelete(perform: { indexSet in
+                    wordsViewModel.deleteWord(offsets: indexSet)
+                })
+                if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                    Button {
+                        showAddView()
+                    } label: {
+                        Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                    }
+                }
+            } header: {
+                // MARK: - Toolbar
+                VStack(spacing: 16) {
+                    HStack {
+                        Button {
+                            removeWord()
+                        } label: {
+                            Image(systemName: "trash")
+                                .foregroundColor(
+                                    selectedWord == nil
+                                    ? .secondary
+                                    : .red)
+                        }
+                        Spacer()
+                        sortMenu
                         Button {
                             showAddView()
                         } label: {
-                            Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                            Image(systemName: "plus")
+                                .foregroundColor(.accentColor)
                         }
                     }
+                    HStack {
+                        Image(systemName: "magnifyingglass")
+                            .foregroundColor(.gray)
+                        TextField("Search", text: $wordsViewModel.searchText)
+                            .textFieldStyle(PlainTextFieldStyle())
+                    }
                 }
+                .padding(8)
+                .padding(.top, 40)
             } footer: {
                 if !wordsToShow().isEmpty {
                     Text(wordsCount)
@@ -91,7 +70,6 @@ struct WordsListView: View {
                 }
             }
         }
-        .navigationTitle("My Dictionary")
         .ignoresSafeArea()
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
             AddView(isShowingAddView: $isShowingAddView)
@@ -202,5 +180,34 @@ struct WordsListView: View {
             Image(systemName: "arrow.up.arrow.down")
             Text(wordsViewModel.sortingState.rawValue)
         }
+    }
+}
+
+struct WordsListCellView: View {
+    var model: Model
+
+    var body: some View {
+        HStack {
+            Text(model.word)
+                .bold()
+            Spacer()
+            if model.isFavorite {
+                Label {
+                    EmptyView()
+                } icon: {
+                    Image(systemName: "heart.fill")
+                        .font(.caption)
+                }
+            }
+            Text(model.partOfSpeech)
+                .foregroundColor(.secondary)
+        }
+        .padding(.vertical, 4)
+    }
+
+    struct Model {
+        let word: String
+        let isFavorite: Bool
+        let partOfSpeech: String
     }
 }

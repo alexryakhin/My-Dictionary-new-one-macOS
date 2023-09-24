@@ -1,10 +1,3 @@
-//
-//  MainTabViewMacOs.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/7/21.
-//
-
 import SwiftUI
 
 struct MainTabView: View {
@@ -12,27 +5,35 @@ struct MainTabView: View {
     @StateObject var quizzesViewModel = QuizzesViewModel()
     @StateObject var idiomsViewModel = IdiomsViewModel()
     
-    @State var selectedTab: TabButton.TabButtonCase = .words
+    @State var selectedSidebarItem: SidebarItem = .words
 
     var body: some View {
-        NavigationView {
-            VStack {
-                switch selectedTab {
-                case .words: WordsListView().environmentObject(wordsViewModel)
-                case .idioms: IdiomsListViewMacOS().environmentObject(idiomsViewModel)
-                case .quizzes: QuizzesView().environmentObject(quizzesViewModel)
-                }
-                HStack {
-                    ForEach(TabButton.TabButtonCase.allCases, id: \.self) { button in
-                        TabButton(button: button, selectedTab: $selectedTab)
+        NavigationSplitView {
+            List(selection: $selectedSidebarItem) {
+                Section {
+                    ForEach(SidebarItem.allCases, id: \.self) { item in
+                        NavigationLink(value: item) {
+                            Label {
+                                Text(item.title)
+                            } icon: {
+                                item.image
+                            }
+                            .padding(.vertical, 8)
+                        }
                     }
+                } header: {
+                    Text("My Dictionary").font(.title2).bold().padding(.vertical, 16)
                 }
-                .padding(.bottom)
-                .padding(.horizontal)
             }
+        } content: {
+            switch selectedSidebarItem {
+            case .words: WordsListView().environmentObject(wordsViewModel)
+            case .idioms: IdiomsListViewMacOS().environmentObject(idiomsViewModel)
+            case .quizzes: QuizzesView().environmentObject(quizzesViewModel)
+            }
+        } detail: {
             Text("Select an item")
         }
-        .frame(minWidth: 700, minHeight: 300)
     }
 }
 

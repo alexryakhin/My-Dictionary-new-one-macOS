@@ -1,10 +1,3 @@
-//
-//  MyDictionaryApp.swift
-//  My Dictionary (Shared)
-//
-//  Created by Alexander Bonney on 10/6/21.
-//
-
 import SwiftUI
 
 @main

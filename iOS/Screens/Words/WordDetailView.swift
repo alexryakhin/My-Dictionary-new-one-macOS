@@ -1,13 +1,5 @@
-//
-//  WordDetailView.swift
-//  My Dictionary
-//
-//  Created by Alexander Bonney on 9/28/21.
-//
-
 import SwiftUI
 import CoreData
-import AVKit
 
 struct WordDetailView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -23,7 +15,7 @@ struct WordDetailView: View {
         return examples
     }
 
-    private let synthesizer = AVSpeechSynthesizer()
+    private let speechSynthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         let bindingWordDefinition = Binding(
@@ -39,12 +31,7 @@ struct WordDetailView: View {
                     Text("[\(word.phonetic ?? "No transcription")]")
                     Spacer()
                     Button {
-                        var utterance: AVSpeechUtterance {
-                            let utterance = AVSpeechUtterance(string: word.wordItself ?? "")
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            return utterance
-                        }
-                        synthesizer.speak(utterance)
+                        speechSynthesizer.speak(word.wordItself ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -87,12 +74,7 @@ struct WordDetailView: View {
             } footer: {
                 if !isEditingDefinition {
                     Button {
-                        var utterance: AVSpeechUtterance {
-                            let utterance = AVSpeechUtterance(string: word.definition ?? "")
-                            utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-                            return utterance
-                        }
-                        synthesizer.speak(utterance)
+                        speechSynthesizer.speak(word.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")
