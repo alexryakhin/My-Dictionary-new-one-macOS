@@ -45,7 +45,7 @@ struct IdiomsListView: View {
                     EmptyListView(text: "Begin to add idioms to your list\nby tapping on plus icon in upper left corner")
                 }
             }
-            .searchable(text: $idiomsViewModel.searchText)
+            .searchable(text: $idiomsViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .navigationTitle("Idioms")
             .listStyle(.insetGrouped)
             .toolbar {

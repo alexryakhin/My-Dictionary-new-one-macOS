@@ -1,20 +1,19 @@
 import Foundation
-import AVKit
+import AVFoundation
 
-final class SpeechSynthesizer: NSObject {
+struct SpeechSynthesizer {
 
     static let shared = SpeechSynthesizer()
 
-    private var speechSynthesizer: AVSpeechSynthesizer?
+    private var speechSynthesizer = AVSpeechSynthesizer()
 
-    private override init() {
-        super.init()
-    }
+    private init() { }
 
     func speak(_ text: String) {
-        speechSynthesizer = AVSpeechSynthesizer()
+        guard !speechSynthesizer.isSpeaking else { return }
         let utterance = AVSpeechUtterance(string: text)
-        speechSynthesizer?.speak(utterance)
-        speechSynthesizer = nil
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        speechSynthesizer.speak(utterance)
     }
 }

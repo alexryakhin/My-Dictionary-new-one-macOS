@@ -7,7 +7,7 @@ struct QuizzesView: View {
         VStack(alignment: .leading) {
             if quizzesViewModel.words.count < 10 {
                 HStack {
-                    Text("Quizzes").font(.title2).bold().padding().padding(.top, 50)
+                    Text("Quizzes").font(.title2).bold().padding().padding(.top, 40)
                     Spacer()
                 }
                 Text("Add at least 10 words\nto your list to play!")
@@ -28,7 +28,7 @@ struct QuizzesView: View {
                                 .padding(.vertical, 8)
                         }
                     } header: {
-                        Text("Quizzes").font(.title2).bold().padding(.vertical, 16).padding(.top, 16)
+                        Text("Quizzes").font(.title2).bold().padding(.vertical, 16).padding(.top, 24)
                     }
                 }
             }

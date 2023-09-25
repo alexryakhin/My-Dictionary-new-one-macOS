@@ -49,7 +49,7 @@ struct WordsListView: View {
                     EmptyListView(text: "Begin to add words to your list\nby tapping on plus icon in upper left corner")
                 }
             }
-            .searchable(text: $wordsViewModel.searchText)
+            .searchable(text: $wordsViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .navigationTitle("Words")
             .listStyle(.insetGrouped)
             .toolbar {
