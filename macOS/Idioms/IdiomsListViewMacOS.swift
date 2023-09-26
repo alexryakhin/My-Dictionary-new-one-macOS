@@ -60,7 +60,6 @@ struct IdiomsListViewMacOS: View {
                     }
                 }
                 .padding(8)
-                .padding(.top, 40)
             } footer: {
                 if !idiomsToShow().isEmpty {
                     Text(idiomCount)
@@ -70,7 +69,7 @@ struct IdiomsListViewMacOS: View {
                 }
             }
         }
-        .ignoresSafeArea()
+        .navigationTitle("Idioms")
         .sheet(isPresented: $isShowingAddView, onDismiss: {
             idiomsViewModel.searchText = ""
         }, content: {

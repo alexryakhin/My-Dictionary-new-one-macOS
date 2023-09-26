@@ -19,6 +19,7 @@ struct MainTabView: View {
                                 item.image
                             }
                             .padding(.vertical, 8)
+                            .font(.title3)
                         }
                     }
                 } header: {
@@ -34,11 +35,6 @@ struct MainTabView: View {
         } detail: {
             Text("Select an item")
         }
-    }
-}
-
-struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainTabView()
+        .fontDesign(.rounded)
     }
 }

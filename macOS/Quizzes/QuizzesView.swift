@@ -6,10 +6,7 @@ struct QuizzesView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if quizzesViewModel.words.count < 10 {
-                HStack {
-                    Text("Quizzes").font(.title2).bold().padding().padding(.top, 40)
-                    Spacer()
-                }
+                Spacer()
                 Text("Add at least 10 words\nto your list to play!")
                     .lineSpacing(10)
                     .font(.title3)
@@ -27,13 +24,12 @@ struct QuizzesView: View {
                             Text("Choose the right definition")
                                 .padding(.vertical, 8)
                         }
-                    } header: {
-                        Text("Quizzes").font(.title2).bold().padding(.vertical, 16).padding(.top, 24)
                     }
                 }
+                .font(.title3)
             }
         }
-        .ignoresSafeArea()
+//        .ignoresSafeArea()
         .navigationTitle("Quizzes")
         .onAppear {
             quizzesViewModel.fetchWords()

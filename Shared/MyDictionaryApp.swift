@@ -8,7 +8,8 @@ struct MyDictionaryApp: App {
                 .font(.system(.body, design: .rounded))
         }
         #if os(macOS)
-        .windowStyle(HiddenTitleBarWindowStyle())
+        .windowStyle(TitleBarWindowStyle())
+        .windowToolbarStyle(.unifiedCompact)
         #endif
         
         #if !os(watchOS)

@@ -60,7 +60,6 @@ struct WordsListView: View {
                     }
                 }
                 .padding(8)
-                .padding(.top, 40)
             } footer: {
                 if !wordsToShow().isEmpty {
                     Text(wordsCount)
@@ -70,7 +69,7 @@ struct WordsListView: View {
                 }
             }
         }
-        .ignoresSafeArea()
+        .navigationTitle("Words")
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
             AddView(isShowingAddView: $isShowingAddView)
         }
