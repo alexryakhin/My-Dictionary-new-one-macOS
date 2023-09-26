@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "51423CD9270DE477006B94CB"
-               BuildableName = "WordCraft.app"
+               BuildableName = "My Dictionary.app"
                BlueprintName = "My Dictionary (macOS)"
                ReferencedContainer = "container:My Dictionary.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51423CD9270DE477006B94CB"
-            BuildableName = "WordCraft.app"
+            BuildableName = "My Dictionary.app"
             BlueprintName = "My Dictionary (macOS)"
             ReferencedContainer = "container:My Dictionary.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "51423CD9270DE477006B94CB"
-            BuildableName = "WordCraft.app"
+            BuildableName = "My Dictionary.app"
             BlueprintName = "My Dictionary (macOS)"
             ReferencedContainer = "container:My Dictionary.xcodeproj">
          </BuildableReference>
