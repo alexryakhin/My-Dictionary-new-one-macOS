@@ -35,6 +35,8 @@ struct MainTabView: View {
             IdiomsListView(idiomsViewModel: idiomsViewModel)
         case .quizzes:
             QuizzesView(quizzesViewModel: quizzesViewModel)
+        case .settings:
+            SettingsView(settingsViewModel: settingsViewModel)
         }
     }
 }

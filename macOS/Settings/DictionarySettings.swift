@@ -1,9 +1,15 @@
 import SwiftUI
 
 struct DictionarySettings: View {
+    @Environment(\.requestReview) var requestReview
+
     var body: some View {
         Form {
-            Text("There will be settings in the future :)")
+            Button {
+                requestReview()
+            } label: {
+                Text("Review the app")
+            }
         }
         .frame(width: 300)
         .navigationTitle("Landmark Settings")

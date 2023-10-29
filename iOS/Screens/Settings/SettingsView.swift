@@ -2,6 +2,9 @@ import SwiftUI
 
 struct SettingsView: View {
     @AppStorage(UDKeys.isShowingRating) var isShowingRating: Bool = true
+
+    @Environment(\.requestReview) var requestReview
+
     @ObservedObject private var settingsViewModel: SettingsViewModel
 
     init(settingsViewModel: SettingsViewModel) {
@@ -12,17 +15,15 @@ struct SettingsView: View {
         NavigationStack {
             List {
                 Section {
-                    Toggle(isOn: .constant(true), label: {
-                        Text("Show Idioms Tab")
-                    })
-                    Text("G")
-                }
-                if isShowingRating {
-                    Section {
-                        Button {
-                            settingsViewModel.requestReview()
-                        } label: {
+                    Button {
+                        requestReview()
+                    } label: {
+                        Label {
                             Text("Rate the app")
+                        } icon: {
+                            Image(systemName: "star.fill")
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(Color.yellow)
                         }
                     }
                 }
