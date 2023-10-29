@@ -95,6 +95,14 @@ final class IdiomsViewModel: ObservableObject {
         save()
     }
 
+    /// Removes selected idiom from Core Data
+    func deleteCurrentIdiom() {
+        guard let idiom = selectedIdiom else { return }
+        persistenceController.container.viewContext.delete(idiom)
+        selectedIdiom = nil
+        save()
+    }
+
     // MARK: Sorting
     var favoriteIdioms: [Idiom] {
         return self.idioms.filter { $0.isFavorite }

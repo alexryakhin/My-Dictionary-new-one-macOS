@@ -2,16 +2,20 @@ import SwiftUI
 import CoreData
 
 struct WordsListView: View {
-    @EnvironmentObject var wordsViewModel: WordsViewModel
+    @ObservedObject private var wordsViewModel: WordsViewModel
+
     @State private var isShowingAddView = false
-    @State private var selectedWord: Word?
+
+    init(wordsViewModel: WordsViewModel) {
+        self.wordsViewModel = wordsViewModel
+    }
 
     var body: some View {
-        List(selection: $selectedWord) {
+        List(selection: $wordsViewModel.selectedWord) {
             Section {
                 // Search, if user type something into search field, show filtered array
                 ForEach(wordsToShow()) { word in
-                    NavigationLink(destination: WordDetailView(word: word).environmentObject(wordsViewModel)) {
+                    NavigationLink(destination: WordDetailView(wordsViewModel: wordsViewModel)) {
                         WordsListCellView(model: .init(
                             word: word.wordItself ?? "word",
                             isFavorite: word.isFavorite,
@@ -39,7 +43,7 @@ struct WordsListView: View {
                         } label: {
                             Image(systemName: "trash")
                                 .foregroundColor(
-                                    selectedWord == nil
+                                    wordsViewModel.selectedWord == nil
                                     ? .secondary
                                     : .red)
                         }
@@ -71,7 +75,11 @@ struct WordsListView: View {
         }
         .navigationTitle("Words")
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
-            AddView(isShowingAddView: $isShowingAddView)
+            AddView(
+                isShowingAddView: $isShowingAddView, 
+                dictionaryViewModel: DictionaryViewModel(),
+                wordsViewModel: wordsViewModel
+            )
         }
     }
 
@@ -99,10 +107,10 @@ struct WordsListView: View {
     }
 
     private func removeWord() {
-        if selectedWord != nil {
-            wordsViewModel.delete(word: selectedWord!)
+        if wordsViewModel.selectedWord != nil {
+            wordsViewModel.delete(word: wordsViewModel.selectedWord!)
         }
-        selectedWord = nil
+        wordsViewModel.selectedWord = nil
     }
 
     private var sortMenu: some View {
@@ -112,7 +120,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .def
                         wordsViewModel.sortWords()
-                        selectedWord = nil
+                        wordsViewModel.selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .def {
@@ -124,7 +132,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .name
                         wordsViewModel.sortWords()
-                        selectedWord = nil
+                        wordsViewModel.selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .name {
@@ -136,7 +144,7 @@ struct WordsListView: View {
                     withAnimation {
                         wordsViewModel.sortingState = .partOfSpeech
                         wordsViewModel.sortWords()
-                        selectedWord = nil
+                        wordsViewModel.selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.sortingState == .partOfSpeech {
@@ -152,7 +160,7 @@ struct WordsListView: View {
                 Button {
                     withAnimation {
                         wordsViewModel.filterState = .none
-                        selectedWord = nil
+                        wordsViewModel.selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.filterState == .none {
@@ -163,7 +171,7 @@ struct WordsListView: View {
                 Button {
                     withAnimation {
                         wordsViewModel.filterState = .favorite
-                        selectedWord = nil
+                        wordsViewModel.selectedWord = nil
                     }
                 } label: {
                     if wordsViewModel.filterState == .favorite {

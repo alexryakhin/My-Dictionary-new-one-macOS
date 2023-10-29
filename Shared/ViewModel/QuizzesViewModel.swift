@@ -2,6 +2,8 @@ import SwiftUI
 import CoreData
 
 final class QuizzesViewModel: ObservableObject {
+    @Published var selectedQuiz: Quiz?
+
     let persistenceController = PersistenceController.shared
 
     @Published var words: [Word] = []

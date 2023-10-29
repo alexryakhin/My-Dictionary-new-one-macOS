@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SpellingQuizView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var quizzesViewModel: QuizzesViewModel
+    @ObservedObject var quizzesViewModel: QuizzesViewModel
 
     @State private var randomWord: Word?
     @State private var answerTextField = ""
@@ -11,6 +11,10 @@ struct SpellingQuizView: View {
     @State private var isShowAlert = false
 
     @State private var playingWords: [Word] = []
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
 
     var body: some View {
         List {

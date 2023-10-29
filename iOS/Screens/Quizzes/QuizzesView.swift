@@ -1,26 +1,22 @@
 import SwiftUI
-import StoreKit
 
 struct QuizzesView: View {
-    @AppStorage("isShowingRating") var isShowingRating: Bool = true
-    @StateObject var quizzesViewModel = QuizzesViewModel()
+    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
 
     var body: some View {
         NavigationStack {
-            List {
+            List(selection: $quizzesViewModel.selectedQuiz) {
                 Section {
-                    NavigationLink {
-                        SpellingQuizView()
-                            .environmentObject(quizzesViewModel)
-                    } label: {
-                        Text("Spelling")
-                    }
-
-                    NavigationLink {
-                        ChooseDefinitionView()
-                            .environmentObject(quizzesViewModel)
-                    } label: {
-                        Text("Choose the right definition")
+                    ForEach(Quiz.allCases, id: \.self) { quiz in
+                        NavigationLink {
+                            quizView(for: quiz)
+                        } label: {
+                            Text(quiz.title)
+                        }
                     }
                 } footer: {
                     Text("All words are from your list.")
@@ -35,13 +31,6 @@ struct QuizzesView: View {
             .navigationTitle("Quizzes")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    if isShowingRating {
-                        Button {
-                            SKStoreReviewController.requestReview()
-                        } label: {
-                            Text("Rate app")
-                        }
-                    }
                 }
             }
             .onAppear {
@@ -49,10 +38,17 @@ struct QuizzesView: View {
             }
         }
     }
+
+    @ViewBuilder func quizView(for quiz: Quiz) -> some View {
+        switch quiz {
+        case .spelling:
+            SpellingQuizView(quizzesViewModel: quizzesViewModel)
+        case .chooseDefinitions:
+            ChooseDefinitionView(quizzesViewModel: quizzesViewModel)
+        }
+    }
 }
 
-struct QuizesView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuizzesView()
-    }
+#Preview {
+    QuizzesView(quizzesViewModel: QuizzesViewModel())
 }

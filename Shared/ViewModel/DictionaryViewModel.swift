@@ -1,7 +1,7 @@
 import SwiftUI
 import Combine
 
-class DictionaryViewModel: ObservableObject {
+final class DictionaryViewModel: ObservableObject {
     @Published var status: FetchingStatus = .blank
     @Published var inputWord: String = ""
     @Published var resultWordDetails: WordElement?

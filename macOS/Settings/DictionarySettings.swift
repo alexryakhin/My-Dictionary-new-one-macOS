@@ -11,8 +11,6 @@ struct DictionarySettings: View {
     }
 }
 
-struct DictionarySettings_Previews: PreviewProvider {
-    static var previews: some View {
-        DictionarySettings()
-    }
+#Preview {
+    DictionarySettings()
 }

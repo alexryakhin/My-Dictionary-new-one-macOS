@@ -1,9 +1,14 @@
 import SwiftUI
 
 struct ChooseDefinitionView: View {
+    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
-    @EnvironmentObject var quizzesViewModel: QuizzesViewModel
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
 
     var body: some View {
         VStack {

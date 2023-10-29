@@ -1,15 +1,19 @@
 import SwiftUI
 
 struct WordDetailView: View {
-    @ObservedObject var word: Word
-    @EnvironmentObject var wordsViewModel: WordsViewModel
+    @ObservedObject private var wordsViewModel: WordsViewModel
+    
     @State private var isEditing = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
 
+    init(wordsViewModel: WordsViewModel) {
+        self.wordsViewModel = wordsViewModel
+    }
+
     private var examples: [String] {
-        guard let data = word.examples else {return []}
+        guard let data = wordsViewModel.selectedWord?.examples else {return []}
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
         return examples
     }
@@ -20,20 +24,20 @@ struct WordDetailView: View {
         VStack {
             // MARK: Title and toolbar
             HStack {
-                Text(word.wordItself ?? "").font(.title).bold()
+                Text(wordsViewModel.selectedWord?.wordItself ?? "").font(.title).bold()
                 Spacer()
                 Button(action: {
-                    word.isFavorite.toggle()
+                    wordsViewModel.selectedWord?.isFavorite.toggle()
                     wordsViewModel.save()
                 }, label: {
-                    Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
+                    Image(systemName: "\(wordsViewModel.selectedWord?.isFavorite ?? false ? "heart.fill" : "heart")")
                         .foregroundColor(.accentColor)
                 })
                 Button(action: {
                     if !isEditing {
                         isEditing = true
                     } else {
-                        word.partOfSpeech = partOfSpeech.rawValue
+                        wordsViewModel.selectedWord?.partOfSpeech = partOfSpeech.rawValue
                         wordsViewModel.save()
                         isEditing = false
                     }
@@ -44,18 +48,18 @@ struct WordDetailView: View {
             // MARK: Primary Content
 
             let bindingWordDefinition = Binding(
-                get: { word.definition ?? "" },
+                get: { wordsViewModel.selectedWord?.definition ?? "" },
                 set: {
-                    word.definition = $0
+                    wordsViewModel.selectedWord?.definition = $0
                 }
             )
             ScrollView {
                 HStack {
                     Text("Phonetics: ").bold()
-                    + Text("[\(word.phonetic ?? "No transcription")]")
+                    + Text("[\(wordsViewModel.selectedWord?.phonetic ?? "No transcription")]")
                     Spacer()
                     Button {
-                        synthesizer.speak(word.wordItself ?? "")
+                        synthesizer.speak(wordsViewModel.selectedWord?.wordItself ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -66,7 +70,7 @@ struct WordDetailView: View {
                 HStack {
                     if !isEditing {
                         Text("Part Of Speech: ").bold()
-                        + Text(word.partOfSpeech ?? "")
+                        + Text(wordsViewModel.selectedWord?.partOfSpeech ?? "")
                     } else {
                         Picker(selection: $partOfSpeech, label: Text("Part of Speech").bold()) {
                             ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
@@ -86,11 +90,11 @@ struct WordDetailView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                     } else {
                         Text("Definition: ").bold()
-                        + Text(word.definition ?? "")
+                        + Text(wordsViewModel.selectedWord?.definition ?? "")
                     }
                     Spacer()
                     Button {
-                        synthesizer.speak(word.definition ?? "")
+                        synthesizer.speak(wordsViewModel.selectedWord?.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -147,7 +151,7 @@ struct WordDetailView: View {
                                 if exampleTextFieldStr != "" {
                                     let newExamples = examples + [exampleTextFieldStr]
                                     let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                    word.examples = newExamplesData
+                                    wordsViewModel.selectedWord?.examples = newExamplesData
                                     wordsViewModel.save()
                                 }
                                 exampleTextFieldStr = ""
@@ -158,9 +162,9 @@ struct WordDetailView: View {
             }
         }
         .padding()
-        .navigationTitle(word.wordItself ?? "")
+        .navigationTitle(wordsViewModel.selectedWord?.wordItself ?? "")
         .onAppear {
-            switch word.partOfSpeech {
+            switch wordsViewModel.selectedWord?.partOfSpeech {
             case "noun":
                 partOfSpeech = .noun
             case "verb":
@@ -189,7 +193,7 @@ struct WordDetailView: View {
         examples.remove(at: index)
 
         let newExamplesData = try? JSONEncoder().encode(examples)
-        word.examples = newExamplesData
+        wordsViewModel.selectedWord?.examples = newExamplesData
         wordsViewModel.save()
     }
 }

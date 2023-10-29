@@ -2,9 +2,13 @@ import SwiftUI
 
 struct AddIdiomView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var inputDefinition: String = ""
     @State private var isShowingAlert = false
+
+    init(idiomsViewModel: IdiomsViewModel) {
+        self.idiomsViewModel = idiomsViewModel
+    }
 
     var body: some View {
         NavigationStack {
@@ -47,8 +51,6 @@ struct AddIdiomView: View {
     }
 }
 
-struct AddIdiomView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddIdiomView()
-    }
+#Preview {
+    AddIdiomView(idiomsViewModel: IdiomsViewModel())
 }

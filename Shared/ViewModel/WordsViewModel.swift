@@ -96,6 +96,14 @@ final class WordsViewModel: ObservableObject {
         persistenceController.container.viewContext.delete(word)
         save()
     }
+    
+    /// Removes selected word from Core Data
+    func deleteCurrentWord() {
+        guard let word = selectedWord else { return }
+        persistenceController.container.viewContext.delete(word)
+        selectedWord = nil
+        save()
+    }
 
     // MARK: Sorting
     var favoriteWords: [Word] {

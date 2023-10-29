@@ -5,7 +5,8 @@ struct OnboardingView: View {
 
     var body: some View {
         ZStack {
-            Color("Background").ignoresSafeArea()
+            Color(.background)
+                .ignoresSafeArea()
             VStack {
                 Text("Welcome to\nMy Dictionary")
                     .multilineTextAlignment(.center)
@@ -44,7 +45,7 @@ struct OnboardingView: View {
                         .bold()
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color.accentColor)
+                        .background(Color.accentColor.gradient)
                         .foregroundColor(.white)
                         .cornerRadius(15)
                         .padding(25)
@@ -77,8 +78,6 @@ struct OnboardingView: View {
     ]
 }
 
-struct OnboardingView_Previews: PreviewProvider {
-    static var previews: some View {
-        OnboardingView()
-    }
+#Preview {
+    OnboardingView()
 }

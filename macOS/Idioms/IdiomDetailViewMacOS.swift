@@ -1,14 +1,17 @@
 import SwiftUI
 
 struct IdiomDetailViewMacOS: View {
-    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
-    @ObservedObject var idiom: Idiom
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var isEditing = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
 
+    init(idiomsViewModel: IdiomsViewModel) {
+        self.idiomsViewModel = idiomsViewModel
+    }
+
     private var examples: [String] {
-        guard let data = idiom.examples else {return []}
+        guard let data = idiomsViewModel.selectedIdiom?.examples else {return []}
         guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
         return examples
     }
@@ -19,18 +22,18 @@ struct IdiomDetailViewMacOS: View {
         VStack {
             // MARK: Title and toolbar
             HStack {
-                Text(idiom.idiomItself ?? "").font(.title).bold()
+                Text(idiomsViewModel.selectedIdiom?.idiomItself ?? "").font(.title).bold()
                 Spacer()
                 Button {
-                    synthesizer.speak(idiom.idiomItself ?? "")
+                    synthesizer.speak(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                 }
                 Button(action: {
-                    idiom.isFavorite.toggle()
+                    idiomsViewModel.selectedIdiom?.isFavorite.toggle()
                     idiomsViewModel.save()
                 }, label: {
-                    Image(systemName: "\(idiom.isFavorite ? "heart.fill" : "heart")")
+                    Image(systemName: "\(idiomsViewModel.selectedIdiom?.isFavorite ?? false ? "heart.fill" : "heart")")
                         .foregroundColor(.accentColor)
                 })
                 Button(action: {
@@ -47,9 +50,9 @@ struct IdiomDetailViewMacOS: View {
             // MARK: Primary Content
 
             let bindingIdiomDefinition = Binding(
-                get: { idiom.definition ?? "" },
+                get: { idiomsViewModel.selectedIdiom?.definition ?? "" },
                 set: {
-                    idiom.definition = $0
+                    idiomsViewModel.selectedIdiom?.definition = $0
                 }
             )
 
@@ -62,11 +65,11 @@ struct IdiomDetailViewMacOS: View {
                             .background(Color.secondary.opacity(0.4))
                     } else {
                         Text("Definition: ").bold()
-                        + Text(idiom.definition ?? "")
+                        + Text(idiomsViewModel.selectedIdiom?.definition ?? "")
                     }
                     Spacer()
                     Button {
-                        synthesizer.speak(idiom.definition ?? "")
+                        synthesizer.speak(idiomsViewModel.selectedIdiom?.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -124,7 +127,7 @@ struct IdiomDetailViewMacOS: View {
                                 if exampleTextFieldStr != "" {
                                     let newExamples = examples + [exampleTextFieldStr]
                                     let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                    idiom.examples = newExamplesData
+                                    idiomsViewModel.selectedIdiom?.examples = newExamplesData
                                     idiomsViewModel.save()
                                 }
                                 exampleTextFieldStr = ""
@@ -135,7 +138,7 @@ struct IdiomDetailViewMacOS: View {
             }
         }
         .padding()
-        .navigationTitle(idiom.idiomItself ?? "")
+        .navigationTitle(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
     }
 
     // MARK: Private methods
@@ -144,7 +147,7 @@ struct IdiomDetailViewMacOS: View {
         examples.remove(at: index)
 
         let newExamplesData = try? JSONEncoder().encode(examples)
-        idiom.examples = newExamplesData
+        idiomsViewModel.selectedIdiom?.examples = newExamplesData
         idiomsViewModel.save()
     }
 }

@@ -1,11 +1,19 @@
 import SwiftUI
 
 struct AddIdiomViewMacOS: View {
-    @Binding var isShowingAddView: Bool
-    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
+    @Binding private var isShowingAddView: Bool
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var showingAlert = false
     @State private var inputIdiom: String = ""
     @State private var inputDefinition: String = ""
+
+    init(
+        isShowingAddView: Binding<Bool>,
+        idiomsViewModel: IdiomsViewModel
+    ) {
+        self._isShowingAddView = isShowingAddView
+        self.idiomsViewModel = idiomsViewModel
+    }
 
     var body: some View {
         VStack {

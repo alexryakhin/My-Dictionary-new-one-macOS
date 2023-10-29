@@ -1,7 +1,11 @@
 import SwiftUI
 
 struct QuizzesView: View {
-    @StateObject var quizzesViewModel = QuizzesViewModel()
+    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -14,31 +18,31 @@ struct QuizzesView: View {
                     .padding(.horizontal)
                 Spacer()
             } else {
-                List {
-                    Section {
-                        NavigationLink(destination: SpellingQuizView().environmentObject(quizzesViewModel)) {
-                            Text("Spelling")
-                                .padding(.vertical, 8)
-                        }
-                        NavigationLink(destination: ChooseDefinitionView().environmentObject(quizzesViewModel)) {
-                            Text("Choose the right definition")
-                                .padding(.vertical, 8)
-                        }
+                List(Quiz.allCases, id: \.self, selection: $quizzesViewModel.selectedQuiz) { quiz in
+                    NavigationLink(destination: quizView(for: quiz)) {
+                        Text(quiz.title)
+                            .padding(.vertical, 8)
                     }
                 }
                 .font(.title3)
             }
         }
-//        .ignoresSafeArea()
         .navigationTitle("Quizzes")
         .onAppear {
             quizzesViewModel.fetchWords()
         }
     }
+
+    @ViewBuilder func quizView(for quiz: Quiz) -> some View {
+        switch quiz {
+        case .spelling:
+            SpellingQuizView(quizzesViewModel: quizzesViewModel)
+        case .chooseDefinitions:
+            ChooseDefinitionView(quizzesViewModel: quizzesViewModel)
+        }
+    }
 }
 
-struct QuizzesView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuizzesView()
-    }
+#Preview {
+    QuizzesView(quizzesViewModel: QuizzesViewModel())
 }

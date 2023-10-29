@@ -1,15 +1,24 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @StateObject var wordsViewModel = WordsViewModel()
-    @StateObject var quizzesViewModel = QuizzesViewModel()
-    @StateObject var idiomsViewModel = IdiomsViewModel()
-    
+    @StateObject private var wordsViewModel = WordsViewModel()
+    @StateObject private var idiomsViewModel = IdiomsViewModel()
+    @StateObject private var quizzesViewModel = QuizzesViewModel()
+
     @State var selectedSidebarItem: SidebarItem = .words
 
     var body: some View {
+        let selectionBinding = Binding {
+            selectedSidebarItem
+        } set: { newValue in
+            wordsViewModel.selectedWord = nil
+            idiomsViewModel.selectedIdiom = nil
+            quizzesViewModel.selectedQuiz = nil
+            selectedSidebarItem = newValue
+        }
+
         NavigationSplitView {
-            List(selection: $selectedSidebarItem) {
+            List(selection: selectionBinding) {
                 Section {
                     ForEach(SidebarItem.allCases, id: \.self) { item in
                         NavigationLink(value: item) {
@@ -28,9 +37,9 @@ struct MainTabView: View {
             }
         } content: {
             switch selectedSidebarItem {
-            case .words: WordsListView().environmentObject(wordsViewModel)
-            case .idioms: IdiomsListViewMacOS().environmentObject(idiomsViewModel)
-            case .quizzes: QuizzesView().environmentObject(quizzesViewModel)
+            case .words: WordsListView(wordsViewModel: wordsViewModel)
+            case .idioms: IdiomsListViewMacOS(idiomsViewModel: idiomsViewModel)
+            case .quizzes: QuizzesView(quizzesViewModel: quizzesViewModel)
             }
         } detail: {
             Text("Select an item")

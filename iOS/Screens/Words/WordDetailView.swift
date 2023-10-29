@@ -2,16 +2,18 @@ import SwiftUI
 import CoreData
 
 struct WordDetailView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var wordsViewModel: WordsViewModel
-    @ObservedObject var word: Word
+    @ObservedObject private var wordsViewModel: WordsViewModel
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
 
+    init(wordsViewModel: WordsViewModel) {
+        self.wordsViewModel = wordsViewModel
+    }
+
     private var examples: [String] {
-        guard let data = word.examples else {return []}
-        guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
+        guard let data = wordsViewModel.selectedWord?.examples else { return [] }
+        guard let examples = try? JSONDecoder().decode([String].self, from: data) else { return [] }
         return examples
     }
 
@@ -19,19 +21,17 @@ struct WordDetailView: View {
 
     var body: some View {
         let bindingWordDefinition = Binding(
-            get: { word.definition ?? "" },
-            set: {
-                word.definition = $0
-            }
+            get: { wordsViewModel.selectedWord?.definition ?? "" },
+            set: { wordsViewModel.selectedWord?.definition = $0 }
         )
 
         List {
             Section {
                 HStack {
-                    Text("[\(word.phonetic ?? "No transcription")]")
+                    Text("[\(wordsViewModel.selectedWord?.phonetic ?? "No transcription")]")
                     Spacer()
                     Button {
-                        speechSynthesizer.speak(word.wordItself ?? "")
+                        speechSynthesizer.speak(wordsViewModel.selectedWord?.wordItself ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -41,11 +41,11 @@ struct WordDetailView: View {
             }
 
             Section {
-                Text(word.partOfSpeech ?? "")
+                Text(wordsViewModel.selectedWord?.partOfSpeech ?? "")
                     .contextMenu {
                         ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
                             Button {
-                                word.partOfSpeech = partCase.rawValue
+                                wordsViewModel.selectedWord?.partOfSpeech = partCase.rawValue
                                 wordsViewModel.save()
                             } label: {
                                 Text(partCase.rawValue)
@@ -62,7 +62,7 @@ struct WordDetailView: View {
                         wordsViewModel.save()
                     }).disableAutocorrection(true)
                 } else {
-                    Text(word.definition ?? "")
+                    Text(wordsViewModel.selectedWord?.definition ?? "")
                         .contextMenu {
                             Button("Edit", action: {
                                     isEditingDefinition = true
@@ -74,7 +74,7 @@ struct WordDetailView: View {
             } footer: {
                 if !isEditingDefinition {
                     Button {
-                        speechSynthesizer.speak(word.definition ?? "")
+                        speechSynthesizer.speak(wordsViewModel.selectedWord?.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")
@@ -97,45 +97,42 @@ struct WordDetailView: View {
                 .onDelete(perform: removeExample)
 
                 if isShowAddExample {
-                    TextField("Type an example here", text: $exampleTextFieldStr, onCommit: {
-                        withAnimation(.easeInOut) {
-                            // save
-                            isShowAddExample = false
-                            if exampleTextFieldStr != "" {
-                                let newExamples = examples + [exampleTextFieldStr]
-                                let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                word.examples = newExamplesData
-                                wordsViewModel.save()
-                            }
-                            exampleTextFieldStr = ""
-                        }
-                    })
+                    TextField("Type an example here", text: $exampleTextFieldStr)
+                    .onSubmit {
+                        onSaveExampleButton()
+                    }
+                    .submitLabel(.done)
                 }
             } header: {
                 Text("Examples")
+            } footer: {
+                if isShowAddExample {
+                    Button {
+                        onSaveExampleButton()
+                    } label: {
+                        Image(systemName: "checkmark")
+                        Text("Save")
+                    }
+                    .foregroundColor(.accentColor)
+                }
             }
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(word.wordItself ?? "")
+        .navigationTitle(wordsViewModel.selectedWord?.wordItself ?? "")
         .navigationBarItems(leading: Button(action: {
             // favorites
-            word.isFavorite.toggle()
+            wordsViewModel.selectedWord?.isFavorite.toggle()
             wordsViewModel.save()
         }, label: {
-            Image(systemName: "\(word.isFavorite ? "heart.fill" : "heart")")
+            Image(systemName: "\(wordsViewModel.selectedWord?.isFavorite ?? false ? "heart.fill" : "heart")")
         }),
            trailing: Button(action: {
-            // remove word
-            removeWord()
+            wordsViewModel.deleteCurrentWord()
         }, label: {
             Image(systemName: "trash")
                 .foregroundColor(.red)
         }))
-    }
-
-    private func removeWord() {
-        wordsViewModel.delete(word: word)
-        presentationMode.wrappedValue.dismiss()
+        .scrollDismissesKeyboard(.interactively)
     }
 
     private func removeExample(offsets: IndexSet) {
@@ -143,7 +140,21 @@ struct WordDetailView: View {
         examples.remove(atOffsets: offsets)
 
         let newExamplesData = try? JSONEncoder().encode(examples)
-        word.examples = newExamplesData
+        wordsViewModel.selectedWord?.examples = newExamplesData
         wordsViewModel.save()
+    }
+
+    private func onSaveExampleButton() {
+        withAnimation(.easeInOut) {
+            // save
+            isShowAddExample = false
+            if exampleTextFieldStr != "" {
+                let newExamples = examples + [exampleTextFieldStr]
+                let newExamplesData = try? JSONEncoder().encode(newExamples)
+                wordsViewModel.selectedWord?.examples = newExamplesData
+                wordsViewModel.save()
+            }
+            exampleTextFieldStr = ""
+        }
     }
 }

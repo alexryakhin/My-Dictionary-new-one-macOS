@@ -1,9 +1,13 @@
 import SwiftUI
 
 struct IdiomsListView: View {
-    @StateObject var idiomsViewModel = IdiomsViewModel()
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
+
+    init(idiomsViewModel: IdiomsViewModel) {
+        self.idiomsViewModel = idiomsViewModel
+    }
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -69,13 +73,11 @@ struct IdiomsListView: View {
             .sheet(isPresented: $isShowingAddSheet, onDismiss: {
                 idiomsViewModel.searchText = ""
             }, content: {
-                AddIdiomView()
-                    .environmentObject(idiomsViewModel)
+                AddIdiomView(idiomsViewModel: idiomsViewModel)
             })
         } detail: {
-            if let idiom = idiomsViewModel.selectedIdiom, !idiomsViewModel.idioms.isEmpty  {
-                IdiomsDetailView(idiom: idiom)
-                    .environmentObject(idiomsViewModel)
+            if let idiom = idiomsViewModel.selectedIdiom {
+                IdiomsDetailView(idiomsViewModel: idiomsViewModel)
             } else {
                 Text("Select an idiom")
             }

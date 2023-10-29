@@ -5,7 +5,7 @@ struct MyDictionaryApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .font(.system(.body, design: .rounded))
+            .font(.system(.body, design: .rounded))
         }
         #if os(macOS)
         .windowStyle(TitleBarWindowStyle())

@@ -2,19 +2,21 @@ import SwiftUI
 import CoreData
 
 struct IdiomsListViewMacOS: View {
-    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var isShowingAddView = false
-    @State private var selectedIdiom: Idiom?
+
+    init(idiomsViewModel: IdiomsViewModel) {
+        self.idiomsViewModel = idiomsViewModel
+    }
 
     var body: some View {
-        List(selection: $selectedIdiom) {
+        List(selection: $idiomsViewModel.selectedIdiom) {
             Section {
                 // Search, if user type something into search field, show filtered array
                 ForEach(idiomsToShow()) { idiom in
-                    NavigationLink(destination: IdiomDetailViewMacOS(idiom: idiom)
-                        .environmentObject(idiomsViewModel)) {
+                    NavigationLink(destination: IdiomDetailViewMacOS(idiomsViewModel: idiomsViewModel)) {
                             IdiomsListCellView(model: .init(
-                                idiom: idiom.idiomItself ?? "word",
+                                idiom: idiom.idiomItself ?? "idiom",
                                 isFavorite: idiom.isFavorite)
                             )
                         }
@@ -35,11 +37,11 @@ struct IdiomsListViewMacOS: View {
                 VStack(spacing: 16) {
                     HStack {
                         Button {
-                            removeIdiom()
+                            idiomsViewModel.deleteCurrentIdiom()
                         } label: {
                             Image(systemName: "trash")
                                 .foregroundColor(
-                                    selectedIdiom == nil
+                                    idiomsViewModel.selectedIdiom == nil
                                     ? .secondary
                                     : .red)
                         }
@@ -73,10 +75,13 @@ struct IdiomsListViewMacOS: View {
         .sheet(isPresented: $isShowingAddView, onDismiss: {
             idiomsViewModel.searchText = ""
         }, content: {
-            AddIdiomViewMacOS(isShowingAddView: $isShowingAddView)
+            AddIdiomViewMacOS(
+                isShowingAddView: $isShowingAddView,
+                idiomsViewModel: idiomsViewModel
+            )
         })
         .onDisappear {
-            selectedIdiom = nil
+            idiomsViewModel.selectedIdiom = nil
         }
     }
 
@@ -103,13 +108,6 @@ struct IdiomsListViewMacOS: View {
         }
     }
 
-    private func removeIdiom() {
-        if selectedIdiom != nil {
-            idiomsViewModel.delete(idiom: selectedIdiom!)
-        }
-        selectedIdiom = nil
-    }
-
     private var sortMenu: some View {
         Menu {
             Section {
@@ -117,7 +115,7 @@ struct IdiomsListViewMacOS: View {
                     withAnimation {
                         idiomsViewModel.sortingState = .def
                         idiomsViewModel.sortIdioms()
-                        selectedIdiom = nil
+                        idiomsViewModel.selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.sortingState == .def {
@@ -129,7 +127,7 @@ struct IdiomsListViewMacOS: View {
                     withAnimation {
                         idiomsViewModel.sortingState = .name
                         idiomsViewModel.sortIdioms()
-                        selectedIdiom = nil
+                        idiomsViewModel.selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.sortingState == .name {
@@ -145,7 +143,7 @@ struct IdiomsListViewMacOS: View {
                 Button {
                     withAnimation {
                         idiomsViewModel.filterState = .none
-                        selectedIdiom = nil
+                        idiomsViewModel.selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.filterState == .none {
@@ -156,7 +154,7 @@ struct IdiomsListViewMacOS: View {
                 Button {
                     withAnimation {
                         idiomsViewModel.filterState = .favorite
-                        selectedIdiom = nil
+                        idiomsViewModel.selectedIdiom = nil
                     }
                 } label: {
                     if idiomsViewModel.filterState == .favorite {

@@ -1,22 +1,24 @@
 import SwiftUI
 
 struct MainTabView: View {
-    @AppStorage("isShowingOnboarding") var isShowingOnboarding: Bool = true
+    @AppStorage(UDKeys.isShowingOnboarding) var isShowingOnboarding: Bool = true
+
+    @StateObject private var wordsViewModel = WordsViewModel()
+    @StateObject private var quizzesViewModel = QuizzesViewModel()
+    @StateObject private var idiomsViewModel = IdiomsViewModel()
+    @StateObject private var settingsViewModel = SettingsViewModel()
+
+    @State private var selectedItem: TabBarItem = .words
 
     var body: some View {
-        TabView {
-            WordsListView()
-                .tabItem {
-                    Label("Words", systemImage: "textformat.abc")
-                }
-            IdiomsListView()
-                .tabItem {
-                    Label("Idioms", systemImage: "scroll")
-                }
-            QuizzesView()
-                .tabItem {
-                    Label("Quizzes", systemImage: "a.magnify")
-                }
+        TabView(selection: $selectedItem) {
+            ForEach(TabBarItem.allCases, id: \.self) { tab in
+                tabView(for: tab)
+                    .tabItem {
+                        Label(tab.title, systemImage: tab.image)
+                    }
+                    .tag(tab)
+            }
         }
         .sheet(isPresented: $isShowingOnboarding, onDismiss: {
             isShowingOnboarding = false
@@ -24,10 +26,19 @@ struct MainTabView: View {
             OnboardingView()
         })
     }
+
+    @ViewBuilder func tabView(for item: TabBarItem) -> some View {
+        switch item {
+        case .words:
+            WordsListView(wordsViewModel: wordsViewModel)
+        case .idioms:
+            IdiomsListView(idiomsViewModel: idiomsViewModel)
+        case .quizzes:
+            QuizzesView(quizzesViewModel: quizzesViewModel)
+        }
+    }
 }
 
-struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainTabView()
-    }
+#Preview {
+    MainTabView()
 }

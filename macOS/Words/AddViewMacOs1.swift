@@ -1,13 +1,24 @@
 import SwiftUI
 
 struct AddView: View {
-    @Binding var isShowingAddView: Bool
+    @Binding private var isShowingAddView: Bool
+    @ObservedObject private var wordsViewModel: WordsViewModel
+    @ObservedObject private var dictionaryViewModel: DictionaryViewModel
+
     @State private var definitionInput = ""
     @State private var partOfSpeech: PartOfSpeech = .noun
-    @EnvironmentObject var wordsViewModel: WordsViewModel
-    @StateObject var dictionaryViewModel = DictionaryViewModel()
     @State private var wordClassSelection = 0
     @State private var showingAlert = false
+
+    init(
+        isShowingAddView: Binding<Bool>,
+        dictionaryViewModel: DictionaryViewModel,
+        wordsViewModel: WordsViewModel
+    ) {
+        self._isShowingAddView = isShowingAddView
+        self.dictionaryViewModel = dictionaryViewModel
+        self.wordsViewModel = wordsViewModel
+    }
 
     var definitions: [Definition] {
         dictionaryViewModel.resultWordDetails!.meanings[wordClassSelection].definitions

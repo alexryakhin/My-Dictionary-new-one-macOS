@@ -3,10 +3,14 @@ import CoreData
 import StoreKit
 
 struct WordsListView: View {
-    @AppStorage("isShowingRating") var isShowingRating: Bool = true
-    @StateObject var wordsViewModel = WordsViewModel()
+    @AppStorage(UDKeys.isShowingRating) var isShowingRating: Bool = true
+    @ObservedObject private var wordsViewModel: WordsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
+
+    init(wordsViewModel: WordsViewModel) {
+        self.wordsViewModel = wordsViewModel
+    }
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
@@ -71,13 +75,14 @@ struct WordsListView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddSheet) {
-                AddView()
-                    .environmentObject(wordsViewModel)
+                AddView(
+                    dictionaryViewModel: DictionaryViewModel(),
+                    wordsViewModel: wordsViewModel
+                )
             }
         } detail: {
-            if let word = wordsViewModel.selectedWord, !wordsViewModel.words.isEmpty {
-                WordDetailView(word: word)
-                    .environmentObject(wordsViewModel)
+            if let word = wordsViewModel.selectedWord {
+                WordDetailView(wordsViewModel: wordsViewModel)
             } else {
                 Text("Select a word")
             }
@@ -189,10 +194,8 @@ struct WordsListView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        WordsListView()
-    }
+#Preview {
+    WordsListView(wordsViewModel: WordsViewModel())
 }
 
 struct WordListCellView: View {

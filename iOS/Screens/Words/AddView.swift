@@ -2,11 +2,19 @@ import SwiftUI
 
 struct AddView: View {
     @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var wordsViewModel: WordsViewModel
-    @StateObject var dictionaryViewModel = DictionaryViewModel()
+    @ObservedObject private var dictionaryViewModel: DictionaryViewModel
+    @ObservedObject private var wordsViewModel: WordsViewModel
     @State private var descriptionField = ""
     @State private var partOfSpeech: PartOfSpeech = .unknown
     @State private var showingAlert = false
+
+    init(
+        dictionaryViewModel: DictionaryViewModel,
+        wordsViewModel: WordsViewModel
+    ) {
+        self.dictionaryViewModel = dictionaryViewModel
+        self.wordsViewModel = wordsViewModel
+    }
 
     private let synthesizer = SpeechSynthesizer.shared
 
@@ -46,14 +54,14 @@ struct AddView: View {
                         .padding(.horizontal)
                         .disabled(dictionaryViewModel.inputWord.isEmpty)
                 }
-                .background(Color("TableBackground").cornerRadius(10))
+                .background(Color(.tableBackground).cornerRadius(10))
                 .padding(.horizontal)
 
                 detailsView
             }
             .ignoresSafeArea(.all, edges: [.bottom])
             .background(
-                Color("Background")
+                Color(.background)
                     .ignoresSafeArea()
                     .onTapGesture(perform: {
                         hideKeyboard()
@@ -163,7 +171,7 @@ struct AddView: View {
                                 .font(.title3)
                                 .padding(.vertical, 5)
                                 .padding(.horizontal)
-                                .background(Color.accentColor)
+                                .background(Color.accentColor.gradient)
                                 .cornerRadius(8)
                                 .foregroundColor(.white)
                         }

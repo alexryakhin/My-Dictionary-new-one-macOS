@@ -2,16 +2,18 @@ import SwiftUI
 import CoreData
 
 struct IdiomsDetailView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @EnvironmentObject var idiomsViewModel: IdiomsViewModel
-    @ObservedObject var idiom: Idiom
+    @ObservedObject private var idiomsViewModel: IdiomsViewModel
     @State private var isEditingDefinition = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""
 
+    init(idiomsViewModel: IdiomsViewModel) {
+        self.idiomsViewModel = idiomsViewModel
+    }
+
     private var examples: [String] {
-        guard let data = idiom.examples else {return []}
-        guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
+        guard let data = idiomsViewModel.selectedIdiom?.examples else { return [] }
+        guard let examples = try? JSONDecoder().decode([String].self, from: data) else { return [] }
         return examples
     }
 
@@ -19,21 +21,19 @@ struct IdiomsDetailView: View {
 
     var body: some View {
         let bindingIdiomDefinition = Binding(
-            get: { idiom.definition ?? "" },
-            set: {
-                idiom.definition = $0
-            }
+            get: { idiomsViewModel.selectedIdiom?.definition ?? "" },
+            set: { idiomsViewModel.selectedIdiom?.definition = $0 }
         )
 
         List {
             Section {
-                Text(idiom.idiomItself ?? "")
+                Text(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
                     .font(.system(.headline, design: .rounded))
             } header: {
                 Text("Idiom")
             } footer: {
                 Button {
-                    synthesizer.speak(idiom.idiomItself ?? "")
+                    synthesizer.speak(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                     Text("Listen")
@@ -52,7 +52,7 @@ struct IdiomsDetailView: View {
                         Text("Save")
                     }
                 } else {
-                    Text(idiom.definition ?? "")
+                    Text(idiomsViewModel.selectedIdiom?.definition ?? "")
                         .contextMenu {
                             Button("Edit", action: {
                                 isEditingDefinition = true
@@ -64,7 +64,7 @@ struct IdiomsDetailView: View {
             } footer: {
                 if !isEditingDefinition {
                     Button {
-                        synthesizer.speak(idiom.definition ?? "")
+                        synthesizer.speak(idiomsViewModel.selectedIdiom?.definition ?? "")
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                         Text("Listen")
@@ -85,7 +85,7 @@ struct IdiomsDetailView: View {
                             if exampleTextFieldStr != "" {
                                 let newExamples = examples + [exampleTextFieldStr]
                                 let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                idiom.examples = newExamplesData
+                                idiomsViewModel.selectedIdiom?.examples = newExamplesData
                                 idiomsViewModel.save()
                             }
                             exampleTextFieldStr = ""
@@ -108,7 +108,7 @@ struct IdiomsDetailView: View {
                             if exampleTextFieldStr != "" {
                                 let newExamples = examples + [exampleTextFieldStr]
                                 let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                idiom.examples = newExamplesData
+                                idiomsViewModel.selectedIdiom?.examples = newExamplesData
                                 idiomsViewModel.save()
                             }
                             exampleTextFieldStr = ""
@@ -123,29 +123,23 @@ struct IdiomsDetailView: View {
         .navigationTitle("Details")
         .navigationBarItems(leading: Button(action: {
             // favorites
-            idiom.isFavorite.toggle()
+            idiomsViewModel.selectedIdiom?.isFavorite.toggle()
             idiomsViewModel.save()
         }, label: {
-            Image(systemName: "\(idiom.isFavorite ? "heart.fill" : "heart")")
+            Image(systemName: "\(idiomsViewModel.selectedIdiom?.isFavorite ?? false ? "heart.fill" : "heart")")
         }), trailing: Button(action: {
-            // remove word
-            removeIdiom()
+            idiomsViewModel.deleteCurrentIdiom()
         }, label: {
             Image(systemName: "trash")
                 .foregroundColor(.red)
         }))
     }
 
-    private func removeIdiom() {
-        idiomsViewModel.delete(idiom: idiom)
-        presentationMode.wrappedValue.dismiss()
-    }
-
     private func removeExample(offsets: IndexSet) {
         var examples = self.examples
         examples.remove(atOffsets: offsets)
         let newExamplesData = try? JSONEncoder().encode(examples)
-        idiom.examples = newExamplesData
+        idiomsViewModel.selectedIdiom?.examples = newExamplesData
         idiomsViewModel.save()
     }
 }
