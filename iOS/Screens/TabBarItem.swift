@@ -1,6 +1,7 @@
 import SwiftUI
+import SwiftUIHandyTools
 
-enum TabBarItem: Hashable, CaseIterable {
+enum TabBarItem: Tabbable, CaseIterable {
     case words
     case idioms
     case quizzes
@@ -15,7 +16,7 @@ enum TabBarItem: Hashable, CaseIterable {
         }
     }
 
-    var image: String {
+    var icon: String {
         switch self {
         case .words: "textformat.abc"
         case .idioms: "scroll"

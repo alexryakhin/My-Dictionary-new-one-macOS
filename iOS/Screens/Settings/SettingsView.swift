@@ -27,6 +27,12 @@ struct SettingsView: View {
                         }
                     }
                 }
+
+                Section {
+                    Toggle(isOn: $settingsViewModel.isShowingIdioms, label: {
+                        Text("Showing Idioms Tab")
+                    })
+                }
             }
             .navigationTitle("Settings")
             .listStyle(.insetGrouped)

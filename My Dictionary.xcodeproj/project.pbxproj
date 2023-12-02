@@ -15,6 +15,7 @@
 		02523C652AEEC897007E9A2D /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C632AEEC897007E9A2D /* Quiz.swift */; };
 		02523C672AEECC1A007E9A2D /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C662AEECC1A007E9A2D /* TabBarItem.swift */; };
 		02523C682AEECC1A007E9A2D /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C662AEECC1A007E9A2D /* TabBarItem.swift */; };
+		028EA4802B1BA3B8009E75FC /* SwiftUIHandyTools in Frameworks */ = {isa = PBXBuildFile; productRef = 028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */; };
 		02D769D62AC2BE6100E32328 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02D769D52AC2BE6100E32328 /* Launch Screen.storyboard */; };
 		02FB1B8A2AC06E320019D265 /* DictionaryCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */; };
 		02FB1B8F2AC07DA80019D265 /* SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FB1B8E2AC07DA80019D265 /* SpeechSynthesizer.swift */; };
@@ -139,6 +140,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				028EA4802B1BA3B8009E75FC /* SwiftUIHandyTools in Frameworks */,
 				51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -409,6 +411,7 @@
 			);
 			name = "My Dictionary (iOS)";
 			packageProductDependencies = (
+				028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */,
 			);
 			productName = "My Dictionary (iOS)";
 			productReference = 51423CD4270DE477006B94CB /* My Dictionary.app */;
@@ -460,6 +463,7 @@
 			);
 			mainGroup = 51423CC4270DE476006B94CB;
 			packageReferences = (
+				028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */,
 			);
 			productRefGroup = 51423CD5270DE477006B94CB /* Products */;
 			projectDirPath = "";
@@ -897,6 +901,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/alexryakhin/SwiftUIHandyTools";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */;
+			productName = SwiftUIHandyTools;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		51423CCA270DE477006B94CB /* My_Dictionary.xcdatamodeld */ = {

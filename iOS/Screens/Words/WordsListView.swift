@@ -81,7 +81,7 @@ struct WordsListView: View {
                 )
             }
         } detail: {
-            if let word = wordsViewModel.selectedWord {
+            if wordsViewModel.selectedWord != nil {
                 WordDetailView(wordsViewModel: wordsViewModel)
             } else {
                 Text("Select a word")

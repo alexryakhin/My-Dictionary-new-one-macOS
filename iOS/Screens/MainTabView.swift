@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftUIHandyTools
 
 struct MainTabView: View {
     @AppStorage(UDKeys.isShowingOnboarding) var isShowingOnboarding: Bool = true
@@ -10,16 +11,20 @@ struct MainTabView: View {
 
     @State private var selectedItem: TabBarItem = .words
 
+    var tabs: [TabBarItem] {
+        settingsViewModel.isShowingIdioms
+        ? TabBarItem.allCases
+        : [.words, .quizzes, .settings]
+    }
+
     var body: some View {
-        TabView(selection: $selectedItem) {
-            ForEach(TabBarItem.allCases, id: \.self) { tab in
+        TabBar(selection: $selectedItem) {
+            ForEach(tabs, id: \.self) { tab in
                 tabView(for: tab)
-                    .tabItem {
-                        Label(tab.title, systemImage: tab.image)
-                    }
-                    .tag(tab)
+                    .tabItem(for: tab)
             }
         }
+        .animation(.default, value: settingsViewModel.isShowingIdioms)
         .sheet(isPresented: $isShowingOnboarding, onDismiss: {
             isShowingOnboarding = false
         }, content: {
@@ -27,7 +32,8 @@ struct MainTabView: View {
         })
     }
 
-    @ViewBuilder func tabView(for item: TabBarItem) -> some View {
+    @ViewBuilder 
+    func tabView(for item: TabBarItem) -> some View {
         switch item {
         case .words:
             WordsListView(wordsViewModel: wordsViewModel)
