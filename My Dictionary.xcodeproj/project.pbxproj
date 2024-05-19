@@ -118,6 +118,7 @@
 		51EBFBEA270F4A970066782B /* WordCard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordCard.swift; sourceTree = "<group>"; };
 		51EBFBEC270F4A9E0066782B /* DictionaryViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DictionaryViewModel.swift; sourceTree = "<group>"; };
 		51EBFBEE270F4AAB0066782B /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
+		53081CF52BFA5E7400964305 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		9781DBFF28D8E28400CFBC60 /* DictionarySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionarySettings.swift; sourceTree = "<group>"; };
 		9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryCommands.swift; sourceTree = "<group>"; };
 		C0358EF5279A84F800E9C452 /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
@@ -190,6 +191,7 @@
 		51423CC4270DE476006B94CB = {
 			isa = PBXGroup;
 			children = (
+				53081CF62BFA5E7400964305 /* docs */,
 				51423CF3270DEBD4006B94CB /* MyDictionaryInfo.plist */,
 				51423CEF270DE64E006B94CB /* My Dictionary (iOS).entitlements */,
 				C0D377C4279984C900BE0726 /* iOS */,
@@ -307,6 +309,14 @@
 				51719139270F74F20077B3C8 /* SidebarItem.swift */,
 			);
 			path = Resourses;
+			sourceTree = "<group>";
+		};
+		53081CF62BFA5E7400964305 /* docs */ = {
+			isa = PBXGroup;
+			children = (
+				53081CF52BFA5E7400964305 /* index.html */,
+			);
+			path = docs;
 			sourceTree = "<group>";
 		};
 		9781DBFE28D8E27000CFBC60 /* Settings */ = {
