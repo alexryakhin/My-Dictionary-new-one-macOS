@@ -65,7 +65,6 @@ final class WordDetailsViewModel: ObservableObject {
     func changePartOfSpeech(_ partOfSpeech: String) {
         word.partOfSpeech = partOfSpeech
         save()
-        objectWillChange.send()
     }
 
     func deleteCurrentWord() {

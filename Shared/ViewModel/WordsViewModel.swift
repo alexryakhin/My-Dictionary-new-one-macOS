@@ -55,11 +55,10 @@ final class WordsViewModel: ObservableObject {
 
     private func setupBindings() {
         wordsProvider.wordsPublisher
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] words in
                 self?.words = words
                 self?.sortWords()
-                self?.objectWillChange.send()
             }
             .store(in: &cancellables)
 

@@ -10,6 +10,7 @@ struct WordsListView: View {
     @StateObject private var viewModel: WordsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
+    @State private var contextDidSaveDate = Date.now
 
     init(viewModel: WordsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -28,7 +29,6 @@ struct WordsListView: View {
                                     partOfSpeech: word.partOfSpeech ?? "")
                                 )
                             }
-                            .id(word.id)
                         }
                         .onDelete(perform: { indexSet in
                             viewModel.deleteWord(offsets: indexSet)
@@ -42,6 +42,7 @@ struct WordsListView: View {
                             Text(viewModel.wordsCount)
                         }
                     }
+                    .id(contextDidSaveDate)
                 }
                 if viewModel.filterState == .search && viewModel.wordsFiltered.count < 10 {
                     Button {
@@ -89,6 +90,9 @@ struct WordsListView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .onReceive(NotificationCenter.default.managedObjectContextDidSavePublisher) { _ in
+            contextDidSaveDate = .now
+        }
     }
 
     private func addItem() {

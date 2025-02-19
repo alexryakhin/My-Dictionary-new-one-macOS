@@ -50,21 +50,13 @@ final class WordsProvider: WordsProviderInterface {
 
     private func setupBindings() {
         // every time core data gets updated, call fetchWords()
-        NotificationCenter.default.publisher(
-            for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
-            object: coreDataContainer.viewContext
-        )
-        .combineLatest(
-            NotificationCenter.default.publisher(
-                for: NSManagedObjectContext.didSaveObjectsNotification,
-                object: coreDataContainer.viewContext
-            )
-        )
-        .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
-        .sink { [weak self] _ in
-            self?.fetchWords()
-        }
-        .store(in: &cancellable)
+        NotificationCenter.default.managedObjectContextDidMergeChangesObjectIDsPublisher
+            .combineLatest(NotificationCenter.default.managedObjectContextDidSavePublisher)
+            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] _ in
+                self?.fetchWords()
+            }
+            .store(in: &cancellable)
     }
 
     /// Fetches latest data from Core Data

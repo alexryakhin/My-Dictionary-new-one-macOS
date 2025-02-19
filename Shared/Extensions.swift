@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 extension UserDefaults {
     enum Key: String {
@@ -20,5 +21,14 @@ extension UserDefaults {
 
     func set(_ object: Any?, forKey key: Key) {
         set(object, forKey: key.rawValue)
+    }
+}
+
+extension NotificationCenter {
+    var managedObjectContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+        return publisher(for: .NSManagedObjectContextDidSave).receive(on: DispatchQueue.main)
+    }
+    var managedObjectContextDidMergeChangesObjectIDsPublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+        return publisher(for: .NSManagedObjectContextDidMergeChangesObjectIDs).receive(on: DispatchQueue.main)
     }
 }

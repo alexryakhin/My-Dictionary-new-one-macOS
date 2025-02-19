@@ -48,21 +48,13 @@ final class IdiomsProvider: IdiomsProviderInterface {
 
     private func setupBindings() {
         // every time core data gets updated, call fetchIdioms()
-        NotificationCenter.default.publisher(
-            for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
-            object: coreDataContainer.viewContext
-        )
-        .combineLatest(
-            NotificationCenter.default.publisher(
-                for: NSManagedObjectContext.didSaveObjectsNotification,
-                object: coreDataContainer.viewContext
-            )
-        )
-        .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
-        .sink { [weak self] _ in
-            self?.fetchIdioms()
-        }
-        .store(in: &cancellable)
+        NotificationCenter.default.managedObjectContextDidMergeChangesObjectIDsPublisher
+            .combineLatest(NotificationCenter.default.managedObjectContextDidSavePublisher)
+            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
+            .sink { [weak self] _ in
+                self?.fetchIdioms()
+            }
+            .store(in: &cancellable)
     }
 
     /// Fetches latest data from Core Data
@@ -81,7 +73,7 @@ final class IdiomsProvider: IdiomsProviderInterface {
         do {
             try coreDataContainer.viewContext.save()
             fetchIdioms()
-        } catch let error {
+        } catch {
             idiomsErrorPublisher.send(.coreDataError(.saveError))
         }
     }

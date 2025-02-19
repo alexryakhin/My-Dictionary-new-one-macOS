@@ -55,6 +55,10 @@
 		51EBFBEB270F4A970066782B /* WordCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEA270F4A970066782B /* WordCard.swift */; };
 		51EBFBED270F4A9E0066782B /* AddWordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEC270F4A9E0066782B /* AddWordViewModel.swift */; };
 		51EBFBEF270F4AAB0066782B /* Words.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBEE270F4AAB0066782B /* Words.swift */; };
+		5395A2212D65EFC90098BD07 /* Idiom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */; };
+		5395A2232D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */; };
+		5395A2252D65EFC90098BD07 /* Idiom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */; };
+		5395A2272D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */; };
 		53DEC1992D65A79700C9BDB2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC1982D65A79700C9BDB2 /* Swinject */; };
 		53DEC19B2D65A7AF00C9BDB2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC19A2D65A7AF00C9BDB2 /* Swinject */; };
 		53DEC19E2D65A7C900C9BDB2 /* SwinjectAutoregistration in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC19D2D65A7C900C9BDB2 /* SwinjectAutoregistration */; };
@@ -143,6 +147,8 @@
 		51EBFBEC270F4A9E0066782B /* AddWordViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddWordViewModel.swift; sourceTree = "<group>"; };
 		51EBFBEE270F4AAB0066782B /* Words.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Words.swift; sourceTree = "<group>"; };
 		53081CF52BFA5E7400964305 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Idiom+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataClass.swift"; sourceTree = "<group>"; };
 		53DEC1A22D65A81200C9BDB2 /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
 		53DEC1A32D65A81200C9BDB2 /* UIAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAssembly.swift; sourceTree = "<group>"; };
 		53DEC1A42D65A81200C9BDB2 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -207,6 +213,8 @@
 			isa = PBXGroup;
 			children = (
 				53DEC1AE2D65AD4800C9BDB2 /* AppError.swift */,
+				5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */,
+				5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */,
 				51EBFBEE270F4AAB0066782B /* Words.swift */,
 				53DEC1B72D65C0D700C9BDB2 /* FetchingStatus.swift */,
 				C0D377BE27997FDC00BE0726 /* FilterCase.swift */,
@@ -648,6 +656,8 @@
 				02FB1B8A2AC06E320019D265 /* DictionaryCommands.swift in Sources */,
 				517366DF270EB83F0073651A /* MainTabView.swift in Sources */,
 				C0D377C12799833700BE0726 /* SortingCase.swift in Sources */,
+				5395A2212D65EFC90098BD07 /* Idiom+CoreDataClass.swift in Sources */,
+				5395A2232D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */,
 				517366E6270EB99C0073651A /* QuizzesView.swift in Sources */,
 				02523C642AEEC897007E9A2D /* Quiz.swift in Sources */,
 				02FB1B932AC0B6FF0019D265 /* EmptyListView.swift in Sources */,
@@ -666,6 +676,8 @@
 				53DEC1BF2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift in Sources */,
 				C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */,
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
+				5395A2252D65EFC90098BD07 /* Idiom+CoreDataClass.swift in Sources */,
+				5395A2272D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */,
 				519B8AA127119FE4003E5EDD /* SpellingQuizView.swift in Sources */,
 				C03908C8279C065C0056968B /* IdiomsViewModel.swift in Sources */,
 				51423CDE270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
