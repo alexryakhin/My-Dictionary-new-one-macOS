@@ -1,49 +1,49 @@
-//
-//  MainTabViewMacOs.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/7/21.
-//
-
 import SwiftUI
 
-var screen = NSScreen.main!.visibleFrame
-
 struct MainTabView: View {
-    @StateObject var homeData = HomeViewModel()
-    
-    var body: some View {
-        HStack(spacing: 0) {
-            VStack {
-                TabButton(image: "textformat.abc", title: "Words", selectedTab: $homeData.selectedTab)
-                TabButton(image: "a.magnify", title: "Quizzes", selectedTab: $homeData.selectedTab)
-                Spacer()
-//                TabButton(image: "gear", title: "Settings", selectedTab: $homeData.selectedTab)
-            }
-            .padding()
-            .padding(.top, 40)
-            .background(BlurView())
-            
+    @StateObject private var wordsViewModel = WordsViewModel()
+    @StateObject private var idiomsViewModel = IdiomsViewModel()
+    @StateObject private var quizzesViewModel = QuizzesViewModel()
 
-            ZStack{
-                switch homeData.selectedTab{
-                case "Words": NavigationView{ WordsListView() }
-                case "Quizzes": NavigationView{ QuizzesView() }
-//                case "Settings": Text("Settings")
-                default : Text("Select an item")
+    @State var selectedSidebarItem: SidebarItem = .words
+
+    var body: some View {
+        let selectionBinding = Binding {
+            selectedSidebarItem
+        } set: { newValue in
+            wordsViewModel.selectedWord = nil
+            idiomsViewModel.selectedIdiom = nil
+            quizzesViewModel.selectedQuiz = nil
+            selectedSidebarItem = newValue
+        }
+
+        NavigationSplitView {
+            List(selection: selectionBinding) {
+                Section {
+                    ForEach(SidebarItem.allCases, id: \.self) { item in
+                        NavigationLink(value: item) {
+                            Label {
+                                Text(item.title)
+                            } icon: {
+                                item.image
+                            }
+                            .padding(.vertical, 8)
+                            .font(.title3)
+                        }
+                    }
+                } header: {
+                    Text("My Dictionary").font(.title2).bold().padding(.vertical, 16)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .animation(.none)
+        } content: {
+            switch selectedSidebarItem {
+            case .words: WordsListView(wordsViewModel: wordsViewModel)
+            case .idioms: IdiomsListViewMacOS(idiomsViewModel: idiomsViewModel)
+            case .quizzes: QuizzesView(quizzesViewModel: quizzesViewModel)
+            }
+        } detail: {
+            Text("Select an item")
         }
-        .ignoresSafeArea(.container, edges: .all)
-        .frame(minWidth: 800, minHeight: 600)
-        .environmentObject(homeData)
-    }
-}
-
-struct MainTabView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainTabView()
+        .fontDesign(.rounded)
     }
 }

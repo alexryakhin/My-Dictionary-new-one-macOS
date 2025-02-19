@@ -1,35 +1,32 @@
-//
-//  ChooseDefinitionView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/9/21.
-//
-
 import SwiftUI
 
 struct ChooseDefinitionView: View {
+    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
-    
-    @ObservedObject var vm: QuizzesViewModel
-    
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
+
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
 
-            Text(vm.words[rightAnswerIndex].wordItself ?? "")
+            Text(quizzesViewModel.words[rightAnswerIndex].wordItself ?? "")
                 .font(.largeTitle)
                 .bold()
-            Text(vm.words[rightAnswerIndex].partOfSpeech ?? "")
+            Text(quizzesViewModel.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
-            
+
             Spacer()
             Text("Choose from given definitions below")
                 .font(.caption)
                 .foregroundColor(.secondary)
-            
+
             ForEach(0..<3) { index in
-                Text(vm.words[index].definition ?? "")
+                Text(quizzesViewModel.words[index].definition ?? "")
                     .foregroundColor(.primary)
                     .frame(width: 300)
                     .padding()
@@ -37,10 +34,10 @@ struct ChooseDefinitionView: View {
                     .cornerRadius(15)
                     .padding(3)
                     .onTapGesture {
-                        if vm.words[rightAnswerIndex].id == vm.words[index].id {
+                        if quizzesViewModel.words[rightAnswerIndex].id == quizzesViewModel.words[index].id {
                             withAnimation {
                                 isRightAnswer = true
-                                vm.words.shuffle()
+                                quizzesViewModel.words.shuffle()
                                 rightAnswerIndex = Int.random(in: 0...2)
                             }
                         } else {
@@ -50,7 +47,7 @@ struct ChooseDefinitionView: View {
                         }
                     }
             }
-            
+
             Text(isRightAnswer ? "" : "Incorrect. Try Arain")
             Spacer().frame(height: 100)
         }
@@ -59,15 +56,5 @@ struct ChooseDefinitionView: View {
         .onAppear {
             rightAnswerIndex = Int.random(in: 0...2)
         }
-        
-    }
-}
-
-class QuizzesViewModel: ObservableObject {
-    @Published var words: [Word] = []
-    
-    init(words: [Word]) {
-        self.words = words
-        self.words.shuffle()
     }
 }

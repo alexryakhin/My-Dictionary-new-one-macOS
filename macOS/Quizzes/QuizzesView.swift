@@ -1,29 +1,16 @@
-//
-//  QuizzesView.swift
-//  My Dictionary (macOS)
-//
-//  Created by Alexander Bonney on 10/9/21.
-//
-
 import SwiftUI
 
 struct QuizzesView: View {
-    @Environment(\.managedObjectContext) private var viewContext
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Word.timestamp, ascending: true)],
-        animation: .default)
-    var words: FetchedResults<Word>
-    
-    @State private var playingWords: [Word] = []
-    
+    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+
+    init(quizzesViewModel: QuizzesViewModel) {
+        self.quizzesViewModel = quizzesViewModel
+    }
+
     var body: some View {
         VStack(alignment: .leading) {
-            if words.count < 10 {
-                HStack {
-                    Text("Quizzes").font(.title2).bold().padding().padding(.top, 50)
-                    Spacer()
-                }
+            if quizzesViewModel.words.count < 10 {
+                Spacer()
                 Text("Add at least 10 words\nto your list to play!")
                     .lineSpacing(10)
                     .font(.title3)
@@ -31,27 +18,31 @@ struct QuizzesView: View {
                     .padding(.horizontal)
                 Spacer()
             } else {
-                Text("Quizzes").font(.title2).bold().padding(.horizontal).padding(.top, 50)
-                List {
-                    NavigationLink(destination: SpellingQuizView()) {
-                        Text("Spelling")
-                    }
-                    NavigationLink(destination: ChooseDefinitionView(vm: QuizzesViewModel(words: playingWords))) {
-                        Text("Choose the right definition")
+                List(Quiz.allCases, id: \.self, selection: $quizzesViewModel.selectedQuiz) { quiz in
+                    NavigationLink(destination: quizView(for: quiz)) {
+                        Text(quiz.title)
+                            .padding(.vertical, 8)
                     }
                 }
+                .font(.title3)
             }
         }
-        .ignoresSafeArea()
         .navigationTitle("Quizzes")
         .onAppear {
-            playingWords = Array(words)
+            quizzesViewModel.fetchWords()
+        }
+    }
+
+    @ViewBuilder func quizView(for quiz: Quiz) -> some View {
+        switch quiz {
+        case .spelling:
+            SpellingQuizView(quizzesViewModel: quizzesViewModel)
+        case .chooseDefinitions:
+            ChooseDefinitionView(quizzesViewModel: quizzesViewModel)
         }
     }
 }
 
-struct QuizzesView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuizzesView()
-    }
+#Preview {
+    QuizzesView(quizzesViewModel: QuizzesViewModel())
 }

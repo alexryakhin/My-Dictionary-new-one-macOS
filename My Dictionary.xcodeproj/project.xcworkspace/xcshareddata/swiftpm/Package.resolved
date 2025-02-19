@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "swiftuihandytools",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/alexryakhin/SwiftUIHandyTools",
+      "state" : {
+        "branch" : "main",
+        "revision" : "1a7f4e1ba9ee79fa8e174458b61a59450fd0d0de"
+      }
+    }
+  ],
+  "version" : 2
+}
