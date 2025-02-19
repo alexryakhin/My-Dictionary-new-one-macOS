@@ -3,71 +3,41 @@ import Combine
 import CoreData
 
 final class IdiomsViewModel: ObservableObject {
-    let persistenceController = PersistenceController.shared
-    var cancellable = Set<AnyCancellable>()
+
     @Published var idioms: [Idiom] = []
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
     @Published var selectedIdiom: Idiom?
 
-    init() {
+    private let idiomsProvider: IdiomsProviderInterface
+    private var cancellables = Set<AnyCancellable>()
+
+    init(idiomsProvider: IdiomsProviderInterface) {
+        self.idiomsProvider = idiomsProvider
+
         setupBindings()
-        fetchIdioms()
     }
 
     private func setupBindings() {
-        // every time core data gets updated, call fetchWords()
-        NotificationCenter.default
-            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
-                          object: persistenceController.container.viewContext)
-            .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
-            .sink { [unowned self] _ in
-                self.fetchIdioms()
+        idiomsProvider.idiomsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] idioms in
+                self?.idioms = idioms
+                self?.sortIdioms()
             }
-            .store(in: &cancellable)
+            .store(in: &cancellables)
 
-        // react to search input from user
-        $searchText.sink { [unowned self] value in
-            if value.isEmpty {
-                self.filterState = .none
-            } else {
-                self.filterState = .search
+        // React to the search input from a user
+        $searchText
+            .sink { [weak self] value in
+                self?.filterState = value.isEmpty ? .none : .search
             }
-        }.store(in: &cancellable)
+            .store(in: &cancellables)
     }
 
-    // MARK: - Core Data Managing support
-
-    /// Fetches latest data from Core Data
-    private func fetchIdioms() {
-        let request = NSFetchRequest<Idiom>(entityName: "Idiom")
-        do {
-            idioms = try persistenceController.container.viewContext.fetch(request)
-            sortIdioms()
-        } catch {
-            print("Error fetching cities. \(error.localizedDescription)")
-        }
-    }
-
-    /// Saves all changes in Core Data
-    func save() {
-        do {
-            try persistenceController.container.viewContext.save()
-            fetchIdioms()
-        } catch let error {
-            print("Error with saving data to CD. \(error.localizedDescription)")
-        }
-        objectWillChange.send()
-    }
-
-    func addNewIdiom(idiom: String, definition: String) {
-        let newIdiom = Idiom(context: persistenceController.container.viewContext)
-        newIdiom.id = UUID()
-        newIdiom.idiomItself = idiom
-        newIdiom.definition = definition
-        newIdiom.timestamp = Date()
-        save()
+    func addNewIdiom(text: String, definition: String) {
+        idiomsProvider.addNewIdiom(text, definition: definition)
     }
 
     // MARK: Removing from CD
@@ -75,46 +45,46 @@ final class IdiomsViewModel: ObservableObject {
         switch filterState {
         case .none:
             withAnimation {
-                offsets.map { idioms[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { idioms[$0] }.forEach { [weak self] idiom in
+                    self?.idiomsProvider.deleteIdiom(idiom)
+                }
             }
         case .favorite:
             withAnimation {
-                offsets.map { favoriteIdioms[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { favoriteIdioms[$0] }.forEach { [weak self] idiom in
+                    self?.idiomsProvider.deleteIdiom(idiom)
+                }
             }
         case .search:
             withAnimation {
-                offsets.map { searchResults[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { searchResults[$0] }.forEach { [weak self] idiom in
+                    self?.idiomsProvider.deleteIdiom(idiom)
+                }
             }
         }
-        save()
     }
 
     /// Removes given word from Core Data
-    func delete(idiom: Idiom) {
-        persistenceController.container.viewContext.delete(idiom)
-        save()
+    func deleteIdiom(_ idiom: Idiom) {
+        idiomsProvider.deleteIdiom(idiom)
     }
 
     /// Removes selected idiom from Core Data
     func deleteCurrentIdiom() {
         guard let idiom = selectedIdiom else { return }
-        persistenceController.container.viewContext.delete(idiom)
+        idiomsProvider.deleteIdiom(idiom)
         selectedIdiom = nil
-        save()
     }
 
     // MARK: Sorting
     var favoriteIdioms: [Idiom] {
-        return self.idioms.filter { $0.isFavorite }
+        idioms.filter { $0.isFavorite }
     }
 
     var searchResults: [Idiom] {
-        return self.idioms.filter { idiom in
-            if let idiomItself = idiom.idiomItself, !searchText.isEmpty {
-                return idiomItself.localizedStandardContains(searchText)
-            } else {
-                return true
-            }
+        idioms.filter { idiom in
+            guard let idiomItself = idiom.idiomItself, !searchText.isEmpty else { return true }
+            return idiomItself.localizedStandardContains(searchText)
         }
     }
 

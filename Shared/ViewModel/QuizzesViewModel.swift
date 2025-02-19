@@ -1,20 +1,23 @@
 import SwiftUI
-import CoreData
+import Combine
 
 final class QuizzesViewModel: ObservableObject {
     @Published var selectedQuiz: Quiz?
-
-    let persistenceController = PersistenceController.shared
-
     @Published var words: [Word] = []
 
+    private let wordsProvider: WordsProviderInterface
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(wordsProvider: WordsProviderInterface) {
+        self.wordsProvider = wordsProvider
+        setupBindings()
+    }
+
     /// Fetches latest data from Core Data
-    func fetchWords() {
-        let request = NSFetchRequest<Word>(entityName: "Word")
-        do {
-            words = try persistenceController.container.viewContext.fetch(request)
-        } catch {
-            print("Error fetching cities. \(error.localizedDescription)")
-        }
+    private func setupBindings() {
+        wordsProvider.wordsPublisher
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.words, on: self)
+            .store(in: &cancellables)
     }
 }

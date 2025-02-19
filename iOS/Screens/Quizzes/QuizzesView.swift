@@ -1,15 +1,18 @@
 import SwiftUI
+import Swinject
+import SwinjectAutoregistration
 
 struct QuizzesView: View {
-    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+    private let resolver = DIContainer.shared.resolver
+    @StateObject private var viewModel: QuizzesViewModel
 
-    init(quizzesViewModel: QuizzesViewModel) {
-        self.quizzesViewModel = quizzesViewModel
+    init(viewModel: QuizzesViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
         NavigationStack {
-            List(selection: $quizzesViewModel.selectedQuiz) {
+            List(selection: $viewModel.selectedQuiz) {
                 Section {
                     ForEach(Quiz.allCases, id: \.self) { quiz in
                         NavigationLink {
@@ -24,7 +27,7 @@ struct QuizzesView: View {
             }
             .listStyle(.insetGrouped)
             .overlay {
-                if quizzesViewModel.words.count < 10 {
+                if viewModel.words.count < 10 {
                     EmptyListView(text: "Add at least 10 words\nto your list to play!")
                 }
             }
@@ -33,22 +36,20 @@ struct QuizzesView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                 }
             }
-            .onAppear {
-                quizzesViewModel.fetchWords()
-            }
         }
     }
 
-    @ViewBuilder func quizView(for quiz: Quiz) -> some View {
+    @ViewBuilder
+    func quizView(for quiz: Quiz) -> some View {
         switch quiz {
         case .spelling:
-            SpellingQuizView(quizzesViewModel: quizzesViewModel)
+            resolver ~> SpellingQuizView.self
         case .chooseDefinitions:
-            ChooseDefinitionView(quizzesViewModel: quizzesViewModel)
+            resolver ~> ChooseDefinitionView.self
         }
     }
 }
 
 #Preview {
-    QuizzesView(quizzesViewModel: QuizzesViewModel())
+    DIContainer.shared.resolver ~> QuizzesView.self
 }

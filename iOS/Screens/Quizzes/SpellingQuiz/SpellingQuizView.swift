@@ -1,8 +1,29 @@
 import SwiftUI
+import Combine
+
+final class SpellingQuizViewModel: ObservableObject {
+    @Published var words: [Word] = []
+
+    private let wordsProvider: WordsProviderInterface
+    private var cancellables: Set<AnyCancellable> = []
+
+    init(wordsProvider: WordsProviderInterface) {
+        self.wordsProvider = wordsProvider
+        setupBindings()
+    }
+
+    /// Fetches latest data from Core Data
+    private func setupBindings() {
+        wordsProvider.wordsPublisher
+            .receive(on: DispatchQueue.main)
+            .assign(to: \.words, on: self)
+            .store(in: &cancellables)
+    }
+}
 
 struct SpellingQuizView: View {
-    @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var quizzesViewModel: QuizzesViewModel
+    @Environment(\.dismiss) var dismiss
+    @StateObject var viewModel: SpellingQuizViewModel
 
     @State private var randomWord: Word?
     @State private var answerTextField = ""
@@ -12,8 +33,8 @@ struct SpellingQuizView: View {
 
     @State private var playingWords: [Word] = []
 
-    init(quizzesViewModel: QuizzesViewModel) {
-        self.quizzesViewModel = quizzesViewModel
+    init(viewModel: SpellingQuizViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -54,17 +75,18 @@ struct SpellingQuizView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("Spelling")
         .onAppear {
-            playingWords = quizzesViewModel.words
+            playingWords = viewModel.words
             randomWord = playingWords.randomElement()
         }
-        .alert(isPresented: $isShowAlert, content: {
+        .alert(isPresented: $isShowAlert) {
             Alert(
                 title: Text("Congratulations"),
                 message: Text("You got all your words!"),
-                dismissButton: .default(Text("Okay"), action: {
-                presentationMode.wrappedValue.dismiss()
-            }))
-        })
+                dismissButton: .default(Text("Okay")) {
+                    dismiss()
+                }
+            )
+        }
     }
 
     private var incorrectMessage: String {

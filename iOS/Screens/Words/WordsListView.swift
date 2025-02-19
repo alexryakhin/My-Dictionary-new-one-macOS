@@ -1,23 +1,26 @@
 import SwiftUI
 import CoreData
 import StoreKit
+import Swinject
+import SwinjectAutoregistration
 
 struct WordsListView: View {
+    private let resolver = DIContainer.shared.resolver
     @AppStorage(UDKeys.isShowingRating) var isShowingRating: Bool = true
-    @ObservedObject private var wordsViewModel: WordsViewModel
+    @StateObject private var viewModel: WordsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
 
-    init(wordsViewModel: WordsViewModel) {
-        self.wordsViewModel = wordsViewModel
+    init(viewModel: WordsViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(selection: $wordsViewModel.selectedWord) {
-                if !wordsToShow().isEmpty {
+            List(selection: $viewModel.selectedWord) {
+                if !viewModel.wordsFiltered.isEmpty {
                     Section {
-                        ForEach(wordsToShow()) { word in
+                        ForEach(viewModel.wordsFiltered) { word in
                             NavigationLink(value: word) {
                                 WordListCellView(model: .init(
                                     word: word.wordItself ?? "word",
@@ -25,35 +28,36 @@ struct WordsListView: View {
                                     partOfSpeech: word.partOfSpeech ?? "")
                                 )
                             }
+                            .id(word.id)
                         }
                         .onDelete(perform: { indexSet in
-                            wordsViewModel.deleteWord(offsets: indexSet)
+                            viewModel.deleteWord(offsets: indexSet)
                         })
                     } header: {
-                        if let title = wordsViewModel.filterState.title {
+                        if let title = viewModel.filterState.title {
                             Text(title)
                         }
                     } footer: {
-                        if !wordsToShow().isEmpty {
-                            Text(wordsCount)
+                        if !viewModel.wordsFiltered.isEmpty {
+                            Text(viewModel.wordsCount)
                         }
                     }
                 }
-                if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
+                if viewModel.filterState == .search && viewModel.wordsFiltered.count < 10 {
                     Button {
                         addItem()
                     } label: {
-                        Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                        Text("Add '\(viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                     }
                 }
             }
             .listStyle(.insetGrouped)
             .overlay {
-                if wordsViewModel.words.isEmpty {
+                if viewModel.words.isEmpty {
                     EmptyListView(text: "Begin to add words to your list\nby tapping on plus icon in upper left corner")
                 }
             }
-            .searchable(text: $wordsViewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
             .navigationTitle("Words")
             .listStyle(.insetGrouped)
             .toolbar {
@@ -75,14 +79,11 @@ struct WordsListView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddSheet) {
-                AddView(
-                    dictionaryViewModel: DictionaryViewModel(),
-                    wordsViewModel: wordsViewModel
-                )
+                resolver.resolve(AddWordView.self, argument: viewModel.searchText)!
             }
         } detail: {
-            if wordsViewModel.selectedWord != nil {
-                WordDetailView(wordsViewModel: wordsViewModel)
+            if let word = viewModel.selectedWord {
+                resolver ~> (WordDetailsView.self, word)
             } else {
                 Text("Select a word")
             }
@@ -91,50 +92,31 @@ struct WordsListView: View {
     }
 
     private func addItem() {
-        if isShowingRating && wordsViewModel.words.count > 15 {
+        if isShowingRating && viewModel.words.count > 15 {
             SKStoreReviewController.requestReview()
             isShowingRating = false
         }
         isShowingAddSheet = true
     }
 
-    private func wordsToShow() -> [Word] {
-        switch wordsViewModel.filterState {
-        case .none:
-            return wordsViewModel.words
-        case .favorite:
-            return wordsViewModel.favoriteWords
-        case .search:
-            return wordsViewModel.searchResults
-        }
-    }
-
-    private var wordsCount: String {
-        if wordsToShow().count == 1 {
-            return "1 word"
-        } else {
-            return "\(wordsToShow().count) words"
-        }
-    }
-
     private var filterMenu: some View {
         Menu {
             Button {
                 withAnimation {
-                    wordsViewModel.filterState = .none
+                    viewModel.filterState = .none
                 }
             } label: {
-                if wordsViewModel.filterState == .none {
+                if viewModel.filterState == .none {
                     Image(systemName: "checkmark")
                 }
                 Text("None")
             }
             Button {
                 withAnimation {
-                    wordsViewModel.filterState = .favorite
+                    viewModel.filterState = .favorite
                 }
             } label: {
-                if wordsViewModel.filterState == .favorite {
+                if viewModel.filterState == .favorite {
                     Image(systemName: "checkmark")
                 }
                 Text("Favorites")
@@ -152,33 +134,33 @@ struct WordsListView: View {
         Menu {
             Button {
                 withAnimation {
-                    wordsViewModel.sortingState = .def
-                    wordsViewModel.sortWords()
+                    viewModel.sortingState = .def
+                    viewModel.sortWords()
                 }
             } label: {
-                if wordsViewModel.sortingState == .def {
+                if viewModel.sortingState == .def {
                     Image(systemName: "checkmark")
                 }
                 Text("Default")
             }
             Button {
                 withAnimation {
-                    wordsViewModel.sortingState = .name
-                    wordsViewModel.sortWords()
+                    viewModel.sortingState = .name
+                    viewModel.sortWords()
                 }
             } label: {
-                if wordsViewModel.sortingState == .name {
+                if viewModel.sortingState == .name {
                     Image(systemName: "checkmark")
                 }
                 Text("Name")
             }
             Button {
                 withAnimation {
-                    wordsViewModel.sortingState = .partOfSpeech
-                    wordsViewModel.sortWords()
+                    viewModel.sortingState = .partOfSpeech
+                    viewModel.sortWords()
                 }
             } label: {
-                if wordsViewModel.sortingState == .partOfSpeech {
+                if viewModel.sortingState == .partOfSpeech {
                     Image(systemName: "checkmark")
                 }
                 Text("Part of speech")
@@ -195,7 +177,7 @@ struct WordsListView: View {
 }
 
 #Preview {
-    WordsListView(wordsViewModel: WordsViewModel())
+    DIContainer.shared.resolver ~> WordsListView.self
 }
 
 struct WordListCellView: View {

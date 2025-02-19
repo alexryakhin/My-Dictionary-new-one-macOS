@@ -3,122 +3,118 @@ import Combine
 import CoreData
 
 final class WordsViewModel: ObservableObject {
-    let persistenceController = PersistenceController.shared
-    var cancellable = Set<AnyCancellable>()
+
+    private let wordsProvider: WordsProviderInterface
+    private var cancellables = Set<AnyCancellable>()
+
     @Published var words: [Word] = []
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
     @Published var selectedWord: Word?
 
-    init() {
+    var wordsFiltered: [Word] {
+        switch filterState {
+        case .none:
+            return words
+        case .favorite:
+            return favoriteWords
+        case .search:
+            return searchResults
+        }
+    }
+
+    var favoriteWords: [Word] {
+        words.filter { $0.isFavorite }
+    }
+
+    var searchResults: [Word] {
+        words.filter { word in
+            guard let wordItself = word.wordItself, !searchText.isEmpty else { return true }
+            return wordItself.localizedStandardContains(searchText)
+        }
+    }
+
+    var wordsCount: String {
+        if wordsFiltered.count == 1 {
+            return "1 word"
+        } else {
+            return "\(wordsFiltered.count) words"
+        }
+    }
+
+    init(wordsProvider: WordsProviderInterface) {
+        self.wordsProvider = wordsProvider
+        print("DEBUG50 WordsViewModel init")
         setupBindings()
-        fetchWords()
+    }
+
+    deinit {
+        print("DEBUG50 WordsViewModel deinit")
     }
 
     private func setupBindings() {
-        // every time core data gets updated, call fetchWords()
-        NotificationCenter.default
-            .publisher(for: NSManagedObjectContext.didMergeChangesObjectIDsNotification,
-                          object: persistenceController.container.viewContext)
-            .throttle(for: 1.0, scheduler: RunLoop.main, latest: true)
-            .sink { [unowned self] _ in
-                self.fetchWords()
+        wordsProvider.wordsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] words in
+                self?.words = words
+                self?.sortWords()
+                self?.objectWillChange.send()
             }
-            .store(in: &cancellable)
+            .store(in: &cancellables)
 
-        // react to search input from user
-        $searchText.sink { [unowned self] value in
-            if value.isEmpty {
-                self.filterState = .none
-            } else {
-                self.filterState = .search
+        // React to the search input from a user
+        $searchText
+            .sink { [weak self] value in
+                self?.filterState = value.isEmpty ? .none : .search
             }
-        }.store(in: &cancellable)
-    }
-
-    // MARK: - Core Data Managing support
-
-    /// Fetches latest data from Core Data
-    private func fetchWords() {
-        let request = NSFetchRequest<Word>(entityName: "Word")
-        do {
-            words = try persistenceController.container.viewContext.fetch(request)
-            sortWords()
-        } catch {
-            print("Error fetching cities. \(error.localizedDescription)")
-        }
-    }
-
-    /// Saves all changes in Core Data
-    func save() {
-        do {
-            try persistenceController.container.viewContext.save()
-            fetchWords()
-        } catch let error {
-            print("Error with saving data to CD. \(error.localizedDescription)")
-        }
-        objectWillChange.send()
+            .store(in: &cancellables)
     }
 
     func addNewWord(word: String, definition: String, partOfSpeech: String, phonetic: String?) {
-        let newWord = Word(context: persistenceController.container.viewContext)
-        newWord.id = UUID()
-        newWord.wordItself = word
-        newWord.definition = definition
-        newWord.partOfSpeech = partOfSpeech
-        newWord.phonetic = phonetic
-        newWord.timestamp = Date()
-        save()
+        wordsProvider.addNewWord(
+            word: word,
+            definition: definition,
+            partOfSpeech: partOfSpeech,
+            phonetic: phonetic
+        )
     }
 
-    // MARK: Removing from CD
     func deleteWord(offsets: IndexSet) {
         switch filterState {
         case .none:
             withAnimation {
-                offsets.map { words[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { words[$0] }.forEach { [weak self] word in
+                    self?.wordsProvider.delete(word: word)
+                }
             }
         case .favorite:
             withAnimation {
-                offsets.map { favoriteWords[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { favoriteWords[$0] }.forEach { [weak self] word in
+                    self?.wordsProvider.delete(word: word)
+                }
             }
         case .search:
             withAnimation {
-                offsets.map { searchResults[$0] }.forEach(persistenceController.container.viewContext.delete)
+                offsets.map { searchResults[$0] }.forEach { [weak self] word in
+                    self?.wordsProvider.delete(word: word)
+                }
             }
         }
-        save()
     }
 
-    /// Removes given word from Core Data
     func delete(word: Word) {
-        persistenceController.container.viewContext.delete(word)
-        save()
+        wordsProvider.delete(word: word)
     }
     
     /// Removes selected word from Core Data
     func deleteCurrentWord() {
         guard let word = selectedWord else { return }
-        persistenceController.container.viewContext.delete(word)
+        wordsProvider.delete(word: word)
         selectedWord = nil
-        save()
     }
 
-    // MARK: Sorting
-    var favoriteWords: [Word] {
-        return self.words.filter { $0.isFavorite }
-    }
-
-    var searchResults: [Word] {
-        return self.words.filter { word in
-            if let wordItself = word.wordItself, !searchText.isEmpty {
-                return wordItself.localizedStandardContains(searchText)
-            } else {
-                return true
-            }
-        }
-    }
+    // MARK: - Sorting
 
     func sortWords() {
         switch sortingState {

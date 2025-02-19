@@ -1,0 +1,122 @@
+import SwiftUI
+import CoreData
+
+struct IdiomDetailsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @StateObject private var viewModel: IdiomDetailsViewModel
+
+    init(viewModel: IdiomDetailsViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
+    }
+
+    var body: some View {
+        let bindingIdiomDefinition = Binding(
+            get: { viewModel.idiom.definition ?? "" },
+            set: { viewModel.idiom.definition = $0 }
+        )
+
+        List {
+            Section {
+                Text(viewModel.idiom.idiomItself ?? "")
+                    .font(.system(.headline, design: .rounded))
+            } header: {
+                Text("Idiom")
+            } footer: {
+                Button {
+                    viewModel.speak(viewModel.idiom.idiomItself)
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                    Text("Listen")
+                }
+                .foregroundColor(.accentColor)
+            }
+
+            Section {
+                if viewModel.isEditingDefinition {
+                    TextEditor(text: bindingIdiomDefinition)
+                        .frame(height: UIScreen.main.bounds.height / 3)
+                    Button {
+                        viewModel.isEditingDefinition = false
+                        viewModel.save()
+                    } label: {
+                        Text("Save")
+                    }
+                } else {
+                    Text(viewModel.idiom.definition ?? "")
+                        .contextMenu {
+                            Button("Edit", action: {
+                                viewModel.isEditingDefinition = true
+                            })
+                        }
+                }
+            } header: {
+                Text("Definition")
+            } footer: {
+                if !viewModel.isEditingDefinition {
+                    Button {
+                        viewModel.speak(viewModel.idiom.definition)
+                    } label: {
+                        Image(systemName: "speaker.wave.2.fill")
+                        Text("Listen")
+                    }
+                    .foregroundColor(.accentColor)
+                }
+            }
+            Section {
+                Button {
+                    if !viewModel.isShowAddExample {
+                        withAnimation {
+                            viewModel.isShowAddExample = true
+                        }
+                    } else {
+                        withAnimation(.easeInOut) {
+                            viewModel.addExample()
+                        }
+                    }
+                } label: {
+                    Text("Add example")
+                }
+
+                ForEach(viewModel.examples, id: \.self) { example in
+                    Text(example)
+                }
+                .onDelete(perform: viewModel.removeExample)
+
+                if viewModel.isShowAddExample {
+                    TextField("Type an example here", text: $viewModel.exampleTextFieldStr, onCommit: {
+                        withAnimation(.easeInOut) {
+                            viewModel.addExample()
+                        }
+                    })
+                }
+            } header: {
+                Text("Examples")
+            }
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle("Details")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    viewModel.deleteCurrentIdiom()
+                    dismiss()
+                } label: {
+                    Image(systemName: "trash")
+                        .foregroundColor(.red)
+                }
+            }
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button {
+                    // favorites
+                    viewModel.idiom.isFavorite.toggle()
+                    viewModel.save()
+                } label: {
+                    Image(systemName: viewModel.idiom.isFavorite
+                          ? "heart.fill"
+                          : "heart"
+                    )
+                }
+            }
+        }
+    }
+}

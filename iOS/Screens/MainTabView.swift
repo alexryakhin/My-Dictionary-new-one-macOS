@@ -1,34 +1,37 @@
 import SwiftUI
 import SwiftUIHandyTools
+import Swinject
+import SwinjectAutoregistration
 
 struct MainTabView: View {
     @AppStorage(UDKeys.isShowingOnboarding) var isShowingOnboarding: Bool = true
-
-    @StateObject private var wordsViewModel = WordsViewModel()
-    @StateObject private var quizzesViewModel = QuizzesViewModel()
-    @StateObject private var idiomsViewModel = IdiomsViewModel()
-    @StateObject private var settingsViewModel = SettingsViewModel()
-
+    @AppStorage(UDKeys.isShowingIdioms) var isShowingIdioms: Bool = false
     @State private var selectedItem: TabBarItem = .words
+    private let resolver = DIContainer.shared.resolver
 
     var tabs: [TabBarItem] {
-        settingsViewModel.isShowingIdioms
+        isShowingIdioms
         ? TabBarItem.allCases
         : [.words, .quizzes, .settings]
     }
 
     var body: some View {
-        TabBar(selection: $selectedItem) {
+        TabView {
             ForEach(tabs, id: \.self) { tab in
                 tabView(for: tab)
-                    .tabItem(for: tab)
+                    .tabItem {
+                        Label {
+                            Text(tab.title)
+                        } icon: {
+                            Image(systemName: tab.icon)
+                        }
+                    }
             }
         }
-        .animation(.default, value: settingsViewModel.isShowingIdioms)
         .sheet(isPresented: $isShowingOnboarding, onDismiss: {
             isShowingOnboarding = false
         }, content: {
-            OnboardingView()
+            resolver ~> OnboardingView.self
         })
     }
 
@@ -36,17 +39,17 @@ struct MainTabView: View {
     func tabView(for item: TabBarItem) -> some View {
         switch item {
         case .words:
-            WordsListView(wordsViewModel: wordsViewModel)
+            resolver ~> WordsListView.self
         case .idioms:
-            IdiomsListView(idiomsViewModel: idiomsViewModel)
+            resolver ~> IdiomsListView.self
         case .quizzes:
-            QuizzesView(quizzesViewModel: quizzesViewModel)
+            resolver ~> QuizzesView.self
         case .settings:
-            SettingsView(settingsViewModel: settingsViewModel)
+            resolver ~> SettingsView.self
         }
     }
 }
 
 #Preview {
-    MainTabView()
+    DIContainer.shared.resolver ~> MainTabView.self
 }

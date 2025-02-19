@@ -32,15 +32,6 @@ struct Phonetic: Codable {
     let text, audio: String?
 }
 
-typealias Words = [WordElement]
-
-enum FetchingStatus {
-    case blank
-    case ready
-    case loading
-    case error
-}
-
 enum PartOfSpeech: String, CaseIterable {
     case noun
     case verb

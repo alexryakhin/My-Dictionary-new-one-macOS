@@ -1,4 +1,5 @@
 {
+  "originHash" : "713629d5f1d5ae16235c8e2ecd39aea165c0ad01acb9d615f93e46fcd97a8dfa",
   "pins" : [
     {
       "identity" : "swiftuihandytools",
@@ -8,7 +9,25 @@
         "branch" : "main",
         "revision" : "1a7f4e1ba9ee79fa8e174458b61a59450fd0d0de"
       }
+    },
+    {
+      "identity" : "swinject",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/Swinject",
+      "state" : {
+        "revision" : "be9dbcc7b86811bc131539a20c6f9c2d3e56919f",
+        "version" : "2.9.1"
+      }
+    },
+    {
+      "identity" : "swinjectautoregistration",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swinject/SwinjectAutoregistration",
+      "state" : {
+        "revision" : "fd9ffae5f666d37b4b3c210af2e16a10598342e4",
+        "version" : "2.9.1"
+      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }
