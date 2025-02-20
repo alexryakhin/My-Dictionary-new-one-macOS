@@ -45,12 +45,7 @@ final class WordsViewModel: ObservableObject {
 
     init(wordsProvider: WordsProviderInterface) {
         self.wordsProvider = wordsProvider
-        print("DEBUG50 WordsViewModel init")
         setupBindings()
-    }
-
-    deinit {
-        print("DEBUG50 WordsViewModel deinit")
     }
 
     private func setupBindings() {
@@ -59,6 +54,10 @@ final class WordsViewModel: ObservableObject {
             .sink { [weak self] words in
                 self?.words = words
                 self?.sortWords()
+                if let selectedWord = self?.selectedWord,
+                    !words.contains(selectedWord) {
+                    self?.selectedWord = nil
+                }
             }
             .store(in: &cancellables)
 
@@ -77,6 +76,7 @@ final class WordsViewModel: ObservableObject {
             partOfSpeech: partOfSpeech,
             phonetic: phonetic
         )
+        wordsProvider.saveContext()
     }
 
     func deleteWord(offsets: IndexSet) {
@@ -84,19 +84,19 @@ final class WordsViewModel: ObservableObject {
         case .none:
             withAnimation {
                 offsets.map { words[$0] }.forEach { [weak self] word in
-                    self?.wordsProvider.delete(word: word)
+                    self?.delete(word: word)
                 }
             }
         case .favorite:
             withAnimation {
                 offsets.map { favoriteWords[$0] }.forEach { [weak self] word in
-                    self?.wordsProvider.delete(word: word)
+                    self?.delete(word: word)
                 }
             }
         case .search:
             withAnimation {
                 offsets.map { searchResults[$0] }.forEach { [weak self] word in
-                    self?.wordsProvider.delete(word: word)
+                    self?.delete(word: word)
                 }
             }
         }
@@ -104,13 +104,7 @@ final class WordsViewModel: ObservableObject {
 
     func delete(word: Word) {
         wordsProvider.delete(word: word)
-    }
-    
-    /// Removes selected word from Core Data
-    func deleteCurrentWord() {
-        guard let word = selectedWord else { return }
-        wordsProvider.delete(word: word)
-        selectedWord = nil
+        wordsProvider.saveContext()
     }
 
     // MARK: - Sorting

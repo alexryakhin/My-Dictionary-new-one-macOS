@@ -2,30 +2,6 @@ import SwiftUI
 import Swinject
 import SwinjectAutoregistration
 
-final class AddIdiomViewModel: ObservableObject {
-    @Published var inputText: String = ""
-    @Published var inputDefinition: String = ""
-    @Published var isShowingAlert = false
-
-    private let idiomsProvider: IdiomsProviderInterface
-
-    init(
-        inputText: String,
-        idiomsProvider: IdiomsProviderInterface
-    ) {
-        self.inputText = inputText
-        self.idiomsProvider = idiomsProvider
-    }
-
-    func addIdiom() {
-        if !inputText.isEmpty, !inputDefinition.isEmpty {
-            idiomsProvider.addNewIdiom(inputText, definition: inputDefinition)
-        } else {
-            isShowingAlert = true
-        }
-    }
-}
-
 struct AddIdiomView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel: AddIdiomViewModel

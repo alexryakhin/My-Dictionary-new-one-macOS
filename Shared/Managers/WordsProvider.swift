@@ -8,8 +8,14 @@ protocol WordsProviderInterface {
     var wordsPublisher: CurrentValueSubject<[Word], Never> { get }
     var wordsErrorPublisher: PassthroughSubject<AppError, Never> { get }
 
+    /// Creates a new word into the Core Data (does not save the data)
     func addNewWord(word: String, definition: String, partOfSpeech: String, phonetic: String?)
+
+    /// Removes a given word from the Core Data (does not save the data)
     func delete(word: Word)
+
+    /// Saves all changes in the Core Data
+    func saveContext()
 }
 
 final class WordsProvider: WordsProviderInterface {
@@ -37,13 +43,18 @@ final class WordsProvider: WordsProviderInterface {
         newWord.partOfSpeech = partOfSpeech
         newWord.phonetic = phonetic
         newWord.timestamp = Date()
-        save()
     }
 
-    /// Removes given word from Core Data
     func delete(word: Word) {
         coreDataContainer.viewContext.delete(word)
-        save()
+    }
+
+    func saveContext() {
+        do {
+            try coreDataContainer.viewContext.save()
+        } catch {
+            wordsErrorPublisher.send(.coreDataError(.saveError))
+        }
     }
 
     // MARK: - Private methods
@@ -52,7 +63,7 @@ final class WordsProvider: WordsProviderInterface {
         // every time core data gets updated, call fetchWords()
         NotificationCenter.default.managedObjectContextDidMergeChangesObjectIDsPublisher
             .combineLatest(NotificationCenter.default.managedObjectContextDidSavePublisher)
-            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in
                 self?.fetchWords()
             }
@@ -67,16 +78,6 @@ final class WordsProvider: WordsProviderInterface {
             wordsPublisher.send(words)
         } catch {
             wordsErrorPublisher.send(.coreDataError(.fetchError))
-        }
-    }
-
-    /// Saves all changes in Core Data
-    private func save() {
-        do {
-            try coreDataContainer.viewContext.save()
-            fetchWords()
-        } catch {
-            wordsErrorPublisher.send(.coreDataError(.saveError))
         }
     }
 }

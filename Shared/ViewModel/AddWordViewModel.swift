@@ -53,6 +53,7 @@ final class AddWordViewModel: ObservableObject {
                 partOfSpeech: partOfSpeech.rawValue,
                 phonetic: resultWordDetails?.phonetic
             )
+            wordsProvider.saveContext()
         } else {
             showingAlert = true
         }
@@ -65,7 +66,7 @@ final class AddWordViewModel: ObservableObject {
     private func setupBindings() {
         $inputWord
             .filter { !$0.isEmpty }
-            .debounce(for: 1, scheduler: DispatchQueue.main)
+            .debounce(for: 1, scheduler: RunLoop.main)
             .sink { [weak self] input in
                 self?.fetchData()
             }

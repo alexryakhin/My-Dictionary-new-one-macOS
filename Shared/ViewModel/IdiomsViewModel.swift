@@ -38,6 +38,7 @@ final class IdiomsViewModel: ObservableObject {
 
     func addNewIdiom(text: String, definition: String) {
         idiomsProvider.addNewIdiom(text, definition: definition)
+        idiomsProvider.saveContext()
     }
 
     // MARK: Removing from CD
@@ -46,19 +47,19 @@ final class IdiomsViewModel: ObservableObject {
         case .none:
             withAnimation {
                 offsets.map { idioms[$0] }.forEach { [weak self] idiom in
-                    self?.idiomsProvider.deleteIdiom(idiom)
+                    self?.deleteIdiom(idiom)
                 }
             }
         case .favorite:
             withAnimation {
                 offsets.map { favoriteIdioms[$0] }.forEach { [weak self] idiom in
-                    self?.idiomsProvider.deleteIdiom(idiom)
+                    self?.deleteIdiom(idiom)
                 }
             }
         case .search:
             withAnimation {
                 offsets.map { searchResults[$0] }.forEach { [weak self] idiom in
-                    self?.idiomsProvider.deleteIdiom(idiom)
+                    self?.deleteIdiom(idiom)
                 }
             }
         }
@@ -67,13 +68,7 @@ final class IdiomsViewModel: ObservableObject {
     /// Removes given word from Core Data
     func deleteIdiom(_ idiom: Idiom) {
         idiomsProvider.deleteIdiom(idiom)
-    }
-
-    /// Removes selected idiom from Core Data
-    func deleteCurrentIdiom() {
-        guard let idiom = selectedIdiom else { return }
-        idiomsProvider.deleteIdiom(idiom)
-        selectedIdiom = nil
+        idiomsProvider.saveContext()
     }
 
     // MARK: Sorting

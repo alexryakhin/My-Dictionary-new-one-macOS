@@ -10,50 +10,44 @@ import Foundation
 
 final class WordDetailsViewModel: ObservableObject {
     @Published var word: Word
-    @Published var isEditingDefinition = false
     @Published var isShowAddExample = false
+    @Published var definitionTextFieldStr = ""
     @Published var exampleTextFieldStr = ""
 
-    var examples: [String] {
-        guard let data = word.examples else { return [] }
-        guard let examples = try? JSONDecoder().decode([String].self, from: data) else { return [] }
-        return examples
-    }
-
-    private let coreDataContainer: CoreDataContainerInterface
     private let wordsProvider: WordsProviderInterface
     private let speechSynthesizer: SpeechSynthesizerInterface
+    private var cancellables: Set<AnyCancellable> = []
 
     init(
         word: Word,
-        coreDataContainer: CoreDataContainerInterface,
         wordsProvider: WordsProviderInterface,
         speechSynthesizer: SpeechSynthesizerInterface
     ) {
         self.word = word
-        self.coreDataContainer = coreDataContainer
         self.wordsProvider = wordsProvider
         self.speechSynthesizer = speechSynthesizer
+        self.definitionTextFieldStr = word.definition ?? ""
+        setupBindings()
     }
 
-    func removeExample(offsets: IndexSet) {
-        var examples = self.examples
-        examples.remove(atOffsets: offsets)
-
-        let newExamplesData = try? JSONEncoder().encode(examples)
-        word.examples = newExamplesData
-        save()
+    func removeExample(atOffsets offsets: IndexSet) {
+        do {
+            try word.removeExample(atOffsets: offsets)
+            wordsProvider.saveContext()
+        } catch {
+            handleError(error)
+        }
     }
 
     func saveExample() {
-        isShowAddExample = false
-        if exampleTextFieldStr != "" {
-            let newExamples = examples + [exampleTextFieldStr]
-            let newExamplesData = try? JSONEncoder().encode(newExamples)
-            word.examples = newExamplesData
-            save()
+        do {
+            try word.addExample(exampleTextFieldStr)
+            wordsProvider.saveContext()
+            exampleTextFieldStr = ""
+            isShowAddExample = false
+        } catch {
+            handleError(error)
         }
-        exampleTextFieldStr = ""
     }
 
     func speak(_ text: String?) {
@@ -64,19 +58,39 @@ final class WordDetailsViewModel: ObservableObject {
 
     func changePartOfSpeech(_ partOfSpeech: String) {
         word.partOfSpeech = partOfSpeech
-        save()
+        wordsProvider.saveContext()
     }
 
     func deleteCurrentWord() {
         wordsProvider.delete(word: word)
+        wordsProvider.saveContext()
     }
 
-    func save() {
-        do {
-            try coreDataContainer.viewContext.save()
-        } catch {
-            print(error.localizedDescription)
-            // TODO: show snack
-        }
+    func toggleFavorite() {
+        word.isFavorite.toggle()
+        wordsProvider.saveContext()
+    }
+
+    private func setupBindings() {
+        wordsProvider.wordsErrorPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] error in
+                self?.handleError(error)
+            }
+            .store(in: &cancellables)
+
+        $definitionTextFieldStr
+            .removeDuplicates()
+            .debounce(for: 1, scheduler: RunLoop.main)
+            .sink { [weak self] text in
+                self?.word.definition = text
+                self?.wordsProvider.saveContext()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func handleError(_ error: Error) {
+        // TODO: show snack
+        print(error.localizedDescription)
     }
 }

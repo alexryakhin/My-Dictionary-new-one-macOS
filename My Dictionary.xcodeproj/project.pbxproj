@@ -59,6 +59,8 @@
 		5395A2232D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */; };
 		5395A2252D65EFC90098BD07 /* Idiom+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */; };
 		5395A2272D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */; };
+		53A1E0472D672A6F000024CC /* AddIdiomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */; };
+		53A1E0482D672A6F000024CC /* AddIdiomViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */; };
 		53DEC1992D65A79700C9BDB2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC1982D65A79700C9BDB2 /* Swinject */; };
 		53DEC19B2D65A7AF00C9BDB2 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC19A2D65A7AF00C9BDB2 /* Swinject */; };
 		53DEC19E2D65A7C900C9BDB2 /* SwinjectAutoregistration in Frameworks */ = {isa = PBXBuildFile; productRef = 53DEC19D2D65A7C900C9BDB2 /* SwinjectAutoregistration */; };
@@ -149,6 +151,7 @@
 		53081CF52BFA5E7400964305 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Idiom+CoreDataClass.swift"; sourceTree = "<group>"; };
 		5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Word+CoreDataClass.swift"; sourceTree = "<group>"; };
+		53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIdiomViewModel.swift; sourceTree = "<group>"; };
 		53DEC1A22D65A81200C9BDB2 /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
 		53DEC1A32D65A81200C9BDB2 /* UIAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIAssembly.swift; sourceTree = "<group>"; };
 		53DEC1A42D65A81200C9BDB2 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
@@ -230,6 +233,7 @@
 				53DEC1BA2D65C7CF00C9BDB2 /* WordDetailsViewModel.swift */,
 				51EBFBEC270F4A9E0066782B /* AddWordViewModel.swift */,
 				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
+				53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */,
 				C03908C3279C06080056968B /* IdiomsViewModel.swift */,
 				53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */,
 				C03908C5279C062A0056968B /* QuizzesViewModel.swift */,
@@ -627,6 +631,7 @@
 				02523C672AEECC1A007E9A2D /* TabBarItem.swift in Sources */,
 				513CBC66271099D800A2F4EC /* SpellingQuizView.swift in Sources */,
 				51423CDF270DE477006B94CB /* MyDictionaryApp.swift in Sources */,
+				53A1E0482D672A6F000024CC /* AddIdiomViewModel.swift in Sources */,
 				517366E1270EB8A50073651A /* OnboardingView.swift in Sources */,
 				53DEC1BE2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift in Sources */,
 				023A3DD92AC96D8D00C8F68A /* SettingsView.swift in Sources */,
@@ -686,6 +691,7 @@
 				9781DC0028D8E28400CFBC60 /* DictionarySettings.swift in Sources */,
 				53DEC1B32D65B2E700C9BDB2 /* IdiomsProvider.swift in Sources */,
 				02523C682AEECC1A007E9A2D /* TabBarItem.swift in Sources */,
+				53A1E0472D672A6F000024CC /* AddIdiomViewModel.swift in Sources */,
 				02523C652AEEC897007E9A2D /* Quiz.swift in Sources */,
 				517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */,
 				53DEC1B92D65C0D700C9BDB2 /* FetchingStatus.swift in Sources */,

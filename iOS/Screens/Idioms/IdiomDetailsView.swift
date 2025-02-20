@@ -10,11 +10,6 @@ struct IdiomDetailsView: View {
     }
 
     var body: some View {
-        let bindingIdiomDefinition = Binding(
-            get: { viewModel.idiom.definition ?? "" },
-            set: { viewModel.idiom.definition = $0 }
-        )
-
         List {
             Section {
                 Text(viewModel.idiom.idiomItself ?? "")
@@ -32,35 +27,18 @@ struct IdiomDetailsView: View {
             }
 
             Section {
-                if viewModel.isEditingDefinition {
-                    TextEditor(text: bindingIdiomDefinition)
-                        .frame(height: UIScreen.main.bounds.height / 3)
-                    Button {
-                        viewModel.isEditingDefinition = false
-                        viewModel.save()
-                    } label: {
-                        Text("Save")
-                    }
-                } else {
-                    Text(viewModel.idiom.definition ?? "")
-                        .contextMenu {
-                            Button("Edit", action: {
-                                viewModel.isEditingDefinition = true
-                            })
-                        }
-                }
+                TextEditor(text: $viewModel.definitionTextFieldStr)
+                    .frame(height: UIScreen.main.bounds.height / 3)
             } header: {
                 Text("Definition")
             } footer: {
-                if !viewModel.isEditingDefinition {
-                    Button {
-                        viewModel.speak(viewModel.idiom.definition)
-                    } label: {
-                        Image(systemName: "speaker.wave.2.fill")
-                        Text("Listen")
-                    }
-                    .foregroundColor(.accentColor)
+                Button {
+                    viewModel.speak(viewModel.idiom.definition)
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                    Text("Listen")
                 }
+                .foregroundColor(.accentColor)
             }
             Section {
                 Button {
@@ -77,7 +55,7 @@ struct IdiomDetailsView: View {
                     Text("Add example")
                 }
 
-                ForEach(viewModel.examples, id: \.self) { example in
+                ForEach(viewModel.idiom.examplesDecoded, id: \.self) { example in
                     Text(example)
                 }
                 .onDelete(perform: viewModel.removeExample)
@@ -107,9 +85,7 @@ struct IdiomDetailsView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    // favorites
-                    viewModel.idiom.isFavorite.toggle()
-                    viewModel.save()
+                    viewModel.toggleFavorite()
                 } label: {
                     Image(systemName: viewModel.idiom.isFavorite
                           ? "heart.fill"

@@ -43,7 +43,6 @@ final class UIAssembly: Assembly, Identifiable {
         container.register(WordDetailsView.self) { resolver, word in
             let viewModel = WordDetailsViewModel(
                 word: word,
-                coreDataContainer: resolver ~> CoreDataContainerInterface.self,
                 wordsProvider: resolver ~> WordsProviderInterface.self,
                 speechSynthesizer: resolver ~> SpeechSynthesizerInterface.self
             )
@@ -68,7 +67,6 @@ final class UIAssembly: Assembly, Identifiable {
         container.register(IdiomDetailsView.self) { resolver, idiom in
             let viewModel = IdiomDetailsViewModel(
                 idiom: idiom,
-                coreDataContainer: resolver ~> CoreDataContainerInterface.self,
                 idiomsProvider: resolver ~> IdiomsProviderInterface.self,
                 speechSynthesizer: resolver ~> SpeechSynthesizerInterface.self
             )

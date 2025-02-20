@@ -8,8 +8,14 @@ protocol IdiomsProviderInterface {
     var idiomsPublisher: CurrentValueSubject<[Idiom], Never> { get }
     var idiomsErrorPublisher: PassthroughSubject<AppError, Never> { get }
 
+    /// Creates a new idiom into the Core Data (does not save the data)
     func addNewIdiom(_ idiom: String, definition: String)
+
+    /// Removes a given idiom from the Core Data (does not save the data)
     func deleteIdiom(_ idiom: Idiom)
+
+    /// Saves all changes in the Core Data
+    func saveContext()
 }
 
 final class IdiomsProvider: IdiomsProviderInterface {
@@ -35,13 +41,18 @@ final class IdiomsProvider: IdiomsProviderInterface {
         newIdiom.idiomItself = text
         newIdiom.definition = definition
         newIdiom.timestamp = Date()
-        save()
     }
 
-    /// Removes given idiom from the Core Data
     func deleteIdiom(_ idiom: Idiom) {
         coreDataContainer.viewContext.delete(idiom)
-        save()
+    }
+
+    func saveContext() {
+        do {
+            try coreDataContainer.viewContext.save()
+        } catch {
+            idiomsErrorPublisher.send(.coreDataError(.saveError))
+        }
     }
 
     // MARK: - Private methods
@@ -50,7 +61,7 @@ final class IdiomsProvider: IdiomsProviderInterface {
         // every time core data gets updated, call fetchIdioms()
         NotificationCenter.default.managedObjectContextDidMergeChangesObjectIDsPublisher
             .combineLatest(NotificationCenter.default.managedObjectContextDidSavePublisher)
-            .throttle(for: 0.5, scheduler: RunLoop.main, latest: true)
+            .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in
                 self?.fetchIdioms()
             }
@@ -65,16 +76,6 @@ final class IdiomsProvider: IdiomsProviderInterface {
             idiomsPublisher.send(idioms)
         } catch {
             idiomsErrorPublisher.send(.coreDataError(.fetchError))
-        }
-    }
-
-    /// Saves all changes in Core Data
-    private func save() {
-        do {
-            try coreDataContainer.viewContext.save()
-            fetchIdioms()
-        } catch {
-            idiomsErrorPublisher.send(.coreDataError(.saveError))
         }
     }
 }

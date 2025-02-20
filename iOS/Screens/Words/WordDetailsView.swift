@@ -2,7 +2,6 @@ import SwiftUI
 import CoreData
 
 struct WordDetailsView: View {
-    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: WordDetailsViewModel
 
     init(viewModel: WordDetailsViewModel) {
@@ -46,31 +45,17 @@ struct WordDetailsView: View {
             }
 
             Section {
-                if viewModel.isEditingDefinition {
-                    TextField("Definition", text: bindingWordDefinition, onCommit: {
-                        viewModel.isEditingDefinition = false
-                        viewModel.save()
-                    }).disableAutocorrection(true)
-                } else {
-                    Text(viewModel.word.definition ?? "")
-                        .contextMenu {
-                            Button("Edit", action: {
-                                viewModel.isEditingDefinition = true
-                            })
-                        }
-                }
+                TextField("Definition", text: $viewModel.definitionTextFieldStr)
             } header: {
                 Text("Definition")
             } footer: {
-                if !viewModel.isEditingDefinition {
-                    Button {
-                        viewModel.speak(viewModel.word.definition)
-                    } label: {
-                        Image(systemName: "speaker.wave.2.fill")
-                        Text("Listen")
-                    }
-                    .foregroundColor(.accentColor)
+                Button {
+                    viewModel.speak(viewModel.word.definition)
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                    Text("Listen")
                 }
+                .foregroundColor(.accentColor)
             }
             Section {
                 Button {
@@ -81,7 +66,7 @@ struct WordDetailsView: View {
                     Text("Add example")
                 }
 
-                ForEach(viewModel.examples, id: \.self) { example in
+                ForEach(viewModel.word.examplesDecoded, id: \.self) { example in
                     Text(example)
                 }
                 .onDelete(perform: viewModel.removeExample)
@@ -113,7 +98,6 @@ struct WordDetailsView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     viewModel.deleteCurrentWord()
-                    dismiss()
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
@@ -121,11 +105,9 @@ struct WordDetailsView: View {
             }
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
-                    // favorites
-                    viewModel.word.isFavorite.toggle()
-                    viewModel.save()
+                    viewModel.toggleFavorite()
                 } label: {
-                    Image(systemName: viewModel.word.isFavorite ?? false
+                    Image(systemName: viewModel.word.isFavorite
                           ? "heart.fill"
                           : "heart"
                     )
