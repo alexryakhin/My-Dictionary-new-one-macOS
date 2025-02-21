@@ -25,10 +25,16 @@ extension UserDefaults {
 }
 
 extension NotificationCenter {
-    var managedObjectContextDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+    var coreDataDidSavePublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
         return publisher(for: .NSManagedObjectContextDidSave).receive(on: DispatchQueue.main)
     }
-    var managedObjectContextDidMergeChangesObjectIDsPublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
+    var mergeChangesObjectIDsPublisher: Publishers.ReceiveOn<NotificationCenter.Publisher, DispatchQueue> {
         return publisher(for: .NSManagedObjectContextDidMergeChangesObjectIDs).receive(on: DispatchQueue.main)
+    }
+}
+
+extension String {
+    var trimmed: String {
+        lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

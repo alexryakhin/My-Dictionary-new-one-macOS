@@ -59,8 +59,8 @@ final class IdiomsProvider: IdiomsProviderInterface {
 
     private func setupBindings() {
         // every time core data gets updated, call fetchIdioms()
-        NotificationCenter.default.managedObjectContextDidMergeChangesObjectIDsPublisher
-            .combineLatest(NotificationCenter.default.managedObjectContextDidSavePublisher)
+        NotificationCenter.default.mergeChangesObjectIDsPublisher
+            .combineLatest(NotificationCenter.default.coreDataDidSavePublisher)
             .throttle(for: 1, scheduler: RunLoop.main, latest: true)
             .sink { [weak self] _ in
                 self?.fetchIdioms()

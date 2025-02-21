@@ -90,7 +90,7 @@ struct WordsListView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
-        .onReceive(NotificationCenter.default.managedObjectContextDidSavePublisher) { _ in
+        .onReceive(NotificationCenter.default.coreDataDidSavePublisher) { _ in
             contextDidSaveDate = .now
         }
     }

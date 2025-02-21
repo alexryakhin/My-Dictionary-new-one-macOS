@@ -84,7 +84,7 @@ struct SpellingQuizView: View {
         }
 
         if attemptCount > 2 {
-            return "Your word is '\(randomWord.wordItself!.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))'. Try harder :)"
+            return "Your word is '\(randomWord.wordItself!.trimmed)'. Try harder :)"
         } else {
             return "Incorrect. Try again"
         }
@@ -101,8 +101,7 @@ struct SpellingQuizView: View {
             return
         }
 
-        if answerTextField.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
-            == randomWord.wordItself!.lowercased().trimmingCharacters(in: .whitespacesAndNewlines) {
+        if answerTextField.trimmed == randomWord.wordItself!.trimmed {
             isRightAnswer = true
             answerTextField = ""
             playingWords.remove(at: wordIndex)

@@ -23,13 +23,13 @@ struct MyDictionaryApp: App {
         .windowStyle(TitleBarWindowStyle())
         .windowToolbarStyle(.unifiedCompact)
         #endif
-        
+
         #if !os(watchOS)
         .commands {
             DictionaryCommands()
         }
         #endif
-        
+
         #if os(macOS)
         Settings {
             DictionarySettings()

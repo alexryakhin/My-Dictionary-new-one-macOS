@@ -2,7 +2,7 @@ import SwiftUI
 
 struct WordDetailView: View {
     @ObservedObject private var wordsViewModel: WordsViewModel
-    
+
     @State private var isEditing = false
     @State private var isShowAddExample = false
     @State private var exampleTextFieldStr = ""

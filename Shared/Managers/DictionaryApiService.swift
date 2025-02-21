@@ -15,12 +15,12 @@ final class DictionaryApiService: DictionaryApiServiceInterface {
     private let baseURLString = "https://api.dictionaryapi.dev/api/v2/entries/en/"
 
     func getWords(for textInput: String) async throws -> [WordElement] {
-        let urlString = "\(baseURLString)\(textInput.lowercased().trimmingCharacters(in: .whitespacesAndNewlines))"
+        let urlString = "\(baseURLString)\(textInput.trimmed)"
 
         guard let url = URL(string: urlString) else {
             throw AppError.networkError(.urlError)
         }
-        
+
         let (data, _) = try await URLSession.shared.data(from: url)
 
         return try JSONDecoder().decode([WordElement].self, from: data)

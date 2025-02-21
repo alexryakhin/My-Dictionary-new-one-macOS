@@ -7,6 +7,7 @@ struct IdiomsListView: View {
     @StateObject private var viewModel: IdiomsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
+    @State private var contextDidSaveDate = Date.now
 
     init(viewModel: IdiomsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -37,6 +38,7 @@ struct IdiomsListView: View {
                             Text(idiomsCount)
                         }
                     }
+                    .id(contextDidSaveDate)
                 }
                 if viewModel.filterState == .search && idiomsToShow().count < 10 {
                     Button {
@@ -86,6 +88,9 @@ struct IdiomsListView: View {
             }
         }
         .navigationSplitViewStyle(.balanced)
+        .onReceive(NotificationCenter.default.coreDataDidSavePublisher) { _ in
+            contextDidSaveDate = .now
+        }
     }
 
     private func addItem() {

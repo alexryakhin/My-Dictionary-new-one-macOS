@@ -9,11 +9,6 @@ struct WordDetailsView: View {
     }
 
     var body: some View {
-        let bindingWordDefinition = Binding(
-            get: { viewModel.word.definition ?? "" },
-            set: { viewModel.word.definition = $0 }
-        )
-
         List {
             Section {
                 HStack {

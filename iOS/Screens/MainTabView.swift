@@ -35,7 +35,7 @@ struct MainTabView: View {
         })
     }
 
-    @ViewBuilder 
+    @ViewBuilder
     func tabView(for item: TabBarItem) -> some View {
         switch item {
         case .words:

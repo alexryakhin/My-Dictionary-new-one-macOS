@@ -76,7 +76,7 @@ struct WordsListView: View {
         .navigationTitle("Words")
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
             AddView(
-                isShowingAddView: $isShowingAddView, 
+                isShowingAddView: $isShowingAddView,
                 dictionaryViewModel: DictionaryViewModel(),
                 wordsViewModel: wordsViewModel
             )

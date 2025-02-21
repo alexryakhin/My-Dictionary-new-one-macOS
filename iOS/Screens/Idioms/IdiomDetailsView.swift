@@ -28,7 +28,7 @@ struct IdiomDetailsView: View {
 
             Section {
                 TextEditor(text: $viewModel.definitionTextFieldStr)
-                    .frame(height: UIScreen.main.bounds.height / 3)
+                    .frame(height: 200)
             } header: {
                 Text("Definition")
             } footer: {

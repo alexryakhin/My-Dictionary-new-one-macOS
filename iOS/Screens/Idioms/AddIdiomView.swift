@@ -20,14 +20,12 @@ struct AddIdiomView: View {
                 }
                 Section {
                     TextEditor(text: $viewModel.inputDefinition)
-                        .frame(height: UIScreen.main.bounds.height / 3)
+                        .frame(height: 200)
                 } header: {
                     Text("Definition")
                 }
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
+            .editModeDisabling()
             .navigationBarTitle("Add new idiom")
             .navigationBarItems(trailing: Button(action: {
                 viewModel.addIdiom()

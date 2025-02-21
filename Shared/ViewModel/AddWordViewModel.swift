@@ -65,9 +65,12 @@ final class AddWordViewModel: ObservableObject {
 
     private func setupBindings() {
         $inputWord
+            .dropFirst()
             .filter { !$0.isEmpty }
+            .removeDuplicates()
             .debounce(for: 1, scheduler: RunLoop.main)
-            .sink { [weak self] input in
+            .sink { [weak self] _ in
+                guard self?.status != .loading else { return }
                 self?.fetchData()
             }
             .store(in: &cancellables)

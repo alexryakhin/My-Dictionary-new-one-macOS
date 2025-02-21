@@ -94,7 +94,7 @@ final class UIAssembly: Assembly, Identifiable {
             return ChooseDefinitionView(viewModel: viewModel)
         }
 
-        container.register(SettingsView.self) { resolver in
+        container.register(SettingsView.self) { _ in
             let viewModel = SettingsViewModel()
             return SettingsView(viewModel: viewModel)
         }

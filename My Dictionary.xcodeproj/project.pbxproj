@@ -85,6 +85,13 @@
 		53DEC1BC2D65C7D200C9BDB2 /* WordDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DEC1BA2D65C7CF00C9BDB2 /* WordDetailsViewModel.swift */; };
 		53DEC1BE2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */; };
 		53DEC1BF2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */; };
+		53F0550F2D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */; };
+		53F055102D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */; };
+		53F055122D68F19B00764003 /* SpellingQuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */; };
+		53F055132D68F19B00764003 /* SpellingQuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */; };
+		53F055162D68F3E900764003 /* FormWithDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055152D68F3E900764003 /* FormWithDivider.swift */; };
+		53F055182D68F4B600764003 /* CellWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055172D68F4B600764003 /* CellWrapper.swift */; };
+		53F0551A2D68F50300764003 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055192D68F4FF00764003 /* View+Extension.swift */; };
 		9781DC0028D8E28400CFBC60 /* DictionarySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781DBFF28D8E28400CFBC60 /* DictionarySettings.swift */; };
 		C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CB279C51A20056968B /* IdiomsListViewMacOS.swift */; };
 		C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D9279C940E0056968B /* IdiomDetailViewMacOS.swift */; };
@@ -162,6 +169,11 @@
 		53DEC1B72D65C0D700C9BDB2 /* FetchingStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchingStatus.swift; sourceTree = "<group>"; };
 		53DEC1BA2D65C7CF00C9BDB2 /* WordDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailsViewModel.swift; sourceTree = "<group>"; };
 		53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomDetailsViewModel.swift; sourceTree = "<group>"; };
+		53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDefinitionViewModel.swift; sourceTree = "<group>"; };
+		53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingQuizViewModel.swift; sourceTree = "<group>"; };
+		53F055152D68F3E900764003 /* FormWithDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithDivider.swift; sourceTree = "<group>"; };
+		53F055172D68F4B600764003 /* CellWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellWrapper.swift; sourceTree = "<group>"; };
+		53F055192D68F4FF00764003 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		9781DBFF28D8E28400CFBC60 /* DictionarySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionarySettings.swift; sourceTree = "<group>"; };
 		9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryCommands.swift; sourceTree = "<group>"; };
 		C0358EF5279A84F800E9C452 /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
@@ -232,9 +244,11 @@
 			children = (
 				53DEC1BA2D65C7CF00C9BDB2 /* WordDetailsViewModel.swift */,
 				51EBFBEC270F4A9E0066782B /* AddWordViewModel.swift */,
+				53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */,
 				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
 				53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */,
 				C03908C3279C06080056968B /* IdiomsViewModel.swift */,
+				53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */,
 				53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */,
 				C03908C5279C062A0056968B /* QuizzesViewModel.swift */,
 				023A3DDA2AC96DFB00C8F68A /* SettingsViewModel.swift */,
@@ -387,6 +401,16 @@
 			path = App;
 			sourceTree = "<group>";
 		};
+		53F055142D68F3E500764003 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				53F055152D68F3E900764003 /* FormWithDivider.swift */,
+				53F055172D68F4B600764003 /* CellWrapper.swift */,
+				53F055192D68F4FF00764003 /* View+Extension.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		9781DBFE28D8E27000CFBC60 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
@@ -408,6 +432,7 @@
 		C0D377C4279984C900BE0726 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
+				53F055142D68F3E500764003 /* Views */,
 				C0D377C9279985E600BE0726 /* Helpers */,
 				C0D377C52799852800BE0726 /* Screens */,
 				02D769D52AC2BE6100E32328 /* Launch Screen.storyboard */,
@@ -546,6 +571,7 @@
 				028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */,
 				53DEC1972D65A79700C9BDB2 /* XCRemoteSwiftPackageReference "Swinject" */,
 				53DEC19C2D65A7C900C9BDB2 /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
+				53F0551B2D68F8FF00764003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			productRefGroup = 51423CD5270DE477006B94CB /* Products */;
 			projectDirPath = "";
@@ -594,7 +620,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "SWIFT_PACKAGE_DIR=\"${BUILD_DIR%Build/*}SourcePackages/artifacts\"\nSWIFTLINT_CMD=$(ls \"$SWIFT_PACKAGE_DIR\"/swiftlintplugins/SwiftLintBinary/SwiftLintBinary.artifactbundle/swiftlint-*-macos/bin/swiftlint | head -n 1)\n\nif test -f \"$SWIFTLINT_CMD\" 2>&1\nthen\n    \"$SWIFTLINT_CMD\"\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
 		};
 		C0183968279D2BC70034ED37 /* Swift Lint */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -612,7 +638,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "SWIFT_PACKAGE_DIR=\"${BUILD_DIR%Build/*}SourcePackages/artifacts\"\nSWIFTLINT_CMD=$(ls \"$SWIFT_PACKAGE_DIR\"/swiftlintplugins/SwiftLintBinary/SwiftLintBinary.artifactbundle/swiftlint-*-macos/bin/swiftlint | head -n 1)\n\nif test -f \"$SWIFTLINT_CMD\" 2>&1\nthen\n    \"$SWIFTLINT_CMD\"\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -621,6 +647,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53F0550F2D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */,
 				51423CDD270DE477006B94CB /* My_Dictionary.xcdatamodeld in Sources */,
 				C03908D7279C8B340056968B /* Extensions.swift in Sources */,
 				02FB1B8F2AC07DA80019D265 /* SpeechSynthesizer.swift in Sources */,
@@ -642,6 +669,8 @@
 				53DEC1B62D65BE5B00C9BDB2 /* DictionaryApiService.swift in Sources */,
 				51EBFBED270F4A9E0066782B /* AddWordViewModel.swift in Sources */,
 				517366EF270EFF860073651A /* WordDetailsView.swift in Sources */,
+				53F055132D68F19B00764003 /* SpellingQuizViewModel.swift in Sources */,
+				53F055162D68F3E900764003 /* FormWithDivider.swift in Sources */,
 				53DEC1B02D65AD4D00C9BDB2 /* AppError.swift in Sources */,
 				53DEC1B22D65B2E700C9BDB2 /* IdiomsProvider.swift in Sources */,
 				51EBFBEB270F4A970066782B /* WordCard.swift in Sources */,
@@ -650,6 +679,7 @@
 				C0D377BD27997D7000BE0726 /* Extensions(iOS).swift in Sources */,
 				51EBFBEF270F4AAB0066782B /* Words.swift in Sources */,
 				C03908C6279C062A0056968B /* QuizzesViewModel.swift in Sources */,
+				53F0551A2D68F50300764003 /* View+Extension.swift in Sources */,
 				C0D377BF27997FDC00BE0726 /* FilterCase.swift in Sources */,
 				C03908C4279C06080056968B /* IdiomsViewModel.swift in Sources */,
 				53DEC1A52D65A81200C9BDB2 /* DIContainer.swift in Sources */,
@@ -665,6 +695,7 @@
 				5395A2232D65EFC90098BD07 /* Word+CoreDataClass.swift in Sources */,
 				517366E6270EB99C0073651A /* QuizzesView.swift in Sources */,
 				02523C642AEEC897007E9A2D /* Quiz.swift in Sources */,
+				53F055182D68F4B600764003 /* CellWrapper.swift in Sources */,
 				02FB1B932AC0B6FF0019D265 /* EmptyListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +705,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				519B8AA32711A013003E5EDD /* ChooseDefinitionView.swift in Sources */,
+				53F055122D68F19B00764003 /* SpellingQuizViewModel.swift in Sources */,
 				51719142270F86370077B3C8 /* AddWordViewModel.swift in Sources */,
 				02FB1B902AC09F230019D265 /* SpeechSynthesizer.swift in Sources */,
 				53DEC1B52D65BE5B00C9BDB2 /* DictionaryApiService.swift in Sources */,
@@ -713,6 +745,7 @@
 				53DEC1A82D65A81200C9BDB2 /* DIContainer.swift in Sources */,
 				53DEC1A92D65A81200C9BDB2 /* ServiceAssembly.swift in Sources */,
 				53DEC1AA2D65A81200C9BDB2 /* UIAssembly.swift in Sources */,
+				53F055102D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */,
 				C0D377C22799833700BE0726 /* SortingCase.swift in Sources */,
 				51719138270F71850077B3C8 /* ExtensionsMacOS.swift in Sources */,
 				023A3DDC2AC96E0700C8F68A /* SettingsViewModel.swift in Sources */,
@@ -1033,6 +1066,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 2.9.1;
+			};
+		};
+		53F0551B2D68F8FF00764003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.58.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

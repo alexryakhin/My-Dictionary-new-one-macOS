@@ -12,43 +12,36 @@ struct AddWordView: View {
     var body: some View {
         NavigationView {
             VStack {
-                VStack(alignment: .leading, spacing: 11) {
-                    TextField("Enter your word", text: $viewModel.inputWord, onCommit: {
-                        if !viewModel.inputWord.isEmpty {
-                            viewModel.fetchData()
-                        } else {
-                            // TODO: snack
-                            print("type a word")
-                        }
-                    })
-                    .padding(.horizontal)
-                    .padding(.top, 11)
-
-                    Divider().padding(.leading)
-
-                    TextField("Word's definition", text: $viewModel.descriptionField)
-                        .padding(.horizontal)
-
-                    Divider().padding(.leading)
-
-                    partOfSpeechMenu
-
-                    Divider().padding(.leading)
-
-                    Button {
-                        viewModel.fetchData()
-                        hideKeyboard()
-                    } label: {
-                        Text("Get definitions from the Internet")
-                            .padding(.vertical, 1)
+                FormWithDivider {
+                    CellWrapper {
+                        TextField("Enter your word", text: $viewModel.inputWord, onCommit: {
+                            if !viewModel.inputWord.isEmpty {
+                                viewModel.fetchData()
+                            } else {
+                                // TODO: snack
+                                print("type a word")
+                            }
+                        })
                     }
-                    .padding(.bottom, 11)
-                    .foregroundColor(viewModel.inputWord.isEmpty ? Color.gray.opacity(0.5) : .green)
-                    .cornerRadius(10)
-                    .padding(.horizontal)
+
+                    CellWrapper {
+                        TextField("Word's definition", text: $viewModel.descriptionField)
+                    }
+
+                    CellWrapper {
+                        partOfSpeechMenu
+                    }
+
+                    CellWrapper {
+                        Text("Get definitions from the Internet")
+                    } onTapAction: {
+                        viewModel.fetchData()
+                        UIApplication.shared.endEditing()
+                    }
                     .disabled(viewModel.inputWord.isEmpty)
                 }
-                .background(Color(.tableBackground).cornerRadius(10))
+                .background(Color.surface)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal)
 
                 detailsView
@@ -57,9 +50,7 @@ struct AddWordView: View {
             .background(
                 Color(.background)
                     .ignoresSafeArea()
-                    .onTapGesture(perform: {
-                        hideKeyboard()
-                    })
+                    .editModeDisabling()
             )
             .navigationBarTitle("Add new word")
             .toolbar {
@@ -92,9 +83,7 @@ struct AddWordView: View {
                 .padding()
             Spacer()
         }
-        .onTapGesture {
-            hideKeyboard()
-        }
+        .editModeDisabling()
     }
 
     var blankView: some View {
@@ -106,9 +95,7 @@ struct AddWordView: View {
                 .padding()
             Spacer()
         }
-        .onTapGesture {
-            hideKeyboard()
-        }
+        .editModeDisabling()
     }
 
     var loadingView: some View {
@@ -117,9 +104,7 @@ struct AddWordView: View {
             ProgressView()
             Spacer()
         }
-        .onTapGesture {
-            hideKeyboard()
-        }
+        .editModeDisabling()
     }
 
     var detailsView: some View {
@@ -157,35 +142,14 @@ struct AddWordView: View {
 
                     WordCard(wordMeanings: result.meanings) { descriptionStr, partOfSpeechStr in
                         viewModel.descriptionField = descriptionStr
-
-                        switch partOfSpeechStr {
-                        case "noun":
-                            viewModel.partOfSpeech = .noun
-                        case "verb":
-                            viewModel.partOfSpeech = .verb
-                        case "adjective":
-                            viewModel.partOfSpeech = .adjective
-                        case "adverb":
-                            viewModel.partOfSpeech = .adverb
-                        case "exclamation":
-                            viewModel.partOfSpeech = .exclamation
-                        case "conjunction":
-                            viewModel.partOfSpeech = .conjunction
-                        case "pronoun":
-                            viewModel.partOfSpeech = .pronoun
-                        case "number":
-                            viewModel.partOfSpeech = .number
-                        default:
-                            viewModel.partOfSpeech = .unknown
-                        }
-
-                        hideKeyboard()
+                        viewModel.partOfSpeech = .init(rawValue: partOfSpeechStr) ?? .unknown
+                        UIApplication.shared.endEditing()
                     }
                     .onAppear {
                         if let meaning = result.meanings.first,
                            let definition = meaning.definitions.first {
                             viewModel.descriptionField = definition.definition
-                            viewModel.partOfSpeech = .noun
+                            viewModel.partOfSpeech = .init(rawValue: meaning.partOfSpeech) ?? .unknown
                         }
                     }
                 }
@@ -212,7 +176,6 @@ struct AddWordView: View {
                 ? "Part of speech"
                 : viewModel.partOfSpeech.rawValue
             )
-            .padding(.horizontal)
             .foregroundColor(
                 viewModel.partOfSpeech == .unknown
                 ? Color.accentColor
