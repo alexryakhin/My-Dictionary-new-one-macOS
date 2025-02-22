@@ -8,6 +8,7 @@ struct WordsListView: View {
     @Binding private var selectedWord: Word?
     @StateObject private var viewModel: WordsViewModel
     @State private var isShowingAddView = false
+    @State private var contextDidSaveDate = Date.now
 
     init(
         selectedWord: Binding<Word?>,
@@ -18,34 +19,41 @@ struct WordsListView: View {
     }
 
     var body: some View {
-        List(selection: $selectedWord) {
-            Section {
-                // Search, if user type something into search field, show filtered array
-                ForEach(viewModel.wordsFiltered) { word in
-                    NavigationLink(value: word) {
-                        WordsListCellView(model: .init(
-                            word: word.wordItself ?? "word",
-                            isFavorite: word.isFavorite,
-                            partOfSpeech: word.partOfSpeech ?? "")
-                        )
+        ScrollView(showsIndicators: false) {
+            ListWithDivider(viewModel.wordsFiltered) { word in
+                WordsListCellView(
+                    model: .init(
+                        word: word.wordItself ?? "word",
+                        partOfSpeech: word.partOfSpeech ?? "",
+                        isFavorite: word.isFavorite,
+                        isSelected: selectedWord?.id == word.id
+                    ) {
+                        selectedWord = word
                     }
-                }
-                .onDelete(perform: viewModel.deleteWord)
+                )
+            }
+            .id(contextDidSaveDate)
 
-                if viewModel.filterState == .search && viewModel.wordsFiltered.count < 10 {
-                    Button("Add '\(viewModel.searchText.trimmed)'") {
-                        isShowingAddView = true
-                    }
+            if viewModel.filterState == .search && viewModel.wordsFiltered.count < 10 {
+                Button {
+                    isShowingAddView = true
+                } label: {
+                    Text("Add '\(viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                 }
-            } header: {
-                toolbar
-            } footer: {
-                if !viewModel.wordsFiltered.isEmpty {
-                    Text(viewModel.wordsCount)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 5)
-                }
+            }
+        }
+        .safeAreaInset(edge: .top) {
+            toolbar
+                .background(.regularMaterial)
+        }
+        .safeAreaInset(edge: .bottom) {
+            if !viewModel.wordsFiltered.isEmpty {
+                Text(viewModel.wordsCount)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(12)
+                    .background(.regularMaterial)
             }
         }
         .navigationTitle("Words")
@@ -55,13 +63,16 @@ struct WordsListView: View {
         .onDisappear {
             selectedWord = nil
         }
+        .onReceive(NotificationCenter.default.coreDataDidSavePublisher) { _ in
+            contextDidSaveDate = .now
+        }
     }
 
     // MARK: - Toolbar
 
     private var toolbar: some View {
-        VStack(spacing: 16) {
-            HStack {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
                 sortMenu
                 Button {
                     isShowingAddView = true
@@ -70,14 +81,19 @@ struct WordsListView: View {
                         .foregroundColor(.accentColor)
                 }
             }
-            HStack {
+            HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
                 TextField("Search", text: $viewModel.searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
+                    .textFieldStyle(.plain)
             }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 8)
+            .background(.separator)
+            .clipShape(RoundedRectangle(cornerRadius: 4))
         }
-        .padding(8)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
     }
 
     // MARK: - Sort Menu

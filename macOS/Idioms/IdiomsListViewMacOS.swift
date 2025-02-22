@@ -7,6 +7,7 @@ struct IdiomsListView: View {
     @Binding private var selectedIdiom: Idiom?
     @StateObject private var viewModel: IdiomsViewModel
     @State private var isShowingAddView = false
+    @State private var contextDidSaveDate = Date.now
 
     init(
         selectedIdiom: Binding<Idiom?>,
@@ -17,34 +18,40 @@ struct IdiomsListView: View {
     }
 
     var body: some View {
-        List(selection: $selectedIdiom) {
-            Section {
-                // Search, if user type something into search field, show filtered array
-                ForEach(idiomsToShow()) { idiom in
-                    NavigationLink(value: idiom) {
-                        IdiomsListCellView(model: .init(
-                            idiom: idiom.idiomItself ?? "idiom",
-                            isFavorite: idiom.isFavorite)
-                        )
+        ScrollView(showsIndicators: false) {
+            ListWithDivider(idiomsToShow()) { idiom in
+                IdiomsListCellView(
+                    model: .init(
+                        idiom: idiom.idiomItself ?? "idiom",
+                        isFavorite: idiom.isFavorite,
+                        isSelected: selectedIdiom?.id == idiom.id
+                    ) {
+                        selectedIdiom = idiom
                     }
+                )
+            }
+            .id(contextDidSaveDate)
+
+            if viewModel.filterState == .search && idiomsToShow().count < 10 {
+                Button {
+                    showAddView()
+                } label: {
+                    Text("Add '\(viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
                 }
-                .onDelete(perform: viewModel.deleteIdiom)
-                if viewModel.filterState == .search && idiomsToShow().count < 10 {
-                    Button {
-                        showAddView()
-                    } label: {
-                        Text("Add '\(viewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
-                    }
-                }
-            } header: {
-                toolbar
-            } footer: {
-                if !idiomsToShow().isEmpty {
-                    Text(idiomCount)
-                        .font(.footnote)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 5)
-                }
+            }
+        }
+        .safeAreaInset(edge: .top) {
+            toolbar
+                .background(.regularMaterial)
+        }
+        .safeAreaInset(edge: .bottom) {
+            if !idiomsToShow().isEmpty {
+                Text(idiomCount)
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(12)
+                    .background(.regularMaterial)
             }
         }
         .navigationTitle("Idioms")
@@ -56,13 +63,16 @@ struct IdiomsListView: View {
         .onDisappear {
             selectedIdiom = nil
         }
+        .onReceive(NotificationCenter.default.coreDataDidSavePublisher) { _ in
+            contextDidSaveDate = .now
+        }
     }
 
     // MARK: - Toolbar
 
     private var toolbar: some View {
-        VStack(spacing: 16) {
-            HStack {
+        VStack(spacing: 8) {
+            HStack(spacing: 8) {
                 sortMenu
                 Button {
                     showAddView()
@@ -71,14 +81,19 @@ struct IdiomsListView: View {
                         .foregroundColor(.accentColor)
                 }
             }
-            HStack {
+            HStack(spacing: 8) {
                 Image(systemName: "magnifyingglass")
                     .foregroundColor(.gray)
                 TextField("Search", text: $viewModel.searchText)
-                    .textFieldStyle(PlainTextFieldStyle())
+                    .textFieldStyle(.plain)
             }
+            .padding(.vertical, 4)
+            .padding(.horizontal, 8)
+            .background(.separator)
+            .clipShape(RoundedRectangle(cornerRadius: 4))
         }
-        .padding(8)
+        .padding(.vertical, 12)
+        .padding(.horizontal, 16)
     }
 
     private var idiomCount: String {

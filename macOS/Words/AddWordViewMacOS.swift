@@ -28,7 +28,7 @@ struct AddWordView: View {
                 TextField("Enter the word", text: $viewModel.inputWord, onCommit: {
                     viewModel.fetchData()
                 })
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
 
                 Button {
                     viewModel.fetchData()
@@ -37,7 +37,7 @@ struct AddWordView: View {
                 }
             }
             TextField("Enter definition", text: $viewModel.descriptionField)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .textFieldStyle(.roundedBorder)
 
             if viewModel.resultWordDetails == nil {
                 Picker(selection: $viewModel.partOfSpeech, label: Text("Part of Speech")) {
@@ -52,6 +52,11 @@ struct AddWordView: View {
                     Picker(selection: $wordClassSelection, label: Text("Part of Speech")) {
                         ForEach(viewModel.resultWordDetails!.meanings.indices, id: \.self) { index in
                             Text("\(viewModel.resultWordDetails!.meanings[index].partOfSpeech)")
+                        }
+                    }
+                    .onChange(of: wordClassSelection) { newValue in
+                        if let value = viewModel.resultWordDetails?.meanings[newValue].partOfSpeech {
+                            viewModel.partOfSpeech = .init(rawValue: value) ?? .unknown
                         }
                     }
 
@@ -118,7 +123,9 @@ struct AddWordView: View {
 
             Button {
                 viewModel.saveWord()
-                dismiss()
+                if !viewModel.showingAlert {
+                    dismiss()
+                }
             } label: {
                 Text("Save")
                     .bold()
@@ -126,11 +133,12 @@ struct AddWordView: View {
         }
         .frame(width: 600, height: 500)
         .padding()
-        .alert(isPresented: $viewModel.showingAlert, content: {
+        .alert(isPresented: $viewModel.showingAlert) {
             Alert(
                 title: Text("Ooops..."),
                 message: Text("You should enter a word and its definition before saving it"),
-                dismissButton: .default(Text("Got it")))
-        })
+                dismissButton: .default(Text("Got it"))
+            )
+        }
     }
 }

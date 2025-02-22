@@ -41,7 +41,7 @@ final class IdiomsViewModel: ObservableObject {
     }
 
     // MARK: Removing from CD
-    func deleteIdiom(offsets: IndexSet) {
+    func deleteIdiom(atOffsets offsets: IndexSet) {
         switch filterState {
         case .none:
             withAnimation {
@@ -85,12 +85,12 @@ final class IdiomsViewModel: ObservableObject {
     func sortIdioms() {
         switch sortingState {
         case .def:
-            idioms.sort(by: { idiom1, idiom2 in
-                idiom1.timestamp! < idiom2.timestamp!
+            idioms.sort(by: { lhs, rhs in
+                lhs.timestamp ?? .now < rhs.timestamp ?? .now
             })
         case .name:
-            idioms.sort(by: { idiom1, idiom2 in
-                idiom1.idiomItself! < idiom2.idiomItself!
+            idioms.sort(by: { lhs, rhs in
+                lhs.idiomItself! < rhs.idiomItself!
             })
         case .partOfSpeech:
             break

@@ -42,7 +42,7 @@ struct SpellingQuizView: View {
                     })
                     .frame(maxWidth: 300)
                     .multilineTextAlignment(.center)
-                    .textFieldStyle(PlainTextFieldStyle())
+                    .textFieldStyle(.plain)
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal)

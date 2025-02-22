@@ -27,6 +27,7 @@ struct AddIdiomView: View {
             }
             .padding(.top)
             TextField("Idiom", text: $viewModel.inputText)
+                .textFieldStyle(.roundedBorder)
             HStack {
                 Text("DEFINITION")
                     .font(.system(.caption, design: .rounded))

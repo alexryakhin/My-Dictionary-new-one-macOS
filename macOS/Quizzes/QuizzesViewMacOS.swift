@@ -4,9 +4,14 @@ import SwinjectAutoregistration
 
 struct QuizzesView: View {
     private let resolver = DIContainer.shared.resolver
+    @Binding private var selectedQuiz: Quiz?
     @StateObject private var viewModel: QuizzesViewModel
 
-    init(viewModel: QuizzesViewModel) {
+    init(
+        selectedQuiz: Binding<Quiz?>,
+        viewModel: QuizzesViewModel
+    ) {
+        self._selectedQuiz = selectedQuiz
         self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
@@ -27,25 +32,23 @@ struct QuizzesView: View {
                     Spacer()
                 }
             } else {
-                List(Quiz.allCases) { quiz in
-                    NavigationLink(destination: quizView(for: quiz)) {
-                        Text(quiz.title)
-                            .padding(.vertical, 8)
+                ScrollView(showsIndicators: false) {
+                    ListWithDivider(Quiz.allCases) { quiz in
+                        QuizzesListCellView(
+                            model: .init(
+                                text: quiz.title,
+                                isSelected: selectedQuiz == quiz
+                            ) {
+                                selectedQuiz = quiz
+                            }
+                        )
                     }
                 }
-                .font(.title3)
             }
         }
         .navigationTitle("Quizzes")
-    }
-
-    @ViewBuilder
-    func quizView(for quiz: Quiz) -> some View {
-        switch quiz {
-        case .spelling:
-            resolver ~> SpellingQuizView.self
-        case .chooseDefinitions:
-            resolver ~> ChooseDefinitionView.self
+        .onDisappear {
+            selectedQuiz = nil
         }
     }
 }

@@ -121,10 +121,9 @@ struct IdiomDetailsView: View {
 
                 if viewModel.isShowAddExample {
                     TextField("Type an example here", text: $viewModel.exampleTextFieldStr, onCommit: {
-                        withAnimation(.easeInOut) {
-                            viewModel.addExample()
-                        }
+                        viewModel.addExample()
                     })
+                    .textFieldStyle(.roundedBorder)
                 }
             }
         }

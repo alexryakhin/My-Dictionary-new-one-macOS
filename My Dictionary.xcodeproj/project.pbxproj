@@ -87,6 +87,8 @@
 		53EE84C32D69C4AF00C4566F /* UDKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 023A3DDD2AC9710800C8F68A /* UDKeys.swift */; };
 		53EE84C62D69C74F00C4566F /* IdiomListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EE84C52D69C74F00C4566F /* IdiomListCellView.swift */; };
 		53EE84C82D69D92100C4566F /* IdiomsListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EE84C72D69D92100C4566F /* IdiomsListCellView.swift */; };
+		53EE84CA2D69E07600C4566F /* ListWithDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EE84C92D69E07600C4566F /* ListWithDivider.swift */; };
+		53EE84CC2D69ED7400C4566F /* QuizzesListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EE84CB2D69ED7400C4566F /* QuizzesListCellView.swift */; };
 		53F0550F2D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */; };
 		53F055102D68EE0B00764003 /* ChooseDefinitionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */; };
 		53F055122D68F19B00764003 /* SpellingQuizViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */; };
@@ -176,6 +178,8 @@
 		53EE84C02D69C1BF00C4566F /* GlobalConstant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalConstant.swift; sourceTree = "<group>"; };
 		53EE84C52D69C74F00C4566F /* IdiomListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomListCellView.swift; sourceTree = "<group>"; };
 		53EE84C72D69D92100C4566F /* IdiomsListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListCellView.swift; sourceTree = "<group>"; };
+		53EE84C92D69E07600C4566F /* ListWithDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListWithDivider.swift; sourceTree = "<group>"; };
+		53EE84CB2D69ED7400C4566F /* QuizzesListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesListCellView.swift; sourceTree = "<group>"; };
 		53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDefinitionViewModel.swift; sourceTree = "<group>"; };
 		53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingQuizViewModel.swift; sourceTree = "<group>"; };
 		53F055152D68F3E900764003 /* FormWithDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithDivider.swift; sourceTree = "<group>"; };
@@ -374,6 +378,7 @@
 			isa = PBXGroup;
 			children = (
 				519B8A9E27119D7F003E5EDD /* QuizzesViewMacOS.swift */,
+				53EE84CB2D69ED7400C4566F /* QuizzesListCellView.swift */,
 				519B8AA027119FE4003E5EDD /* SpellingQuizView.swift */,
 				519B8AA22711A013003E5EDD /* ChooseDefinitionView.swift */,
 			);
@@ -386,6 +391,7 @@
 				51719137270F71850077B3C8 /* ExtensionsMacOS.swift */,
 				5171913D270F76090077B3C8 /* BlurView.swift */,
 				51719139270F74F20077B3C8 /* SidebarItem.swift */,
+				53EE84C92D69E07600C4566F /* ListWithDivider.swift */,
 			);
 			path = Resourses;
 			sourceTree = "<group>";
@@ -759,6 +765,8 @@
 				5171913A270F74F20077B3C8 /* SidebarItem.swift in Sources */,
 				C03908D8279C8B340056968B /* Extensions.swift in Sources */,
 				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
+				53EE84CA2D69E07600C4566F /* ListWithDivider.swift in Sources */,
+				53EE84CC2D69ED7400C4566F /* QuizzesListCellView.swift in Sources */,
 				53DEC1BC2D65C7D200C9BDB2 /* WordDetailsViewModel.swift in Sources */,
 				53DEC1AF2D65AD4D00C9BDB2 /* AppError.swift in Sources */,
 				51719135270F6F970077B3C8 /* AddWordViewMacOS.swift in Sources */,

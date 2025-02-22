@@ -2,9 +2,8 @@ import SwiftUI
 
 struct WordDetailsView: View {
     @ObservedObject private var viewModel: WordDetailsViewModel
-
+    @State private var contextDidSaveDate = Date.now
     @State private var isEditing = false
-    @State private var partOfSpeech: PartOfSpeech = .noun
 
     init(viewModel: WordDetailsViewModel) {
         self._viewModel = ObservedObject(wrappedValue: viewModel)
@@ -32,16 +31,12 @@ struct WordDetailsView: View {
             }
 
             Button(isEditing ? "Save" : "Edit") {
-                if !isEditing {
-                    viewModel.changePartOfSpeech(partOfSpeech.rawValue)
-                }
                 isEditing.toggle()
             }
         }
-        .onAppear {
-            if let partOfSpeechRawValue = viewModel.word.partOfSpeech {
-                partOfSpeech = PartOfSpeech(rawValue: partOfSpeechRawValue) ?? .unknown
-            }
+        .id(contextDidSaveDate)
+        .onReceive(NotificationCenter.default.coreDataDidSavePublisher) { _ in
+            contextDidSaveDate = .now
         }
     }
 
@@ -76,9 +71,14 @@ struct WordDetailsView: View {
                     Text("Part Of Speech: ").bold()
                     + Text(viewModel.word.partOfSpeech ?? "")
                 } else {
-                    Picker(selection: $partOfSpeech, label: Text("Part of Speech").bold()) {
+                    Picker(selection: Binding(get: {
+                        viewModel.word.partOfSpeech ?? ""
+                    }, set: { newValue in
+                        viewModel.changePartOfSpeech(newValue)
+                    }), label: Text("Part of Speech").bold()) {
                         ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
                             Text(partCase.rawValue)
+                                .tag(partCase.rawValue)
                         }
                     }
                 }
@@ -91,7 +91,7 @@ struct WordDetailsView: View {
                 if isEditing {
                     Text("Definition: ").bold()
                     TextField("Definition", text: $viewModel.definitionTextFieldStr)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .textFieldStyle(.roundedBorder)
                 } else {
                     Text("Definition: ").bold()
                     + Text(viewModel.word.definition ?? "")
@@ -154,6 +154,7 @@ struct WordDetailsView: View {
                             viewModel.saveExample()
                         }
                     })
+                    .textFieldStyle(.roundedBorder)
                 }
             }
         }

@@ -161,11 +161,11 @@ final class UIAssembly: Assembly, Identifiable {
             return IdiomDetailsView(viewModel: viewModel)
         }
 
-        container.register(QuizzesView.self) { resolver in
+        container.register(QuizzesView.self) { (resolver: Resolver, selectedQuiz: Binding<Quiz?>) in
             let viewModel = QuizzesViewModel(
                 wordsProvider: resolver ~> WordsProviderInterface.self
             )
-            return QuizzesView(viewModel: viewModel)
+            return QuizzesView(selectedQuiz: selectedQuiz, viewModel: viewModel)
         }
 
         container.register(SpellingQuizView.self) { resolver in
