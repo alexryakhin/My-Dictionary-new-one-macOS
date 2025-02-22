@@ -1,30 +1,33 @@
 import SwiftUI
 
 struct SpellingQuizView: View {
-    @ObservedObject private var viewModel: SpellingQuizViewModel
+    @StateObject private var viewModel: SpellingQuizViewModel
 
-    @State private var randomWord: Word?
-    @State private var answerTextField = ""
-    @State private var isRightAnswer = true
-    @State private var attemptCount = 0
-    @State private var isShowAlert = false
-    @State private var playingWords: [Word] = []
+    private var incorrectMessage: String {
+        guard let randomWord = viewModel.randomWord else { return "" }
+
+        if viewModel.attemptCount > 2 {
+            return "Your word is '\(randomWord.wordItself!.trimmed)'. Try harder :)"
+        } else {
+            return "Incorrect. Try again"
+        }
+    }
 
     init(viewModel: SpellingQuizViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
 
-            Text(randomWord?.definition ?? "Error")
+            Text(viewModel.randomWord?.definition ?? "Error")
                 .font(.title)
                 .bold()
                 .padding(.horizontal, 30)
                 .multilineTextAlignment(.center)
 
-            Text(randomWord?.partOfSpeech ?? "error")
+            Text(viewModel.randomWord?.partOfSpeech ?? "error")
                 .foregroundColor(.secondary)
 
             Spacer()
@@ -34,14 +37,12 @@ struct SpellingQuizView: View {
                     .foregroundColor(.secondary).font(.caption)
 
                 HStack {
-                    TextField("Answer", text: $answerTextField, onCommit: {
-                        withAnimation {
-                            checkAnswer()
-                        }
+                    TextField("Answer", text: $viewModel.answerTextField, onCommit: {
+                        viewModel.confirmAnswer()
                     })
-                        .frame(maxWidth: 300)
-                        .multilineTextAlignment(.center)
-                        .textFieldStyle(PlainTextFieldStyle())
+                    .frame(maxWidth: 300)
+                    .multilineTextAlignment(.center)
+                    .textFieldStyle(PlainTextFieldStyle())
                 }
                 .padding(.vertical, 8)
                 .padding(.horizontal)
@@ -49,71 +50,18 @@ struct SpellingQuizView: View {
                 .cornerRadius(8)
                 .padding(.horizontal, 20)
             }
-            Text(isRightAnswer ? "" : incorrectMessage)
+            Text(viewModel.isCorrectAnswer ? "" : incorrectMessage)
 
             Button {
-                withAnimation {
-                    checkAnswer()
-                }
+                viewModel.confirmAnswer()
             } label: {
                 Text("Confirm answer")
-            }.disabled(answerTextField.isEmpty)
+            }
+            .disabled(viewModel.answerTextField.isEmpty)
 
             Spacer().frame(height: 100)
 
         }
         .navigationTitle("Spelling")
-        .onAppear {
-            playingWords = quizzesViewModel.words
-            randomWord = playingWords.randomElement()
-        }
-        .alert(isPresented: $isShowAlert, content: {
-            Alert(
-                title: Text("Congratulations"),
-                message: Text("You got all your words!"),
-                dismissButton: .default(Text("Okay"), action: {
-                // game over
-            }))
-        })
-
-    }
-
-    private var incorrectMessage: String {
-        guard let randomWord = randomWord else {
-            return ""
-        }
-
-        if attemptCount > 2 {
-            return "Your word is '\(randomWord.wordItself!.trimmed)'. Try harder :)"
-        } else {
-            return "Incorrect. Try again"
-        }
-    }
-
-    private func checkAnswer() {
-        guard let randomWord = randomWord else {
-            return
-        }
-
-        guard let wordIndex = playingWords.firstIndex(where: {
-            $0.id == randomWord.id
-        }) else {
-            return
-        }
-
-        if answerTextField.trimmed == randomWord.wordItself!.trimmed {
-            isRightAnswer = true
-            answerTextField = ""
-            playingWords.remove(at: wordIndex)
-            attemptCount = 0
-            if !playingWords.isEmpty {
-                self.randomWord = playingWords.randomElement()
-            } else {
-                isShowAlert = true
-            }
-        } else {
-            isRightAnswer = false
-            attemptCount += 1
-        }
     }
 }

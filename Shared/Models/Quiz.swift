@@ -7,9 +7,11 @@
 
 import Foundation
 
-public enum Quiz: CaseIterable {
+enum Quiz: String, CaseIterable, Identifiable {
     case spelling
     case chooseDefinitions
+
+    var id: String { rawValue }
 
     var title: String {
         switch self {

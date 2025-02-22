@@ -58,7 +58,10 @@ struct SpellingQuizView: View {
             .listStyle(.insetGrouped)
             .navigationTitle("Spelling")
         } else {
-            EmptyListView(text: "Congratulations!\nYou got all your words!")
+            EmptyListView(
+                label: "Congratulations!",
+                description: "You got all your words!"
+            )
         }
     }
 }

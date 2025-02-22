@@ -1,18 +1,11 @@
 import SwiftUI
 
-struct AddIdiomViewMacOS: View {
-    @Binding private var isShowingAddView: Bool
-    @ObservedObject private var idiomsViewModel: IdiomsViewModel
-    @State private var showingAlert = false
-    @State private var inputIdiom: String = ""
-    @State private var inputDefinition: String = ""
+struct AddIdiomView: View {
+    @Environment(\.dismiss) var dismiss
+    @StateObject private var viewModel: AddIdiomViewModel
 
-    init(
-        isShowingAddView: Binding<Bool>,
-        idiomsViewModel: IdiomsViewModel
-    ) {
-        self._isShowingAddView = isShowingAddView
-        self.idiomsViewModel = idiomsViewModel
+    init(viewModel: AddIdiomViewModel) {
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -21,53 +14,45 @@ struct AddIdiomViewMacOS: View {
                 Text("Add new idiom").font(.title2).bold()
                 Spacer()
                 Button {
-                    isShowingAddView = false
+                    dismiss()
                 } label: {
                     Text("Close")
                 }
             }
             HStack {
-                Text("IDIOM").font(.system(.caption, design: .rounded)).foregroundColor(.secondary)
+                Text("IDIOM")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.secondary)
                 Spacer()
             }
             .padding(.top)
-            TextField("Idiom", text: $inputIdiom)
+            TextField("Idiom", text: $viewModel.inputText)
             HStack {
-                Text("DEFINITION").font(.system(.caption, design: .rounded)).foregroundColor(.secondary)
+                Text("DEFINITION")
+                    .font(.system(.caption, design: .rounded))
+                    .foregroundColor(.secondary)
                 Spacer()
             }
             .padding(.top)
-            TextEditor(text: $inputDefinition)
+            TextEditor(text: $viewModel.inputDefinition)
                 .padding(1)
                 .background(Color.secondary.opacity(0.4))
             Button {
-                saveNewIdiom()
+                viewModel.addIdiom()
+                dismiss()
             } label: {
-                Text("Save").bold()
+                Text("Save")
+                    .bold()
             }
         }
         .frame(width: 500, height: 300)
         .padding()
-        .alert(isPresented: $showingAlert, content: {
+        .alert(isPresented: $viewModel.isShowingAlert) {
             Alert(
                 title: Text("Ooops..."),
                 message: Text("You should enter an idiom and its definition before saving it"),
-                dismissButton: .default(Text("Got it")))
-        })
-        .onAppear {
-            if !idiomsViewModel.searchText.isEmpty {
-                inputIdiom = idiomsViewModel.searchText
-            }
-        }
-    }
-
-    private func saveNewIdiom() {
-        if !inputIdiom.isEmpty, !inputDefinition.isEmpty {
-            idiomsViewModel.addNewIdiom(idiom: inputIdiom, definition: inputDefinition)
-            idiomsViewModel.searchText = ""
-            isShowingAddView = false
-        } else {
-            showingAlert = true
+                dismissButton: .default(Text("Got it"))
+            )
         }
     }
 }

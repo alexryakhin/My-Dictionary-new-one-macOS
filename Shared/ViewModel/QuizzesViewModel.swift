@@ -2,7 +2,6 @@ import SwiftUI
 import Combine
 
 final class QuizzesViewModel: ObservableObject {
-    @Published var selectedQuiz: Quiz?
     @Published var words: [Word] = []
 
     private let wordsProvider: WordsProviderInterface

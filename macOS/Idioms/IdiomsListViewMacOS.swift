@@ -1,26 +1,32 @@
 import SwiftUI
-import CoreData
+import Swinject
+import SwinjectAutoregistration
 
 struct IdiomsListView: View {
-    @ObservedObject private var viewModel: IdiomsViewModel
+    private let resolver = DIContainer.shared.resolver
+    @Binding private var selectedIdiom: Idiom?
+    @StateObject private var viewModel: IdiomsViewModel
     @State private var isShowingAddView = false
 
-    init(viewModel: IdiomsViewModel) {
-        self.viewModel = viewModel
+    init(
+        selectedIdiom: Binding<Idiom?>,
+        viewModel: IdiomsViewModel
+    ) {
+        self._selectedIdiom = selectedIdiom
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
-        List(selection: $viewModel.selectedIdiom) {
+        List(selection: $selectedIdiom) {
             Section {
                 // Search, if user type something into search field, show filtered array
                 ForEach(idiomsToShow()) { idiom in
-                    NavigationLink(destination: IdiomDetailViewMacOS(viewModel: viewModel)) {
-                            IdiomsListCellView(model: .init(
-                                idiom: idiom.idiomItself ?? "idiom",
-                                isFavorite: idiom.isFavorite)
-                            )
-                        }
-                        .tag(idiom)
+                    NavigationLink(value: idiom) {
+                        IdiomsListCellView(model: .init(
+                            idiom: idiom.idiomItself ?? "idiom",
+                            isFavorite: idiom.isFavorite)
+                        )
+                    }
                 }
                 .onDelete(perform: viewModel.deleteIdiom)
                 if viewModel.filterState == .search && idiomsToShow().count < 10 {
@@ -31,35 +37,7 @@ struct IdiomsListView: View {
                     }
                 }
             } header: {
-                // MARK: - Toolbar
-                VStack(spacing: 16) {
-                    HStack {
-                        Button {
-                            viewModel.deleteCurrentIdiom()
-                        } label: {
-                            Image(systemName: "trash")
-                                .foregroundColor(
-                                    viewModel.selectedIdiom == nil
-                                    ? .secondary
-                                    : .red)
-                        }
-                        Spacer()
-                        sortMenu
-                        Button {
-                            showAddView()
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        TextField("Search", text: $viewModel.searchText)
-                            .textFieldStyle(PlainTextFieldStyle())
-                    }
-                }
-                .padding(8)
+                toolbar
             } footer: {
                 if !idiomsToShow().isEmpty {
                     Text(idiomCount)
@@ -70,17 +48,37 @@ struct IdiomsListView: View {
             }
         }
         .navigationTitle("Idioms")
-        .sheet(isPresented: $isShowingAddView, onDismiss: {
+        .sheet(isPresented: $isShowingAddView) {
             viewModel.searchText = ""
-        }, content: {
-            AddIdiomViewMacOS(
-                isShowingAddView: $isShowingAddView,
-                viewModel: viewModel
-            )
-        })
-        .onDisappear {
-            viewModel.selectedIdiom = nil
+        } content: {
+            resolver.resolve(AddIdiomView.self, argument: viewModel.searchText)!
         }
+        .onDisappear {
+            selectedIdiom = nil
+        }
+    }
+
+    // MARK: - Toolbar
+
+    private var toolbar: some View {
+        VStack(spacing: 16) {
+            HStack {
+                sortMenu
+                Button {
+                    showAddView()
+                } label: {
+                    Image(systemName: "plus")
+                        .foregroundColor(.accentColor)
+                }
+            }
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search", text: $viewModel.searchText)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+        }
+        .padding(8)
     }
 
     private var idiomCount: String {
@@ -113,7 +111,6 @@ struct IdiomsListView: View {
                     withAnimation {
                         viewModel.sortingState = .def
                         viewModel.sortIdioms()
-                        viewModel.selectedIdiom = nil
                     }
                 } label: {
                     if viewModel.sortingState == .def {
@@ -125,7 +122,6 @@ struct IdiomsListView: View {
                     withAnimation {
                         viewModel.sortingState = .name
                         viewModel.sortIdioms()
-                        viewModel.selectedIdiom = nil
                     }
                 } label: {
                     if viewModel.sortingState == .name {
@@ -141,7 +137,6 @@ struct IdiomsListView: View {
                 Button {
                     withAnimation {
                         viewModel.filterState = .none
-                        viewModel.selectedIdiom = nil
                     }
                 } label: {
                     if viewModel.filterState == .none {
@@ -152,7 +147,6 @@ struct IdiomsListView: View {
                 Button {
                     withAnimation {
                         viewModel.filterState = .favorite
-                        viewModel.selectedIdiom = nil
                     }
                 } label: {
                     if viewModel.filterState == .favorite {
@@ -168,31 +162,5 @@ struct IdiomsListView: View {
             Image(systemName: "arrow.up.arrow.down")
             Text(viewModel.sortingState.rawValue)
         }
-    }
-}
-
-struct IdiomsListCellView: View {
-    var model: Model
-
-    var body: some View {
-        HStack {
-            Text(model.idiom)
-                .bold()
-            Spacer()
-            if model.isFavorite {
-                Label {
-                    EmptyView()
-                } icon: {
-                    Image(systemName: "heart.fill")
-                        .font(.caption)
-                }
-            }
-        }
-        .padding(.vertical, 4)
-    }
-
-    struct Model {
-        let idiom: String
-        let isFavorite: Bool
     }
 }

@@ -12,9 +12,9 @@ struct QuizzesView: View {
 
     var body: some View {
         NavigationStack {
-            List(selection: $viewModel.selectedQuiz) {
+            List {
                 Section {
-                    ForEach(Quiz.allCases, id: \.self) { quiz in
+                    ForEach(Quiz.allCases) { quiz in
                         NavigationLink {
                             quizView(for: quiz)
                         } label: {
@@ -28,7 +28,10 @@ struct QuizzesView: View {
             .listStyle(.insetGrouped)
             .overlay {
                 if viewModel.words.count < 10 {
-                    EmptyListView(text: "Add at least 10 words\nto your list to play!")
+                    EmptyListView(
+                        label: "No words in your list",
+                        description: "Add at least 10 words to your list to play!"
+                    )
                 }
             }
             .navigationTitle("Quizzes")

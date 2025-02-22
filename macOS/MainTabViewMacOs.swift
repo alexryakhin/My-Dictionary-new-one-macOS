@@ -6,15 +6,12 @@ struct MainTabView: View {
     private let resolver = DIContainer.shared.resolver
     @State var selectedSidebarItem: SidebarItem = .words
 
-    var body: some View {
-        let selectionBinding = Binding {
-            selectedSidebarItem
-        } set: { newValue in
-            selectedSidebarItem = newValue
-        }
+    @State var selectedWord: Word?
+    @State var selectedIdiom: Idiom?
 
+    var body: some View {
         NavigationSplitView {
-            List(selection: selectionBinding) {
+            List(selection: $selectedSidebarItem) {
                 Section {
                     ForEach(SidebarItem.allCases, id: \.self) { item in
                         NavigationLink(value: item) {
@@ -33,12 +30,21 @@ struct MainTabView: View {
             }
         } content: {
             switch selectedSidebarItem {
-            case .words: resolver ~> WordsListView.self
-            case .idioms: resolver ~> IdiomsListView.self
-            case .quizzes: resolver ~> QuizzesView.self
+            case .words:
+                resolver.resolve(WordsListView.self, argument: $selectedWord)!
+            case .idioms:
+                resolver.resolve(IdiomsListView.self, argument: $selectedIdiom)!
+            case .quizzes:
+                resolver ~> QuizzesView.self
             }
         } detail: {
-            Text("Select an item")
+            if let selectedWord {
+                resolver.resolve(WordDetailsView.self, argument: selectedWord)!
+            } else if let selectedIdiom {
+                resolver.resolve(IdiomDetailsView.self, argument: selectedIdiom)!
+            } else {
+                Text("Select an item")
+            }
         }
         .fontDesign(.rounded)
     }

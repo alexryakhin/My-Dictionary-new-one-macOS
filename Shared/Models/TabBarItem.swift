@@ -1,10 +1,12 @@
 import SwiftUI
 
-enum TabBarItem: CaseIterable {
+enum TabBarItem: String, CaseIterable, Identifiable {
     case words
     case idioms
     case quizzes
     case settings
+
+    var id: String { rawValue }
 
     var title: String {
         switch self {

@@ -1,37 +1,28 @@
 import SwiftUI
 
-struct WordDetailView: View {
+struct WordDetailsView: View {
     @ObservedObject private var viewModel: WordDetailsViewModel
 
     @State private var isEditing = false
     @State private var partOfSpeech: PartOfSpeech = .noun
 
     init(viewModel: WordDetailsViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = ObservedObject(wrappedValue: viewModel)
     }
 
     var body: some View {
         VStack {
-            titleAndToolbar
+            title
             content
         }
         .padding()
         .navigationTitle(viewModel.word.wordItself ?? "")
-        .onAppear {
-            if let partOfSpeechRawValue = viewModel.word.partOfSpeech {
-                partOfSpeech = PartOfSpeech(rawValue: partOfSpeechRawValue) ?? .unknown
+        .toolbar {
+            Button(role: .destructive) {
+                viewModel.deleteCurrentWord()
+            } label: {
+                Image(systemName: "trash")
             }
-        }
-    }
-
-    // MARK: - Title and toolbar
-
-    private var titleAndToolbar: some View {
-        HStack {
-            Text(viewModel.word.wordItself ?? "")
-                .font(.title)
-                .bold()
-                .frame(maxWidth: .infinity, alignment: .leading)
 
             Button {
                 viewModel.toggleFavorite()
@@ -40,17 +31,27 @@ struct WordDetailView: View {
                     .foregroundColor(.accentColor)
             }
 
-            Button {
+            Button(isEditing ? "Save" : "Edit") {
                 if !isEditing {
-                    isEditing = true
-                } else {
                     viewModel.changePartOfSpeech(partOfSpeech.rawValue)
-                    isEditing = false
                 }
-            } label: {
-                Text(isEditing ? "Save" : "Edit")
+                isEditing.toggle()
             }
         }
+        .onAppear {
+            if let partOfSpeechRawValue = viewModel.word.partOfSpeech {
+                partOfSpeech = PartOfSpeech(rawValue: partOfSpeechRawValue) ?? .unknown
+            }
+        }
+    }
+
+    // MARK: - Title
+
+    private var title: some View {
+        Text(viewModel.word.wordItself ?? "")
+            .font(.title)
+            .bold()
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     // MARK: - Primary Content

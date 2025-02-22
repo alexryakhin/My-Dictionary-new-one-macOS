@@ -1,24 +1,33 @@
 import SwiftUI
+import Swinject
+import SwinjectAutoregistration
 
 struct QuizzesView: View {
-    @ObservedObject private var viewModel: QuizzesViewModel
+    private let resolver = DIContainer.shared.resolver
+    @StateObject private var viewModel: QuizzesViewModel
 
     init(viewModel: QuizzesViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
         VStack(alignment: .leading) {
             if viewModel.words.count < 10 {
-                Spacer()
-                Text("Add at least 10 words\nto your list to play!")
-                    .lineSpacing(10)
-                    .font(.title3)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal)
-                Spacer()
+                if #available(macOS 14.0, *) {
+                    ContentUnavailableView {
+                        Text("Add at least 10 words to your list to play!")
+                    }
+                } else {
+                    Spacer()
+                    Text("Add at least 10 words\nto your list to play!")
+                        .lineSpacing(10)
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal)
+                    Spacer()
+                }
             } else {
-                List(Quiz.allCases, id: \.self, selection: $viewModel.selectedQuiz) { quiz in
+                List(Quiz.allCases) { quiz in
                     NavigationLink(destination: quizView(for: quiz)) {
                         Text(quiz.title)
                             .padding(.vertical, 8)
@@ -28,21 +37,19 @@ struct QuizzesView: View {
             }
         }
         .navigationTitle("Quizzes")
-        .onAppear {
-            viewModel.fetchWords()
-        }
     }
 
-    @ViewBuilder func quizView(for quiz: Quiz) -> some View {
+    @ViewBuilder
+    func quizView(for quiz: Quiz) -> some View {
         switch quiz {
         case .spelling:
-            SpellingQuizView(viewModel: viewModel)
+            resolver ~> SpellingQuizView.self
         case .chooseDefinitions:
-            ChooseDefinitionView(viewModel: viewModel)
+            resolver ~> ChooseDefinitionView.self
         }
     }
 }
 
 #Preview {
-    QuizzesView(viewModel: QuizzesViewModel())
+    DIContainer.shared.resolver ~> QuizzesView.self
 }

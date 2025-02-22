@@ -49,7 +49,10 @@ struct IdiomsListView: View {
             .listStyle(.insetGrouped)
             .overlay {
                 if viewModel.idioms.isEmpty {
-                    EmptyListView(text: "Begin to add idioms to your list\nby tapping on plus icon in upper left corner")
+                    EmptyListView(
+                        label: "No idioms yet!",
+                        description: "Begin to add idioms to your list by tapping on plus icon in upper left corner"
+                    )
                 }
             }
             .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
@@ -176,30 +179,5 @@ struct IdiomsListView: View {
                 Image(systemName: "arrow.up.arrow.down")
             }
         }
-    }
-}
-
-struct IdiomListCellView: View {
-    var model: Model
-
-    var body: some View {
-        HStack {
-            Text(model.idiom)
-                .bold()
-            Spacer()
-            if model.isFavorite {
-                Label {
-                    EmptyView()
-                } icon: {
-                    Image(systemName: "heart.fill")
-                        .font(.caption)
-                }
-            }
-        }
-    }
-
-    struct Model {
-        var idiom: String
-        var isFavorite: Bool
     }
 }

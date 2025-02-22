@@ -5,10 +5,10 @@ import SwinjectAutoregistration
 struct DictionarySettings: View {
     @Environment(\.requestReview) var requestReview
 
-    @ObservedObject private var viewModel: SettingsViewModel
+    @StateObject private var viewModel: SettingsViewModel
 
     init(viewModel: SettingsViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {

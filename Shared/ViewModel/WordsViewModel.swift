@@ -11,7 +11,6 @@ final class WordsViewModel: ObservableObject {
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
-    @Published var selectedWord: Word?
 
     var wordsFiltered: [Word] {
         switch filterState {
@@ -54,10 +53,6 @@ final class WordsViewModel: ObservableObject {
             .sink { [weak self] words in
                 self?.words = words
                 self?.sortWords()
-                if let selectedWord = self?.selectedWord,
-                    !words.contains(selectedWord) {
-                    self?.selectedWord = nil
-                }
             }
             .store(in: &cancellables)
 
@@ -111,7 +106,6 @@ final class WordsViewModel: ObservableObject {
         withAnimation { [weak self] in
             self?.filterState = filterState
             self?.sortWords()
-            self?.selectedWord = nil
         }
     }
 
@@ -121,7 +115,6 @@ final class WordsViewModel: ObservableObject {
         withAnimation { [weak self] in
             self?.sortingState = sortingState
             self?.sortWords()
-            self?.selectedWord = nil
         }
     }
 

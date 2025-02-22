@@ -53,15 +53,25 @@ struct WordsListView: View {
             .listStyle(.insetGrouped)
             .overlay {
                 if viewModel.words.isEmpty {
-                    EmptyListView(text: "Begin to add words to your list\nby tapping on plus icon in upper left corner")
+                    EmptyListView(
+                        label: "No words yet",
+                        description: "Begin to add words to your list by tapping on plus icon in upper left corner"
+                    ) {
+                        Button("Add your first word!", action: addItem)
+                            .buttonStyle(.borderedProminent)
+                    }
                 }
             }
-            .searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
+            .if(viewModel.words.isNotEmpty, transform: { view in
+                view.searchable(text: $viewModel.searchText, placement: .navigationBarDrawer(displayMode: .always))
+            })
             .navigationTitle("Words")
             .listStyle(.insetGrouped)
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    EditButton()
+                if viewModel.words.isNotEmpty {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                    }
                 }
                 ToolbarItem {
                     Button(action: addItem) {

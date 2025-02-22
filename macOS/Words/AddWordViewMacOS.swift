@@ -2,12 +2,11 @@ import SwiftUI
 
 struct AddWordView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject private var viewModel: AddWordViewModel
-
+    @StateObject private var viewModel: AddWordViewModel
     @State private var wordClassSelection = 0
 
     init(viewModel: AddWordViewModel) {
-        self.viewModel = viewModel
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var definitions: [Definition] {
@@ -119,6 +118,7 @@ struct AddWordView: View {
 
             Button {
                 viewModel.saveWord()
+                dismiss()
             } label: {
                 Text("Save")
                     .bold()

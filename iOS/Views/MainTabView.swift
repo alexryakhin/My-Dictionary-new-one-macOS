@@ -1,5 +1,4 @@
 import SwiftUI
-import SwiftUIHandyTools
 import Swinject
 import SwinjectAutoregistration
 
@@ -17,7 +16,7 @@ struct MainTabView: View {
 
     var body: some View {
         TabView {
-            ForEach(tabs, id: \.self) { tab in
+            ForEach(tabs) { tab in
                 tabView(for: tab)
                     .tabItem {
                         Label {
@@ -28,11 +27,11 @@ struct MainTabView: View {
                     }
             }
         }
-        .sheet(isPresented: $isShowingOnboarding, onDismiss: {
+        .sheet(isPresented: $isShowingOnboarding) {
             isShowingOnboarding = false
-        }, content: {
+        } content: {
             resolver ~> OnboardingView.self
-        })
+        }
     }
 
     @ViewBuilder

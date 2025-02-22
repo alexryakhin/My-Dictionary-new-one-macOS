@@ -5,26 +5,30 @@ import SwinjectAutoregistration
 struct WordsListView: View {
     private let resolver = DIContainer.shared.resolver
 
-    @ObservedObject private var viewModel: WordsViewModel
+    @Binding private var selectedWord: Word?
+    @StateObject private var viewModel: WordsViewModel
     @State private var isShowingAddView = false
 
-    init(viewModel: WordsViewModel) {
-        self.viewModel = viewModel
+    init(
+        selectedWord: Binding<Word?>,
+        viewModel: WordsViewModel
+    ) {
+        self._selectedWord = selectedWord
+        self._viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
-        List(selection: $viewModel.selectedWord) {
+        List(selection: $selectedWord) {
             Section {
                 // Search, if user type something into search field, show filtered array
                 ForEach(viewModel.wordsFiltered) { word in
-                    NavigationLink(destination: WordDetailView(viewModel: viewModel)) {
+                    NavigationLink(value: word) {
                         WordsListCellView(model: .init(
                             word: word.wordItself ?? "word",
                             isFavorite: word.isFavorite,
                             partOfSpeech: word.partOfSpeech ?? "")
                         )
                     }
-                    .tag(word)
                 }
                 .onDelete(perform: viewModel.deleteWord)
 
@@ -34,38 +38,7 @@ struct WordsListView: View {
                     }
                 }
             } header: {
-                // MARK: - Toolbar
-                VStack(spacing: 16) {
-                    HStack {
-                        if let selectedWord = viewModel.selectedWord {
-                            Button {
-                                viewModel.delete(word: selectedWord)
-                                viewModel.selectedWord = nil
-                            } label: {
-                                Image(systemName: "trash")
-                                    .foregroundColor(
-                                        viewModel.selectedWord == nil
-                                        ? .secondary
-                                        : .red)
-                            }
-                        }
-                        Spacer()
-                        sortMenu
-                        Button {
-                            isShowingAddView = true
-                        } label: {
-                            Image(systemName: "plus")
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .foregroundColor(.gray)
-                        TextField("Search", text: $viewModel.searchText)
-                            .textFieldStyle(PlainTextFieldStyle())
-                    }
-                }
-                .padding(8)
+                toolbar
             } footer: {
                 if !viewModel.wordsFiltered.isEmpty {
                     Text(viewModel.wordsCount)
@@ -76,15 +49,38 @@ struct WordsListView: View {
             }
         }
         .navigationTitle("Words")
-        .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
-            resolver ~> AddWordView.self
-//            AddView(
-//                isShowingAddView: $isShowingAddView,
-//                dictionaryViewModel: DictionaryViewModel(),
-//                viewModel: viewModel
-//            )
+        .sheet(isPresented: $isShowingAddView) {
+            resolver.resolve(AddWordView.self, argument: viewModel.searchText)!
+        }
+        .onDisappear {
+            selectedWord = nil
         }
     }
+
+    // MARK: - Toolbar
+
+    private var toolbar: some View {
+        VStack(spacing: 16) {
+            HStack {
+                sortMenu
+                Button {
+                    isShowingAddView = true
+                } label: {
+                    Image(systemName: "plus")
+                        .foregroundColor(.accentColor)
+                }
+            }
+            HStack {
+                Image(systemName: "magnifyingglass")
+                    .foregroundColor(.gray)
+                TextField("Search", text: $viewModel.searchText)
+                    .textFieldStyle(PlainTextFieldStyle())
+            }
+        }
+        .padding(8)
+    }
+
+    // MARK: - Sort Menu
 
     private var sortMenu: some View {
         Menu {
@@ -144,4 +140,3 @@ struct WordsListView: View {
         }
     }
 }
-

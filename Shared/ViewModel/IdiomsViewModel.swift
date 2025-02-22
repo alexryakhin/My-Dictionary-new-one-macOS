@@ -8,7 +8,6 @@ final class IdiomsViewModel: ObservableObject {
     @Published var sortingState: SortingCase = .def
     @Published var filterState: FilterCase = .none
     @Published var searchText = ""
-    @Published var selectedIdiom: Idiom?
 
     private let idiomsProvider: IdiomsProviderInterface
     private var cancellables = Set<AnyCancellable>()

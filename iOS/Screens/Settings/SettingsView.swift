@@ -11,7 +11,7 @@ struct SettingsView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationView {
             List {
                 // MARK: - Review section
 
@@ -34,9 +34,9 @@ struct SettingsView: View {
                 // MARK: - Idioms Tab
 
                 Section {
-                    Toggle(isOn: $viewModel.isShowingIdioms, label: {
+                    Toggle(isOn: $viewModel.isShowingIdioms) {
                         Text("Showing Idioms Tab")
-                    })
+                    }
                 }
 
                 // MARK: - Export
@@ -47,6 +47,12 @@ struct SettingsView: View {
             }
             .navigationTitle("Settings")
             .listStyle(.insetGrouped)
+            .safeAreaInset(edge: .bottom) {
+                Text("App version: \(GlobalConstant.currentFullAppVersion)")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(16)
+            }
         }
     }
 }

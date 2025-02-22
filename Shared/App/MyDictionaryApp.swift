@@ -24,15 +24,9 @@ struct MyDictionaryApp: App {
         .windowToolbarStyle(.unifiedCompact)
         #endif
 
-        #if !os(watchOS)
-        .commands {
-            DictionaryCommands()
-        }
-        #endif
-
         #if os(macOS)
         Settings {
-            DictionarySettings()
+            resolver ~> DictionarySettings.self
         }
         #endif
     }
