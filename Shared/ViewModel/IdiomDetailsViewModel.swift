@@ -44,6 +44,15 @@ final class IdiomDetailsViewModel: ObservableObject {
         }
     }
 
+    func removeExample(_ example: String) {
+        do {
+            try idiom.removeExample(example)
+            idiomsProvider.saveContext()
+        } catch {
+            handleError(error)
+        }
+    }
+
     func removeExample(atOffsets offsets: IndexSet) {
         do {
             try idiom.removeExample(atOffsets: offsets)

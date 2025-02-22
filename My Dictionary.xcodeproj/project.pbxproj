@@ -15,7 +15,6 @@
 		02523C652AEEC897007E9A2D /* Quiz.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C632AEEC897007E9A2D /* Quiz.swift */; };
 		02523C672AEECC1A007E9A2D /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C662AEECC1A007E9A2D /* TabBarItem.swift */; };
 		02523C682AEECC1A007E9A2D /* TabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02523C662AEECC1A007E9A2D /* TabBarItem.swift */; };
-		028EA4802B1BA3B8009E75FC /* SwiftUIHandyTools in Frameworks */ = {isa = PBXBuildFile; productRef = 028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */; };
 		02D769D62AC2BE6100E32328 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 02D769D52AC2BE6100E32328 /* Launch Screen.storyboard */; };
 		02FB1B8A2AC06E320019D265 /* DictionaryCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */; };
 		02FB1B8F2AC07DA80019D265 /* SpeechSynthesizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02FB1B8E2AC07DA80019D265 /* SpeechSynthesizer.swift */; };
@@ -34,7 +33,7 @@
 		51423CE5270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CE6270DE477006B94CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 51423CCF270DE477006B94CB /* Assets.xcassets */; };
 		51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51423CF1270DE658006B94CB /* CloudKit.framework */; };
-		51719135270F6F970077B3C8 /* AddViewMacOs1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */; };
+		51719135270F6F970077B3C8 /* AddWordViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719132270F6E0D0077B3C8 /* AddWordViewMacOS.swift */; };
 		51719138270F71850077B3C8 /* ExtensionsMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719137270F71850077B3C8 /* ExtensionsMacOS.swift */; };
 		5171913A270F74F20077B3C8 /* SidebarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51719139270F74F20077B3C8 /* SidebarItem.swift */; };
 		5171913E270F76090077B3C8 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5171913D270F76090077B3C8 /* BlurView.swift */; };
@@ -47,7 +46,7 @@
 		517366ED270EFCC70073651A /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 517366EC270EFCC70073651A /* CloudKit.framework */; };
 		517366EF270EFF860073651A /* WordDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366EE270EFF860073651A /* WordDetailsView.swift */; };
 		517366FB270F31030073651A /* WordDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517366FA270F31030073651A /* WordDetailViewMacOS.swift */; };
-		519B8A9F27119D7F003E5EDD /* QuizzesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519B8A9E27119D7F003E5EDD /* QuizzesView.swift */; };
+		519B8A9F27119D7F003E5EDD /* QuizzesViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519B8A9E27119D7F003E5EDD /* QuizzesViewMacOS.swift */; };
 		519B8AA127119FE4003E5EDD /* SpellingQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519B8AA027119FE4003E5EDD /* SpellingQuizView.swift */; };
 		519B8AA32711A013003E5EDD /* ChooseDefinitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 519B8AA22711A013003E5EDD /* ChooseDefinitionView.swift */; };
 		51EBFBE7270F459C0066782B /* WordsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */; };
@@ -92,6 +91,8 @@
 		53F055162D68F3E900764003 /* FormWithDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055152D68F3E900764003 /* FormWithDivider.swift */; };
 		53F055182D68F4B600764003 /* CellWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055172D68F4B600764003 /* CellWrapper.swift */; };
 		53F0551A2D68F50300764003 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F055192D68F4FF00764003 /* View+Extension.swift */; };
+		53F0551D2D68FCBA00764003 /* WordListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0551C2D68FCBA00764003 /* WordListCellView.swift */; };
+		53F0551F2D6902BC00764003 /* WordsListCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F0551E2D6902BC00764003 /* WordsListCellView.swift */; };
 		9781DC0028D8E28400CFBC60 /* DictionarySettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9781DBFF28D8E28400CFBC60 /* DictionarySettings.swift */; };
 		C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908CB279C51A20056968B /* IdiomsListViewMacOS.swift */; };
 		C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03908D9279C940E0056968B /* IdiomDetailViewMacOS.swift */; };
@@ -136,7 +137,7 @@
 		51423CEF270DE64E006B94CB /* My Dictionary (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Dictionary (iOS).entitlements"; sourceTree = "<group>"; };
 		51423CF1270DE658006B94CB /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS15.0.sdk/System/Library/Frameworks/CloudKit.framework; sourceTree = DEVELOPER_DIR; };
 		51423CF3270DEBD4006B94CB /* MyDictionaryInfo.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = MyDictionaryInfo.plist; sourceTree = "<group>"; };
-		51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddViewMacOs1.swift; sourceTree = "<group>"; };
+		51719132270F6E0D0077B3C8 /* AddWordViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWordViewMacOS.swift; sourceTree = "<group>"; };
 		51719137270F71850077B3C8 /* ExtensionsMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionsMacOS.swift; sourceTree = "<group>"; };
 		51719139270F74F20077B3C8 /* SidebarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SidebarItem.swift; sourceTree = "<group>"; };
 		5171913D270F76090077B3C8 /* BlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
@@ -147,7 +148,7 @@
 		517366EC270EFCC70073651A /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 		517366EE270EFF860073651A /* WordDetailsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordDetailsView.swift; sourceTree = "<group>"; };
 		517366FA270F31030073651A /* WordDetailViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordDetailViewMacOS.swift; sourceTree = "<group>"; };
-		519B8A9E27119D7F003E5EDD /* QuizzesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesView.swift; sourceTree = "<group>"; };
+		519B8A9E27119D7F003E5EDD /* QuizzesViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizzesViewMacOS.swift; sourceTree = "<group>"; };
 		519B8AA027119FE4003E5EDD /* SpellingQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellingQuizView.swift; sourceTree = "<group>"; };
 		519B8AA22711A013003E5EDD /* ChooseDefinitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseDefinitionView.swift; sourceTree = "<group>"; };
 		51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListViewMacOS.swift; sourceTree = "<group>"; };
@@ -174,6 +175,8 @@
 		53F055152D68F3E900764003 /* FormWithDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormWithDivider.swift; sourceTree = "<group>"; };
 		53F055172D68F4B600764003 /* CellWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellWrapper.swift; sourceTree = "<group>"; };
 		53F055192D68F4FF00764003 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
+		53F0551C2D68FCBA00764003 /* WordListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListCellView.swift; sourceTree = "<group>"; };
+		53F0551E2D6902BC00764003 /* WordsListCellView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsListCellView.swift; sourceTree = "<group>"; };
 		9781DBFF28D8E28400CFBC60 /* DictionarySettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionarySettings.swift; sourceTree = "<group>"; };
 		9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryCommands.swift; sourceTree = "<group>"; };
 		C0358EF5279A84F800E9C452 /* IdiomsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdiomsListView.swift; sourceTree = "<group>"; };
@@ -196,7 +199,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				028EA4802B1BA3B8009E75FC /* SwiftUIHandyTools in Frameworks */,
 				51423CF2270DE658006B94CB /* CloudKit.framework in Frameworks */,
 				53DEC1992D65A79700C9BDB2 /* Swinject in Frameworks */,
 				53DEC19E2D65A7C900C9BDB2 /* SwinjectAutoregistration in Frameworks */,
@@ -230,6 +232,7 @@
 				53DEC1AE2D65AD4800C9BDB2 /* AppError.swift */,
 				5395A21D2D65EFC90098BD07 /* Idiom+CoreDataClass.swift */,
 				5395A21F2D65EFC90098BD07 /* Word+CoreDataClass.swift */,
+				02523C662AEECC1A007E9A2D /* TabBarItem.swift */,
 				51EBFBEE270F4AAB0066782B /* Words.swift */,
 				53DEC1B72D65C0D700C9BDB2 /* FetchingStatus.swift */,
 				C0D377BE27997FDC00BE0726 /* FilterCase.swift */,
@@ -242,15 +245,15 @@
 		51332CC32711721C004686D2 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
 				53DEC1BA2D65C7CF00C9BDB2 /* WordDetailsViewModel.swift */,
 				51EBFBEC270F4A9E0066782B /* AddWordViewModel.swift */,
-				53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */,
-				C0358EF7279A8BCD00E9C452 /* WordsViewModel.swift */,
-				53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */,
 				C03908C3279C06080056968B /* IdiomsViewModel.swift */,
-				53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */,
 				53DEC1BD2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift */,
+				53A1E0462D672A6F000024CC /* AddIdiomViewModel.swift */,
 				C03908C5279C062A0056968B /* QuizzesViewModel.swift */,
+				53F0550E2D68EE0B00764003 /* ChooseDefinitionViewModel.swift */,
+				53F055112D68F19B00764003 /* SpellingQuizViewModel.swift */,
 				023A3DDA2AC96DFB00C8F68A /* SettingsViewModel.swift */,
 			);
 			path = ViewModel;
@@ -296,14 +299,14 @@
 		51423CDB270DE477006B94CB /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				9781DBFE28D8E27000CFBC60 /* Settings */,
-				C03908CA279C518B0056968B /* Idioms */,
-				51423CDC270DE477006B94CB /* macOS.entitlements */,
-				519B8AA62711B0C1003E5EDD /* Resourses */,
-				519B8AA52711B0BB003E5EDD /* Quizzes */,
 				519B8AA42711B0B5003E5EDD /* Words */,
+				C03908CA279C518B0056968B /* Idioms */,
+				519B8AA52711B0BB003E5EDD /* Quizzes */,
+				9781DBFE28D8E27000CFBC60 /* Settings */,
+				519B8AA62711B0C1003E5EDD /* Resourses */,
 				5171913F270F7F000077B3C8 /* MainTabViewMacOs.swift */,
 				9781DC0128D8E76F00CFBC60 /* DictionaryCommands.swift */,
+				51423CDC270DE477006B94CB /* macOS.entitlements */,
 			);
 			path = macOS;
 			sourceTree = "<group>";
@@ -355,9 +358,10 @@
 		519B8AA42711B0B5003E5EDD /* Words */ = {
 			isa = PBXGroup;
 			children = (
-				51719132270F6E0D0077B3C8 /* AddViewMacOs1.swift */,
-				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
 				51EBFBE5270F45960066782B /* WordsListViewMacOS.swift */,
+				51719132270F6E0D0077B3C8 /* AddWordViewMacOS.swift */,
+				517366FA270F31030073651A /* WordDetailViewMacOS.swift */,
+				53F0551E2D6902BC00764003 /* WordsListCellView.swift */,
 			);
 			path = Words;
 			sourceTree = "<group>";
@@ -365,7 +369,7 @@
 		519B8AA52711B0BB003E5EDD /* Quizzes */ = {
 			isa = PBXGroup;
 			children = (
-				519B8A9E27119D7F003E5EDD /* QuizzesView.swift */,
+				519B8A9E27119D7F003E5EDD /* QuizzesViewMacOS.swift */,
 				519B8AA027119FE4003E5EDD /* SpellingQuizView.swift */,
 				519B8AA22711A013003E5EDD /* ChooseDefinitionView.swift */,
 			);
@@ -443,14 +447,13 @@
 		C0D377C52799852800BE0726 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
-				517366DE270EB83F0073651A /* MainTabView.swift */,
-				02FB1B922AC0B6FF0019D265 /* EmptyListView.swift */,
-				517366DB270EB7FA0073651A /* Onboarding */,
+				C0D377C62799853700BE0726 /* Words */,
 				C0D377C82799854F00BE0726 /* Idioms */,
 				C0D377C72799854900BE0726 /* Quizzes */,
-				C0D377C62799853700BE0726 /* Words */,
 				023A3DD72AC96D7400C8F68A /* Settings */,
-				02523C662AEECC1A007E9A2D /* TabBarItem.swift */,
+				517366DB270EB7FA0073651A /* Onboarding */,
+				517366DE270EB83F0073651A /* MainTabView.swift */,
+				02FB1B922AC0B6FF0019D265 /* EmptyListView.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -459,6 +462,7 @@
 			isa = PBXGroup;
 			children = (
 				51423CCD270DE477006B94CB /* WordsListView.swift */,
+				53F0551C2D68FCBA00764003 /* WordListCellView.swift */,
 				517366EE270EFF860073651A /* WordDetailsView.swift */,
 				51EBFBE8270F4A7E0066782B /* AddWordView.swift */,
 				51EBFBEA270F4A970066782B /* WordCard.swift */,
@@ -514,7 +518,6 @@
 			);
 			name = "My Dictionary (iOS)";
 			packageProductDependencies = (
-				028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */,
 				53DEC1982D65A79700C9BDB2 /* Swinject */,
 				53DEC19D2D65A7C900C9BDB2 /* SwinjectAutoregistration */,
 			);
@@ -568,7 +571,6 @@
 			);
 			mainGroup = 51423CC4270DE476006B94CB;
 			packageReferences = (
-				028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */,
 				53DEC1972D65A79700C9BDB2 /* XCRemoteSwiftPackageReference "Swinject" */,
 				53DEC19C2D65A7C900C9BDB2 /* XCRemoteSwiftPackageReference "SwinjectAutoregistration" */,
 				53F0551B2D68F8FF00764003 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
@@ -664,6 +666,7 @@
 				023A3DD92AC96D8D00C8F68A /* SettingsView.swift in Sources */,
 				C0358EF6279A84F800E9C452 /* IdiomsListView.swift in Sources */,
 				513CBC64271099CF00A2F4EC /* ChooseDefinitionView.swift in Sources */,
+				53F0551D2D68FCBA00764003 /* WordListCellView.swift in Sources */,
 				C0358EF8279A8BCD00E9C452 /* WordsViewModel.swift in Sources */,
 				51423CE1270DE477006B94CB /* WordsListView.swift in Sources */,
 				53DEC1B62D65BE5B00C9BDB2 /* DictionaryApiService.swift in Sources */,
@@ -710,6 +713,7 @@
 				02FB1B902AC09F230019D265 /* SpeechSynthesizer.swift in Sources */,
 				53DEC1B52D65BE5B00C9BDB2 /* DictionaryApiService.swift in Sources */,
 				C0D377C32799833A00BE0726 /* FilterCase.swift in Sources */,
+				53F0551F2D6902BC00764003 /* WordsListCellView.swift in Sources */,
 				53DEC1BF2D65D2EE00C9BDB2 /* IdiomDetailsViewModel.swift in Sources */,
 				C0183964279C97E60034ED37 /* IdiomsListViewMacOS.swift in Sources */,
 				51719140270F7F000077B3C8 /* MainTabViewMacOs.swift in Sources */,
@@ -734,14 +738,14 @@
 				5171913E270F76090077B3C8 /* BlurView.swift in Sources */,
 				C03908C7279C065C0056968B /* WordsViewModel.swift in Sources */,
 				C0183965279C98380034ED37 /* IdiomDetailViewMacOS.swift in Sources */,
-				519B8A9F27119D7F003E5EDD /* QuizzesView.swift in Sources */,
+				519B8A9F27119D7F003E5EDD /* QuizzesViewMacOS.swift in Sources */,
 				5171913A270F74F20077B3C8 /* SidebarItem.swift in Sources */,
 				C03908D8279C8B340056968B /* Extensions.swift in Sources */,
 				C03908C9279C065C0056968B /* QuizzesViewModel.swift in Sources */,
 				02FB1B912AC0A1690019D265 /* DictionaryCommands.swift in Sources */,
 				53DEC1BC2D65C7D200C9BDB2 /* WordDetailsViewModel.swift in Sources */,
 				53DEC1AF2D65AD4D00C9BDB2 /* AppError.swift in Sources */,
-				51719135270F6F970077B3C8 /* AddViewMacOs1.swift in Sources */,
+				51719135270F6F970077B3C8 /* AddWordViewMacOS.swift in Sources */,
 				53DEC1A82D65A81200C9BDB2 /* DIContainer.swift in Sources */,
 				53DEC1A92D65A81200C9BDB2 /* ServiceAssembly.swift in Sources */,
 				53DEC1AA2D65A81200C9BDB2 /* UIAssembly.swift in Sources */,
@@ -1044,14 +1048,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/alexryakhin/SwiftUIHandyTools";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		53DEC1972D65A79700C9BDB2 /* XCRemoteSwiftPackageReference "Swinject" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Swinject/Swinject";
@@ -1079,11 +1075,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		028EA47F2B1BA3B8009E75FC /* SwiftUIHandyTools */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 028EA47E2B1BA3B8009E75FC /* XCRemoteSwiftPackageReference "SwiftUIHandyTools" */;
-			productName = SwiftUIHandyTools;
-		};
 		53DEC1982D65A79700C9BDB2 /* Swinject */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 53DEC1972D65A79700C9BDB2 /* XCRemoteSwiftPackageReference "Swinject" */;

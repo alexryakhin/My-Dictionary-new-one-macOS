@@ -1,5 +1,5 @@
 {
-  "originHash" : "66e76f693caed3add2db09c8caa40757ad6777e2802d99331970f2813c8cfdec",
+  "originHash" : "060d173d4708c0540d6b6023348e618b0a6ca06e49386a521d65cfee24b45aa5",
   "pins" : [
     {
       "identity" : "swiftlintplugins",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "7a3d77f3dd9f91d5cea138e52c20cfceabf352de",
         "version" : "0.58.2"
-      }
-    },
-    {
-      "identity" : "swiftuihandytools",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alexryakhin/SwiftUIHandyTools",
-      "state" : {
-        "branch" : "main",
-        "revision" : "1a7f4e1ba9ee79fa8e174458b61a59450fd0d0de"
       }
     },
     {

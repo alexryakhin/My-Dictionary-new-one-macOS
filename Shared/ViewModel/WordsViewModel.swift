@@ -107,7 +107,23 @@ final class WordsViewModel: ObservableObject {
         wordsProvider.saveContext()
     }
 
+    func selectFilterState(_ filterState: FilterCase) {
+        withAnimation { [weak self] in
+            self?.filterState = filterState
+            self?.sortWords()
+            self?.selectedWord = nil
+        }
+    }
+
     // MARK: - Sorting
+
+    func selectSortingState(_ sortingState: SortingCase) {
+        withAnimation { [weak self] in
+            self?.sortingState = sortingState
+            self?.sortWords()
+            self?.selectedWord = nil
+        }
+    }
 
     func sortWords() {
         switch sortingState {

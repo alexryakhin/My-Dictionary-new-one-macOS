@@ -1,7 +1,6 @@
 import SwiftUI
-import SwiftUIHandyTools
 
-enum TabBarItem: Tabbable, CaseIterable {
+enum TabBarItem: CaseIterable {
     case words
     case idioms
     case quizzes

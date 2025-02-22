@@ -1,15 +1,15 @@
 import SwiftUI
 
 struct QuizzesView: View {
-    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+    @ObservedObject private var viewModel: QuizzesViewModel
 
-    init(quizzesViewModel: QuizzesViewModel) {
-        self.quizzesViewModel = quizzesViewModel
+    init(viewModel: QuizzesViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
         VStack(alignment: .leading) {
-            if quizzesViewModel.words.count < 10 {
+            if viewModel.words.count < 10 {
                 Spacer()
                 Text("Add at least 10 words\nto your list to play!")
                     .lineSpacing(10)
@@ -18,7 +18,7 @@ struct QuizzesView: View {
                     .padding(.horizontal)
                 Spacer()
             } else {
-                List(Quiz.allCases, id: \.self, selection: $quizzesViewModel.selectedQuiz) { quiz in
+                List(Quiz.allCases, id: \.self, selection: $viewModel.selectedQuiz) { quiz in
                     NavigationLink(destination: quizView(for: quiz)) {
                         Text(quiz.title)
                             .padding(.vertical, 8)
@@ -29,20 +29,20 @@ struct QuizzesView: View {
         }
         .navigationTitle("Quizzes")
         .onAppear {
-            quizzesViewModel.fetchWords()
+            viewModel.fetchWords()
         }
     }
 
     @ViewBuilder func quizView(for quiz: Quiz) -> some View {
         switch quiz {
         case .spelling:
-            SpellingQuizView(quizzesViewModel: quizzesViewModel)
+            SpellingQuizView(viewModel: viewModel)
         case .chooseDefinitions:
-            ChooseDefinitionView(quizzesViewModel: quizzesViewModel)
+            ChooseDefinitionView(viewModel: viewModel)
         }
     }
 }
 
 #Preview {
-    QuizzesView(quizzesViewModel: QuizzesViewModel())
+    QuizzesView(viewModel: QuizzesViewModel())
 }

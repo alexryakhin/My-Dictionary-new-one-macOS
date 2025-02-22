@@ -26,9 +26,7 @@ struct IdiomsListView: View {
                                 )
                             }
                         }
-                        .onDelete(perform: { indexSet in
-                            viewModel.deleteIdiom(offsets: indexSet)
-                        })
+                        .onDelete(perform: viewModel.deleteIdiom)
                     } header: {
                         if let title = viewModel.filterState.title {
                             Text(title)

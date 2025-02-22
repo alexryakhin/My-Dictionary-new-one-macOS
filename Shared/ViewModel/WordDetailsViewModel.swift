@@ -30,6 +30,15 @@ final class WordDetailsViewModel: ObservableObject {
         setupBindings()
     }
 
+    func removeExample(_ example: String) {
+        do {
+            try word.removeExample(example)
+            wordsProvider.saveContext()
+        } catch {
+            handleError(error)
+        }
+    }
+
     func removeExample(atOffsets offsets: IndexSet) {
         do {
             try word.removeExample(atOffsets: offsets)

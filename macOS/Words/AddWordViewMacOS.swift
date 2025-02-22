@@ -1,30 +1,18 @@
 import SwiftUI
 
-struct AddView: View {
-    @Binding private var isShowingAddView: Bool
-    @ObservedObject private var wordsViewModel: WordsViewModel
-    @ObservedObject private var dictionaryViewModel: DictionaryViewModel
+struct AddWordView: View {
+    @Environment(\.dismiss) var dismiss
+    @ObservedObject private var viewModel: AddWordViewModel
 
-    @State private var definitionInput = ""
-    @State private var partOfSpeech: PartOfSpeech = .noun
     @State private var wordClassSelection = 0
-    @State private var showingAlert = false
 
-    init(
-        isShowingAddView: Binding<Bool>,
-        dictionaryViewModel: DictionaryViewModel,
-        wordsViewModel: WordsViewModel
-    ) {
-        self._isShowingAddView = isShowingAddView
-        self.dictionaryViewModel = dictionaryViewModel
-        self.wordsViewModel = wordsViewModel
+    init(viewModel: AddWordViewModel) {
+        self.viewModel = viewModel
     }
 
     var definitions: [Definition] {
-        dictionaryViewModel.resultWordDetails!.meanings[wordClassSelection].definitions
+        viewModel.resultWordDetails!.meanings[wordClassSelection].definitions
     }
-
-    private let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         VStack {
@@ -32,47 +20,49 @@ struct AddView: View {
                 Text("Add new word").font(.title2).bold()
                 Spacer()
                 Button {
-                    isShowingAddView = false
+                    dismiss()
                 } label: {
                     Text("Close")
                 }
             }
             HStack {
-                TextField("Enter the word", text: $dictionaryViewModel.inputWord, onCommit: {
-                    fetchData()
-                }).textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Enter the word", text: $viewModel.inputWord, onCommit: {
+                    viewModel.fetchData()
+                })
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
                 Button {
-                    fetchData()
+                    viewModel.fetchData()
                 } label: {
                     Text("Get definitions")
                 }
             }
-            TextField("Enter definition", text: $definitionInput)
+            TextField("Enter definition", text: $viewModel.descriptionField)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
-            if dictionaryViewModel.resultWordDetails == nil {
-                Picker(selection: $partOfSpeech, label: Text("Part of Speech")) {
+            if viewModel.resultWordDetails == nil {
+                Picker(selection: $viewModel.partOfSpeech, label: Text("Part of Speech")) {
                     ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
                         Text(partCase.rawValue)
                     }
                 }
             }
 
-            if dictionaryViewModel.resultWordDetails != nil && dictionaryViewModel.status == .ready {
+            if viewModel.resultWordDetails != nil && viewModel.status == .ready {
                 VStack {
                     Picker(selection: $wordClassSelection, label: Text("Part of Speech")) {
-                        ForEach(dictionaryViewModel.resultWordDetails!.meanings.indices, id: \.self) { index in
-                            Text("\(dictionaryViewModel.resultWordDetails!.meanings[index].partOfSpeech)")
+                        ForEach(viewModel.resultWordDetails!.meanings.indices, id: \.self) { index in
+                            Text("\(viewModel.resultWordDetails!.meanings[index].partOfSpeech)")
                         }
                     }
 
-                    if dictionaryViewModel.resultWordDetails!.phonetic != nil {
+                    if viewModel.resultWordDetails!.phonetic != nil {
                         HStack(spacing: 0) {
                             Text("Phonetic: ").bold()
-                            Text(dictionaryViewModel.resultWordDetails!.phonetic ?? "")
+                            Text(viewModel.resultWordDetails!.phonetic ?? "")
                             Spacer()
                             Button {
-                                synthesizer.speak(dictionaryViewModel.inputWord)
+                                viewModel.speakInputWord()
                             } label: {
                                 Image(systemName: "speaker.wave.2.fill")
                             }
@@ -80,8 +70,7 @@ struct AddView: View {
                     }
 
                     TabView {
-                        ForEach(dictionaryViewModel.resultWordDetails!.meanings[wordClassSelection].definitions.indices,
-                                id: \.self) { index in
+                        ForEach(viewModel.resultWordDetails!.meanings[wordClassSelection].definitions.indices, id: \.self) { index in
                             ScrollView {
                                 VStack(alignment: .leading) {
                                     if !definitions[index].definition.isEmpty {
@@ -91,7 +80,7 @@ struct AddView: View {
                                             + Text(definitions[index].definition)
                                         }
                                         .onTapGesture {
-                                            definitionInput = definitions[index].definition
+                                            viewModel.descriptionField = definitions[index].definition
                                         }
                                     }
                                     if definitions[index].example != nil {
@@ -110,13 +99,15 @@ struct AddView: View {
                                         + Text(definitions[index].antonyms.joined(separator: ", "))
                                     }
                                 }
-                            }.tabItem({
+                            }
+                            .tabItem {
                                 Text("\(index + 1)")
-                            }).padding(.horizontal)
+                            }
+                            .padding(.horizontal)
                         }
                     }
                 }
-            } else if dictionaryViewModel.status == .loading {
+            } else if viewModel.status == .loading {
                 VStack {
                     Spacer().frame(height: 50)
                     ProgressView()
@@ -127,49 +118,19 @@ struct AddView: View {
             }
 
             Button {
-                saveNewWord()
+                viewModel.saveWord()
             } label: {
-                Text("Save").bold()
+                Text("Save")
+                    .bold()
             }
-
         }
         .frame(width: 600, height: 500)
         .padding()
-        .alert(isPresented: $showingAlert, content: {
+        .alert(isPresented: $viewModel.showingAlert, content: {
             Alert(
                 title: Text("Ooops..."),
                 message: Text("You should enter a word and its definition before saving it"),
                 dismissButton: .default(Text("Got it")))
         })
-        .onAppear {
-            if !wordsViewModel.searchText.isEmpty {
-                dictionaryViewModel.inputWord = wordsViewModel.searchText
-                try? dictionaryViewModel.fetchData()
-            }
-        }
-    }
-
-    private func fetchData() {
-        do {
-            try dictionaryViewModel.fetchData()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-
-    private func saveNewWord() {
-        if !dictionaryViewModel.inputWord.isEmpty, !definitionInput.isEmpty {
-            wordsViewModel.addNewWord(
-                word: dictionaryViewModel.inputWord.capitalizingFirstLetter(),
-                definition: definitionInput.capitalizingFirstLetter(),
-                partOfSpeech: partOfSpeech.rawValue,
-                phonetic: dictionaryViewModel.resultWordDetails?.phonetic)
-            isShowingAddView = false
-            dictionaryViewModel.resultWordDetails = nil
-            dictionaryViewModel.inputWord = ""
-            dictionaryViewModel.status = .blank
-        } else {
-            showingAlert = true
-        }
     }
 }

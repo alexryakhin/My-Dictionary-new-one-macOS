@@ -1,7 +1,15 @@
 import SwiftUI
+import Swinject
+import SwinjectAutoregistration
 
 struct DictionarySettings: View {
     @Environment(\.requestReview) var requestReview
+
+    @ObservedObject private var viewModel: SettingsViewModel
+
+    init(viewModel: SettingsViewModel) {
+        self.viewModel = viewModel
+    }
 
     var body: some View {
         Form {
@@ -12,11 +20,11 @@ struct DictionarySettings: View {
             }
         }
         .frame(width: 300)
-        .navigationTitle("Landmark Settings")
+        .navigationTitle("Dictionary Settings")
         .padding(80)
     }
 }
 
 #Preview {
-    DictionarySettings()
+    DIContainer.shared.resolver ~> DictionarySettings.self
 }

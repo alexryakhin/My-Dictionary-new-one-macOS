@@ -1,21 +1,23 @@
 import SwiftUI
-import CoreData
+import Swinject
+import SwinjectAutoregistration
 
 struct WordsListView: View {
-    @ObservedObject private var wordsViewModel: WordsViewModel
+    private let resolver = DIContainer.shared.resolver
 
+    @ObservedObject private var viewModel: WordsViewModel
     @State private var isShowingAddView = false
 
-    init(wordsViewModel: WordsViewModel) {
-        self.wordsViewModel = wordsViewModel
+    init(viewModel: WordsViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
-        List(selection: $wordsViewModel.selectedWord) {
+        List(selection: $viewModel.selectedWord) {
             Section {
                 // Search, if user type something into search field, show filtered array
-                ForEach(wordsToShow()) { word in
-                    NavigationLink(destination: WordDetailView(wordsViewModel: wordsViewModel)) {
+                ForEach(viewModel.wordsFiltered) { word in
+                    NavigationLink(destination: WordDetailView(viewModel: viewModel)) {
                         WordsListCellView(model: .init(
                             word: word.wordItself ?? "word",
                             isFavorite: word.isFavorite,
@@ -24,33 +26,33 @@ struct WordsListView: View {
                     }
                     .tag(word)
                 }
-                .onDelete(perform: { indexSet in
-                    wordsViewModel.deleteWord(offsets: indexSet)
-                })
-                if wordsViewModel.filterState == .search && wordsToShow().count < 10 {
-                    Button {
-                        showAddView()
-                    } label: {
-                        Text("Add '\(wordsViewModel.searchText.trimmingCharacters(in: .whitespacesAndNewlines))'")
+                .onDelete(perform: viewModel.deleteWord)
+
+                if viewModel.filterState == .search && viewModel.wordsFiltered.count < 10 {
+                    Button("Add '\(viewModel.searchText.trimmed)'") {
+                        isShowingAddView = true
                     }
                 }
             } header: {
                 // MARK: - Toolbar
                 VStack(spacing: 16) {
                     HStack {
-                        Button {
-                            removeWord()
-                        } label: {
-                            Image(systemName: "trash")
-                                .foregroundColor(
-                                    wordsViewModel.selectedWord == nil
-                                    ? .secondary
-                                    : .red)
+                        if let selectedWord = viewModel.selectedWord {
+                            Button {
+                                viewModel.delete(word: selectedWord)
+                                viewModel.selectedWord = nil
+                            } label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(
+                                        viewModel.selectedWord == nil
+                                        ? .secondary
+                                        : .red)
+                            }
                         }
                         Spacer()
                         sortMenu
                         Button {
-                            showAddView()
+                            isShowingAddView = true
                         } label: {
                             Image(systemName: "plus")
                                 .foregroundColor(.accentColor)
@@ -59,14 +61,14 @@ struct WordsListView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(.gray)
-                        TextField("Search", text: $wordsViewModel.searchText)
+                        TextField("Search", text: $viewModel.searchText)
                             .textFieldStyle(PlainTextFieldStyle())
                     }
                 }
                 .padding(8)
             } footer: {
-                if !wordsToShow().isEmpty {
-                    Text(wordsCount)
+                if !viewModel.wordsFiltered.isEmpty {
+                    Text(viewModel.wordsCount)
                         .font(.footnote)
                         .foregroundColor(.secondary)
                         .padding(.bottom, 5)
@@ -75,79 +77,38 @@ struct WordsListView: View {
         }
         .navigationTitle("Words")
         .sheet(isPresented: $isShowingAddView, onDismiss: nil) {
-            AddView(
-                isShowingAddView: $isShowingAddView,
-                dictionaryViewModel: DictionaryViewModel(),
-                wordsViewModel: wordsViewModel
-            )
+            resolver ~> AddWordView.self
+//            AddView(
+//                isShowingAddView: $isShowingAddView,
+//                dictionaryViewModel: DictionaryViewModel(),
+//                viewModel: viewModel
+//            )
         }
-    }
-
-    private var wordsCount: String {
-        if wordsToShow().count == 1 {
-            return "1 word"
-        } else {
-            return "\(wordsToShow().count) words"
-        }
-    }
-
-    private func showAddView() {
-        isShowingAddView = true
-    }
-
-    private func wordsToShow() -> [Word] {
-        switch wordsViewModel.filterState {
-        case .none:
-            return wordsViewModel.words
-        case .favorite:
-            return wordsViewModel.favoriteWords
-        case .search:
-            return wordsViewModel.searchResults
-        }
-    }
-
-    private func removeWord() {
-        if wordsViewModel.selectedWord != nil {
-            wordsViewModel.delete(word: wordsViewModel.selectedWord!)
-        }
-        wordsViewModel.selectedWord = nil
     }
 
     private var sortMenu: some View {
         Menu {
             Section {
                 Button {
-                    withAnimation {
-                        wordsViewModel.sortingState = .def
-                        wordsViewModel.sortWords()
-                        wordsViewModel.selectedWord = nil
-                    }
+                    viewModel.selectSortingState(.def)
                 } label: {
-                    if wordsViewModel.sortingState == .def {
+                    if viewModel.sortingState == .def {
                         Image(systemName: "checkmark")
                     }
                     Text("Default")
                 }
                 Button {
-                    withAnimation {
-                        wordsViewModel.sortingState = .name
-                        wordsViewModel.sortWords()
-                        wordsViewModel.selectedWord = nil
-                    }
+                    viewModel.selectSortingState(.name)
                 } label: {
-                    if wordsViewModel.sortingState == .name {
+                    if viewModel.sortingState == .name {
                         Image(systemName: "checkmark")
                     }
                     Text("Name")
                 }
                 Button {
-                    withAnimation {
-                        wordsViewModel.sortingState = .partOfSpeech
-                        wordsViewModel.sortWords()
-                        wordsViewModel.selectedWord = nil
-                    }
+                    viewModel.selectSortingState(.partOfSpeech)
                 } label: {
-                    if wordsViewModel.sortingState == .partOfSpeech {
+                    if viewModel.sortingState == .partOfSpeech {
                         Image(systemName: "checkmark")
                     }
                     Text("Part of speech")
@@ -158,23 +119,17 @@ struct WordsListView: View {
 
             Section {
                 Button {
-                    withAnimation {
-                        wordsViewModel.filterState = .none
-                        wordsViewModel.selectedWord = nil
-                    }
+                    viewModel.selectFilterState(.none)
                 } label: {
-                    if wordsViewModel.filterState == .none {
+                    if viewModel.filterState == .none {
                         Image(systemName: "checkmark")
                     }
                     Text("None")
                 }
                 Button {
-                    withAnimation {
-                        wordsViewModel.filterState = .favorite
-                        wordsViewModel.selectedWord = nil
-                    }
+                    viewModel.selectFilterState(.favorite)
                 } label: {
-                    if wordsViewModel.filterState == .favorite {
+                    if viewModel.filterState == .favorite {
                         Image(systemName: "checkmark")
                     }
                     Text("Favorites")
@@ -185,36 +140,8 @@ struct WordsListView: View {
 
         } label: {
             Image(systemName: "arrow.up.arrow.down")
-            Text(wordsViewModel.sortingState.rawValue)
+            Text(viewModel.sortingState.rawValue)
         }
     }
 }
 
-struct WordsListCellView: View {
-    var model: Model
-
-    var body: some View {
-        HStack {
-            Text(model.word)
-                .bold()
-            Spacer()
-            if model.isFavorite {
-                Label {
-                    EmptyView()
-                } icon: {
-                    Image(systemName: "heart.fill")
-                        .font(.caption)
-                }
-            }
-            Text(model.partOfSpeech)
-                .foregroundColor(.secondary)
-        }
-        .padding(.vertical, 4)
-    }
-
-    struct Model {
-        let word: String
-        let isFavorite: Bool
-        let partOfSpeech: String
-    }
-}

@@ -1,46 +1,35 @@
 import SwiftUI
 
 struct IdiomDetailViewMacOS: View {
-    @ObservedObject private var idiomsViewModel: IdiomsViewModel
+    @ObservedObject private var viewModel: IdiomDetailsViewModel
     @State private var isEditing = false
-    @State private var isShowAddExample = false
-    @State private var exampleTextFieldStr = ""
 
-    init(idiomsViewModel: IdiomsViewModel) {
-        self.idiomsViewModel = idiomsViewModel
+    init(viewModel: IdiomDetailsViewModel) {
+        self.viewModel = viewModel
     }
-
-    private var examples: [String] {
-        guard let data = idiomsViewModel.selectedIdiom?.examples else {return []}
-        guard let examples = try? JSONDecoder().decode([String].self, from: data) else {return []}
-        return examples
-    }
-
-    let synthesizer = SpeechSynthesizer.shared
 
     var body: some View {
         VStack {
             // MARK: Title and toolbar
             HStack {
-                Text(idiomsViewModel.selectedIdiom?.idiomItself ?? "").font(.title).bold()
+                Text(viewModel.idiom.idiomItself ?? "").font(.title).bold()
                 Spacer()
                 Button {
-                    synthesizer.speak(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
+                    viewModel.speak(viewModel.idiom.idiomItself)
                 } label: {
                     Image(systemName: "speaker.wave.2.fill")
                 }
                 Button(action: {
-                    idiomsViewModel.selectedIdiom?.isFavorite.toggle()
-                    idiomsViewModel.save()
+                    viewModel.toggleFavorite()
                 }, label: {
-                    Image(systemName: "\(idiomsViewModel.selectedIdiom?.isFavorite ?? false ? "heart.fill" : "heart")")
+                    Image(systemName: "\(viewModel.idiom.isFavorite ?? false ? "heart.fill" : "heart")")
                         .foregroundColor(.accentColor)
                 })
                 Button(action: {
                     if !isEditing {
                         isEditing = true
                     } else {
-                        idiomsViewModel.save()
+                        viewModel.save()
                         isEditing = false
                     }
                 }, label: {
@@ -49,27 +38,20 @@ struct IdiomDetailViewMacOS: View {
             }
             // MARK: Primary Content
 
-            let bindingIdiomDefinition = Binding(
-                get: { idiomsViewModel.selectedIdiom?.definition ?? "" },
-                set: {
-                    idiomsViewModel.selectedIdiom?.definition = $0
-                }
-            )
-
             ScrollView {
                 HStack {
                     if isEditing {
                         Text("Definition: ").bold()
-                        TextEditor(text: bindingIdiomDefinition)
+                        TextEditor(text: $viewModel.definitionTextFieldStr)
                             .padding(1)
                             .background(Color.secondary.opacity(0.4))
                     } else {
                         Text("Definition: ").bold()
-                        + Text(idiomsViewModel.selectedIdiom?.definition ?? "")
+                        + Text(viewModel.idiom.definition ?? "")
                     }
                     Spacer()
                     Button {
-                        synthesizer.speak(idiomsViewModel.selectedIdiom?.definition ?? "")
+                        viewModel.speak(viewModel.idiom.definition)
                     } label: {
                         Image(systemName: "speaker.wave.2.fill")
                     }
@@ -81,10 +63,10 @@ struct IdiomDetailViewMacOS: View {
                     HStack {
                         Text("Examples:").bold()
                         Spacer()
-                        if !examples.isEmpty {
+                        if !viewModel.idiom.examplesDecoded.isEmpty {
                             Button {
                                 withAnimation {
-                                    isShowAddExample = true
+                                    viewModel.isShowAddExample = true
                                 }
                             } label: {
                                 Text("Add example")
@@ -92,18 +74,18 @@ struct IdiomDetailViewMacOS: View {
                         }
                     }
 
-                    if !examples.isEmpty {
-                        ForEach(examples.indices, id: \.self) { index in
+                    if !viewModel.idiom.examplesDecoded.isEmpty {
+                        ForEach(Array(viewModel.idiom.examplesDecoded.enumerated()), id: \.offset) { offset, element in
                             if !isEditing {
-                                Text("\(index + 1). \(examples[index])")
+                                Text("\(offset + 1). \(viewModel.idiom.examplesDecoded[offset])")
                             } else {
                                 HStack {
                                     Button {
-                                        removeExample(of: index)
+                                        viewModel.removeExample(element)
                                     } label: {
                                         Image(systemName: "trash")
                                     }
-                                    Text("\(index + 1). \(examples[index])")
+                                    Text("\(offset + 1). \(viewModel.idiom.examplesDecoded[offset])")
                                 }
                             }
                         }
@@ -112,7 +94,7 @@ struct IdiomDetailViewMacOS: View {
                             Text("No examples yet..")
                             Button {
                                 withAnimation {
-                                    isShowAddExample = true
+                                    viewModel.isShowAddExample = true
                                 }
                             } label: {
                                 Text("Add example")
@@ -120,17 +102,10 @@ struct IdiomDetailViewMacOS: View {
                         }
                     }
 
-                    if isShowAddExample {
-                        TextField("Type an example here", text: $exampleTextFieldStr, onCommit: {
+                    if viewModel.isShowAddExample {
+                        TextField("Type an example here", text: $viewModel.exampleTextFieldStr, onCommit: {
                             withAnimation(.easeInOut) {
-                                isShowAddExample = false
-                                if exampleTextFieldStr != "" {
-                                    let newExamples = examples + [exampleTextFieldStr]
-                                    let newExamplesData = try? JSONEncoder().encode(newExamples)
-                                    idiomsViewModel.selectedIdiom?.examples = newExamplesData
-                                    idiomsViewModel.save()
-                                }
-                                exampleTextFieldStr = ""
+                                viewModel.addExample()
                             }
                         })
                     }
@@ -138,16 +113,6 @@ struct IdiomDetailViewMacOS: View {
             }
         }
         .padding()
-        .navigationTitle(idiomsViewModel.selectedIdiom?.idiomItself ?? "")
-    }
-
-    // MARK: Private methods
-    private func removeExample(of index: Int) {
-        var examples = self.examples
-        examples.remove(at: index)
-
-        let newExamplesData = try? JSONEncoder().encode(examples)
-        idiomsViewModel.selectedIdiom?.examples = newExamplesData
-        idiomsViewModel.save()
+        .navigationTitle(viewModel.idiom.idiomItself ?? "")
     }
 }

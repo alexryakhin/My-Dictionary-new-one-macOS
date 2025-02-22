@@ -1,19 +1,15 @@
 import SwiftUI
+import Swinject
+import SwinjectAutoregistration
 
 struct MainTabView: View {
-    @StateObject private var wordsViewModel = WordsViewModel()
-    @StateObject private var idiomsViewModel = IdiomsViewModel()
-    @StateObject private var quizzesViewModel = QuizzesViewModel()
-
+    private let resolver = DIContainer.shared.resolver
     @State var selectedSidebarItem: SidebarItem = .words
 
     var body: some View {
         let selectionBinding = Binding {
             selectedSidebarItem
         } set: { newValue in
-            wordsViewModel.selectedWord = nil
-            idiomsViewModel.selectedIdiom = nil
-            quizzesViewModel.selectedQuiz = nil
             selectedSidebarItem = newValue
         }
 
@@ -37,9 +33,9 @@ struct MainTabView: View {
             }
         } content: {
             switch selectedSidebarItem {
-            case .words: WordsListView(wordsViewModel: wordsViewModel)
-            case .idioms: IdiomsListViewMacOS(idiomsViewModel: idiomsViewModel)
-            case .quizzes: QuizzesView(quizzesViewModel: quizzesViewModel)
+            case .words: resolver ~> WordsListView.self
+            case .idioms: resolver ~> IdiomsListView.self
+            case .quizzes: resolver ~> QuizzesView.self
             }
         } detail: {
             Text("Select an item")

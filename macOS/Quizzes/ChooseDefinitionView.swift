@@ -1,23 +1,23 @@
 import SwiftUI
 
 struct ChooseDefinitionView: View {
-    @ObservedObject private var quizzesViewModel: QuizzesViewModel
+    @ObservedObject private var viewModel: ChooseDefinitionViewModel
 
     @State private var rightAnswerIndex = Int.random(in: 0...2)
     @State private var isRightAnswer = true
 
-    init(quizzesViewModel: QuizzesViewModel) {
-        self.quizzesViewModel = quizzesViewModel
+    init(viewModel: ChooseDefinitionViewModel) {
+        self.viewModel = viewModel
     }
 
     var body: some View {
         VStack {
             Spacer().frame(height: 100)
 
-            Text(quizzesViewModel.words[rightAnswerIndex].wordItself ?? "")
+            Text(viewModel.words[rightAnswerIndex].wordItself ?? "")
                 .font(.largeTitle)
                 .bold()
-            Text(quizzesViewModel.words[rightAnswerIndex].partOfSpeech ?? "")
+            Text(viewModel.words[rightAnswerIndex].partOfSpeech ?? "")
                     .foregroundColor(.secondary)
 
             Spacer()
@@ -26,7 +26,7 @@ struct ChooseDefinitionView: View {
                 .foregroundColor(.secondary)
 
             ForEach(0..<3) { index in
-                Text(quizzesViewModel.words[index].definition ?? "")
+                Text(viewModel.words[index].definition ?? "")
                     .foregroundColor(.primary)
                     .frame(width: 300)
                     .padding()
@@ -34,10 +34,10 @@ struct ChooseDefinitionView: View {
                     .cornerRadius(15)
                     .padding(3)
                     .onTapGesture {
-                        if quizzesViewModel.words[rightAnswerIndex].id == quizzesViewModel.words[index].id {
+                        if viewModel.words[rightAnswerIndex].id == viewModel.words[index].id {
                             withAnimation {
                                 isRightAnswer = true
-                                quizzesViewModel.words.shuffle()
+                                viewModel.words.shuffle()
                                 rightAnswerIndex = Int.random(in: 0...2)
                             }
                         } else {

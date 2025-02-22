@@ -25,7 +25,9 @@ public class Word: NSManagedObject, Identifiable {
     @NSManaged public var wordItself: String?
 
     public var examplesDecoded: [String] {
-        guard let examples, let decodedData = try? JSONDecoder().decode([String].self, from: examples) else { return [] }
+        guard let examples,
+              let decodedData = try? JSONDecoder().decode([String].self, from: examples)
+        else { return [] }
         return decodedData
     }
 

@@ -30,9 +30,7 @@ struct WordsListView: View {
                                 )
                             }
                         }
-                        .onDelete(perform: { indexSet in
-                            viewModel.deleteWord(offsets: indexSet)
-                        })
+                        .onDelete(perform: viewModel.deleteWord)
                     } header: {
                         if let title = viewModel.filterState.title {
                             Text(title)
@@ -138,8 +136,7 @@ struct WordsListView: View {
         Menu {
             Button {
                 withAnimation {
-                    viewModel.sortingState = .def
-                    viewModel.sortWords()
+                    viewModel.selectSortingState(.def)
                 }
             } label: {
                 if viewModel.sortingState == .def {
@@ -149,8 +146,7 @@ struct WordsListView: View {
             }
             Button {
                 withAnimation {
-                    viewModel.sortingState = .name
-                    viewModel.sortWords()
+                    viewModel.selectSortingState(.name)
                 }
             } label: {
                 if viewModel.sortingState == .name {
@@ -160,8 +156,7 @@ struct WordsListView: View {
             }
             Button {
                 withAnimation {
-                    viewModel.sortingState = .partOfSpeech
-                    viewModel.sortWords()
+                    viewModel.selectSortingState(.partOfSpeech)
                 }
             } label: {
                 if viewModel.sortingState == .partOfSpeech {
@@ -182,32 +177,4 @@ struct WordsListView: View {
 
 #Preview {
     DIContainer.shared.resolver ~> WordsListView.self
-}
-
-struct WordListCellView: View {
-    var model: Model
-
-    var body: some View {
-        HStack {
-            Text(model.word)
-                .bold()
-            Spacer()
-            if model.isFavorite {
-                Label {
-                    EmptyView()
-                } icon: {
-                    Image(systemName: "heart.fill")
-                        .font(.caption)
-                }
-            }
-            Text(model.partOfSpeech)
-                .foregroundColor(.secondary)
-        }
-    }
-
-    struct Model {
-        let word: String
-        let isFavorite: Bool
-        let partOfSpeech: String
-    }
 }
