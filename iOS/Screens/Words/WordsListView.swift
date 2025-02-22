@@ -10,6 +10,7 @@ struct WordsListView: View {
     @StateObject private var viewModel: WordsViewModel
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
+    @State private var selectedWord: Word?
     @State private var contextDidSaveDate = Date.now
 
     init(viewModel: WordsViewModel) {
@@ -18,7 +19,7 @@ struct WordsListView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(selection: $viewModel.selectedWord) {
+            List(selection: $selectedWord) {
                 if !viewModel.wordsFiltered.isEmpty {
                     Section {
                         ForEach(viewModel.wordsFiltered) { word in
@@ -91,8 +92,8 @@ struct WordsListView: View {
                 resolver.resolve(AddWordView.self, argument: viewModel.searchText)!
             }
         } detail: {
-            if let word = viewModel.selectedWord {
-                resolver ~> (WordDetailsView.self, word)
+            if let selectedWord {
+                resolver ~> (WordDetailsView.self, selectedWord)
             } else {
                 Text("Select a word")
             }

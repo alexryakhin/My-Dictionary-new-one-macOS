@@ -7,7 +7,7 @@ final class AddWordViewModel: ObservableObject {
     @Published var inputWord = ""
     @Published var resultWordDetails: WordElement?
     @Published var descriptionField = ""
-    @Published var partOfSpeech: PartOfSpeech = .unknown
+    @Published var partOfSpeech: PartOfSpeech?
     @Published var showingAlert = false
 
     private let dictionaryApiService: DictionaryApiServiceInterface
@@ -38,6 +38,10 @@ final class AddWordViewModel: ObservableObject {
             do {
                 let words = try await dictionaryApiService.getWords(for: inputWord)
                 resultWordDetails = words.first
+                if let firstMeaning = words.first?.meanings.first {
+                    descriptionField = firstMeaning.definitions.first?.definition ?? ""
+                    partOfSpeech = PartOfSpeech.init(rawValue: firstMeaning.partOfSpeech) ?? .unknown
+                }
                 status = .ready
             } catch {
                 status = .error
@@ -50,7 +54,7 @@ final class AddWordViewModel: ObservableObject {
             wordsProvider.addNewWord(
                 word: inputWord.capitalizingFirstLetter(),
                 definition: descriptionField.capitalizingFirstLetter(),
-                partOfSpeech: partOfSpeech.rawValue,
+                partOfSpeech: partOfSpeech?.rawValue ?? "unknown",
                 phonetic: resultWordDetails?.phonetic
             )
             wordsProvider.saveContext()
@@ -66,9 +70,9 @@ final class AddWordViewModel: ObservableObject {
     private func setupBindings() {
         $inputWord
             .dropFirst()
-            .filter { !$0.isEmpty }
             .removeDuplicates()
             .debounce(for: 1, scheduler: RunLoop.main)
+            .filter { $0.isNotEmpty && $0.isCorrect }
             .sink { [weak self] _ in
                 guard self?.status != .loading else { return }
                 self?.fetchData()

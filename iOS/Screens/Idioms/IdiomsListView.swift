@@ -8,6 +8,7 @@ struct IdiomsListView: View {
     @State private var columnVisibility = NavigationSplitViewVisibility.all
     @State private var isShowingAddSheet = false
     @State private var contextDidSaveDate = Date.now
+    @State private var selectedIdiom: Idiom?
 
     init(viewModel: IdiomsViewModel) {
         self._viewModel = StateObject(wrappedValue: viewModel)
@@ -15,7 +16,7 @@ struct IdiomsListView: View {
 
     var body: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
-            List(selection: $viewModel.selectedIdiom) {
+            List(selection: $selectedIdiom) {
                 if !idiomsToShow().isEmpty {
                     Section {
                         ForEach(idiomsToShow()) { idiom in
@@ -82,8 +83,8 @@ struct IdiomsListView: View {
                 resolver.resolve(AddIdiomView.self, argument: viewModel.searchText)!
             })
         } detail: {
-            if let idiom = viewModel.selectedIdiom {
-                resolver ~> (IdiomDetailsView.self, idiom)
+            if let selectedIdiom {
+                resolver ~> (IdiomDetailsView.self, selectedIdiom)
             } else {
                 Text("Select an idiom")
             }

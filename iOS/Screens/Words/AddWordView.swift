@@ -11,42 +11,22 @@ struct AddWordView: View {
 
     var body: some View {
         NavigationView {
-            VStack {
-                FormWithDivider {
-                    CellWrapper {
-                        TextField("Enter your word", text: $viewModel.inputWord, onCommit: {
-                            if !viewModel.inputWord.isEmpty {
-                                viewModel.fetchData()
-                            } else {
-                                // TODO: snack
-                                print("type a word")
-                            }
-                        })
+            ScrollView {
+                VStack(spacing: 16) {
+                    FormWithDivider {
+                        wordCellView
+                        definitionCellView
+                        partOfSpeechCellView
+                        phoneticsCellView
                     }
+                    .background(Color.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
 
-                    CellWrapper {
-                        TextField("Word's definition", text: $viewModel.descriptionField)
-                    }
-
-                    CellWrapper {
-                        partOfSpeechMenu
-                    }
-
-                    CellWrapper {
-                        Text("Get definitions from the Internet")
-                    } onTapAction: {
-                        viewModel.fetchData()
-                        UIApplication.shared.endEditing()
-                    }
-                    .disabled(viewModel.inputWord.isEmpty)
+                    definitionsSectionView
                 }
-                .background(Color.surface)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.horizontal)
-
-                detailsView
+                .editModeDisabling()
             }
-            .ignoresSafeArea(.all, edges: [.bottom])
             .background(
                 Color(.background)
                     .ignoresSafeArea()
@@ -74,113 +54,117 @@ struct AddWordView: View {
         }
     }
 
-    var errorView: some View {
-        VStack {
-            Spacer().frame(height: 25)
-            Text("Couldn't get the word's data, check your spelling. Or you lost your internet connection, so check this out as well.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .padding()
-            Spacer()
+    var wordCellView: some View {
+        CellWrapper("Word") {
+            CustomTextField("Type a word", text: $viewModel.inputWord, submitLabel: .search) {
+                if viewModel.inputWord.isNotEmpty && viewModel.inputWord.isCorrect {
+                    viewModel.fetchData()
+                }
+            }
+            .autocorrectionDisabled()
         }
-        .editModeDisabling()
     }
 
-    var blankView: some View {
-        VStack {
-            Spacer().frame(height: 25)
-            Text("*After the data shows up here, tap on word's definition to fill it into definition's field.")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .padding()
-            Spacer()
+    var definitionCellView: some View {
+        CellWrapper("Definition") {
+            CustomTextField("Enter definition", text: $viewModel.descriptionField)
+                .autocorrectionDisabled()
         }
-        .editModeDisabling()
     }
 
-    var loadingView: some View {
-        VStack {
-            Spacer().frame(height: 50)
-            ProgressView()
-            Spacer()
+    @ViewBuilder
+    var partOfSpeechCellView: some View {
+        var cases: [PartOfSpeech] {
+            if let result = viewModel.resultWordDetails {
+                return result.meanings
+                    .compactMap {
+                        PartOfSpeech(rawValue: $0.partOfSpeech)
+                    }
+            } else {
+                return PartOfSpeech.allCases
+            }
         }
-        .editModeDisabling()
+        CellWrapper("Part of speech") {
+            Menu {
+                ForEach(cases, id: \.self) { partCase in
+                    Button {
+                        viewModel.partOfSpeech = partCase
+                    } label: {
+                        if viewModel.partOfSpeech == partCase {
+                            Image(systemName: "checkmark")
+                        }
+                        Text(partCase.rawValue)
+                    }
+                }
+            } label: {
+                Text(viewModel.partOfSpeech?.rawValue ?? "Select a value")
+            }
+        }
     }
 
-    var detailsView: some View {
-        Section {
-            switch viewModel.status {
-            case .blank:
-                blankView
-            case .loading:
-                loadingView
-            case .error:
-                errorView
-            case .ready:
-                if let result = viewModel.resultWordDetails {
-                    if let phonetic = result.phonetic {
-                        HStack(spacing: 0) {
-                            HStack {
-                                Text("Phonetic: ").bold()
-                                + Text(phonetic)
-                            }.padding(.top)
-                            Spacer()
-                            Button {
-                                viewModel.speakInputWord()
-                            } label: {
-                                Image(systemName: "speaker.wave.2.fill")
-                                    .font(.title3)
-                                    .padding(.vertical, 5)
-                                    .padding(.horizontal)
-                                    .background(Color.accentColor.gradient)
-                                    .cornerRadius(8)
-                                    .foregroundColor(.white)
+    @ViewBuilder
+    var phoneticsCellView: some View {
+        if let phonetic = viewModel.resultWordDetails?.phonetic {
+            CellWrapper("Phonetics") {
+                Text(phonetic)
+            } trailingContent: {
+                Button {
+                    viewModel.speakInputWord()
+                } label: {
+                    Image(systemName: "speaker.wave.2.fill")
+                        .font(.title3)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        }
+    }
+
+    @ViewBuilder
+    var definitionsSectionView: some View {
+        if let meaning = viewModel.resultWordDetails?.meanings.first(where: {
+            $0.partOfSpeech == viewModel.partOfSpeech?.rawValue
+        }) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text("Select a definition")
+                    .font(.callout)
+                    .bold()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 16)
+                    .padding(.top, 16)
+
+                ForEach(Array(meaning.definitions.enumerated()), id: \.offset) { offset, element in
+                    FormWithDivider {
+                        if element.definition.isNotEmpty {
+                            CellWrapper("Definition \(offset + 1)") {
+                                Text(element.definition)
+                                    .multilineTextAlignment(.leading)
+                            } onTapAction: {
+                                viewModel.descriptionField = element.definition
+                                viewModel.partOfSpeech = .init(rawValue: meaning.partOfSpeech) ?? .unknown
+                                UIApplication.shared.endEditing()
                             }
                         }
-                        .padding(.horizontal)
-                    }
-
-                    WordCard(wordMeanings: result.meanings) { descriptionStr, partOfSpeechStr in
-                        viewModel.descriptionField = descriptionStr
-                        viewModel.partOfSpeech = .init(rawValue: partOfSpeechStr) ?? .unknown
-                        UIApplication.shared.endEditing()
-                    }
-                    .onAppear {
-                        if let meaning = result.meanings.first,
-                           let definition = meaning.definitions.first {
-                            viewModel.descriptionField = definition.definition
-                            viewModel.partOfSpeech = .init(rawValue: meaning.partOfSpeech) ?? .unknown
+                        if let example = element.example {
+                            CellWrapper("Example") {
+                                Text(example)
+                            }
+                        }
+                        if element.synonyms.isNotEmpty {
+                            CellWrapper("Synonyms") {
+                                Text(element.synonyms.joined(separator: ", "))
+                            }
+                        }
+                        if element.antonyms.isNotEmpty {
+                            CellWrapper("Antonyms") {
+                                Text(element.antonyms.joined(separator: ", "))
+                            }
                         }
                     }
+                    .background(Color.surface)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal, 16)
                 }
             }
-        }
-        .cornerRadius(16)
-    }
-
-    var partOfSpeechMenu: some View {
-        Menu {
-            ForEach(PartOfSpeech.allCases, id: \.self) { partCase in
-                Button {
-                    viewModel.partOfSpeech = partCase
-                } label: {
-                    if viewModel.partOfSpeech == partCase {
-                        Image(systemName: "checkmark")
-                    }
-                    Text(partCase.rawValue)
-                }
-            }
-        } label: {
-            Text(
-                viewModel.partOfSpeech == .unknown
-                ? "Part of speech"
-                : viewModel.partOfSpeech.rawValue
-            )
-            .foregroundColor(
-                viewModel.partOfSpeech == .unknown
-                ? Color.accentColor
-                : Color.primary
-            )
         }
     }
 }

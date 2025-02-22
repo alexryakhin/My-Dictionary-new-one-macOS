@@ -1,5 +1,6 @@
 import Foundation
 import Combine
+import SwiftUI
 
 extension UserDefaults {
     enum Key: String {
@@ -36,6 +37,13 @@ extension NotificationCenter {
 extension String {
     var trimmed: String {
         lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var isCorrect: Bool {
+        let checker = UITextChecker()
+        let range = NSRange(location: 0, length: self.utf16.count)
+        let misspelledRange = checker.rangeOfMisspelledWord(in: self, range: range, startingAt: 0, wrap: false, language: "en")
+        return misspelledRange.location == NSNotFound
     }
 }
 
